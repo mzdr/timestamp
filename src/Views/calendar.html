@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../node_modules/normalize.css/normalize.css">
+    <link rel="stylesheet" href="../../node_modules/pikaday/css/pikaday.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <input type="hidden" id="datepicker">
+    <script>
+        const Pikaday = require('pikaday');
+
+        let picker = new Pikaday({
+            field: document.getElementById('datepicker'),
+            bound: false,
+            container: document.body,
+            showWeekNumber: true,
+            showDaysInNextAndPreviousMonths: true
+        });
+</script>
+</body>
+</html>
