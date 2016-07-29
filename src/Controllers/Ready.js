@@ -4,48 +4,79 @@ const Path = require('path');
 class Ready
 {
     /**
-     * Creates an instance of the Ready controller.
+     * This class will be instantiated when Electron has finished
+     * initialization and is ready to create browser windows.
      *
      * @param {App} app The app instance.
      * @return {Ready}
      */
     constructor(app)
     {
+        // Remember app instance
+        this.app = app;
+
         // Hide dock icon
         Electron.app.dock.hide();
 
         // Set path to views directory
-        app.viewsDir = 'file://' + Path.normalize(`${__dirname}/../Views`);
+        this.app.viewsDir = 'file://' + Path.normalize(`${__dirname}/../Views`);
 
         // Create tray
-        app.tray = new (require('../Components/Tray'))(app);
+        this.app.tray = new (require('../Components/Tray'))(app);
 
         // Create clock
-        app.clock = new (require('../Components/Clock'))(app);
+        this.app.clock = new (require('../Components/Clock'))(app);
 
         // Create preferences
-        app.preferences = new (require('../Components/Preferences'))(app);
+        this.app.preferences = new (require('../Components/Preferences'))(app);
 
         // Create calendar
-        app.calendar = new (require('../Components/Calendar'))(app);
+        this.app.calendar = new (require('../Components/Calendar'))(app);
 
+        // Initialize tray related things
+        this.initTray();
+
+        // Synchronize preferences with several components
+        this.app.preferences.onChange = (data) => this.preferencesChanged(data);
+    }
+
+    /**
+     * Initialize everything that belongs to the tray.
+     */
+    initTray()
+    {
         // Hook clock tick with tray label
-        app.clock.onTick = (clock) => {
-            app.tray.label = clock.toString();
+        this.app.clock.onTick = (clock) => {
+            this.app.tray.label = clock.toString();
         }
 
         // Show calendar when clicking on tray icon
-        app.tray.onClick = (e, bounds) => {
-            app.calendar.setPosition(bounds.x || 0, bounds.y || 0);
-            app.calendar.show();
+        this.app.tray.onClick = (e, bounds) => {
+            this.app.calendar.setPosition(bounds.x, bounds.y);
+
+            if (this.app.calendar.isVisible()) {
+                this.app.calendar.hide();
+            } else {
+                this.app.calendar.show();
+            }
         };
 
         // Glue tray menu items with app components
-        app.tray.onPreferencesClicked = () => app.preferences.show();
-        app.tray.onQuitClicked = () => Electron.app.quit();
+        this.app.tray.onPreferencesClicked = () => this.app.preferences.show();
+        this.app.tray.onQuitClicked = () => Electron.app.quit();
+    }
 
-        // Synchronize preferences with clock
-        app.preferences.onChange = (format) => app.clock.format = format;
+    /**
+     * Handle change of preferences.
+     *
+     * @param {object} data New preferences.
+     */
+    preferencesChanged(data)
+    {
+        // We have a new clock format
+        if (data.clockFormat !== this.app.clock.format) {
+            this.app.clock.format = data.clockFormat;
+        }
     }
 }
 
