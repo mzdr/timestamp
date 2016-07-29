@@ -18,4 +18,4 @@ class App
     }
 }
 
-new App;
+global.App = new App;
