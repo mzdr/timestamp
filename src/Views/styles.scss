@@ -1,0 +1,189 @@
+// -----------------------------------------------------------------------------
+// Get values from a nested map.
+// -----------------------------------------------------------------------------
+@function _($keys...) {
+    $track: "";
+    $map: $colors;
+
+    @each $key in $keys {
+        @if not map-has-key($map, $key) {
+            @error "No \"#{$key}\" found in \"$colors#{$track}\". Property omitted.";
+        }
+
+        $track: $track + "." + $key;
+        $map: map-get($map, $key);
+    }
+
+    @return $map;
+}
+
+// -----------------------------------------------------------------------------
+// Color palette.
+// -----------------------------------------------------------------------------
+$colors: (
+    "bright": (
+        "baby-blue": #20bf55,
+        "ghost-white": #fafafa,
+        "silver-sand": #666,
+    ),
+    "dark": (
+        "black": #000
+    )
+);
+
+$highlight-bg: _("bright", "baby-blue");
+$highlight-fg: _("bright", "ghost-white");
+$background-color: _("bright", "ghost-white");
+
+// -----------------------------------------------------------------------------
+// Styles.
+// -----------------------------------------------------------------------------
+// .dark-mode {
+//     $background-color: _("dark", "black") !global;
+// }
+
+:root {
+    background-color: $background-color;
+    box-sizing: border-box;
+    font-family: system, -apple-system, BlinkMacSystemFont, Helvetica Neue, Lucida Grande;
+    font-size: 16px;
+    font-weight: lighter;
+    text-transform: uppercase;
+    transition-duration: 200ms;
+    transition-property: none;
+}
+
+*,
+*::before,
+*::after {
+    border-color: inherit;
+    box-sizing: inherit;
+    color: _("bright", "silver-sand");
+    transition-duration: inherit;
+    transition-property: inherit;
+}
+
+abbr[title] {
+    text-decoration: none;
+}
+
+select {
+    position: absolute;
+    visibility: hidden;
+}
+
+.calendar-container {
+    display: inline-block;
+    height: 396px;
+    margin: 0.5rem 1rem 0;
+    position: relative;
+}
+
+.calendar-controls {
+    bottom: 0;
+    box-shadow: inset 0 2px 0 0 lighten(_("bright", "silver-sand"), 50%);
+    left: 0;
+    position: absolute;
+    width: 100%;
+
+    :first-child {
+        padding-left: 0;
+    }
+}
+
+.primary-button {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: smaller;
+    outline: 0;
+    padding: 0.75rem;
+    text-transform: uppercase;
+}
+
+.pika-single {
+    border: 0;
+    display: inline-block;
+}
+
+.pika-title {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 0.5rem;
+}
+
+.pika-label {
+    order: 2;
+
+    & + & {
+        font-weight: normal;
+        order: 3;
+    }
+}
+
+.pika-table td {
+    padding: 0.25rem;
+}
+
+.pika-prev,
+.pika-next {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 0;
+    padding: inherit;
+
+    &::before {
+        $arrow-size: 0.5rem;
+        $line-size: 1px;
+
+        border-color: currentColor;
+        border-style: solid;
+        border-width: $line-size $line-size 0 0;
+        content: "";
+        display: block;
+        height: $arrow-size;
+        width: $arrow-size;
+    }
+}
+
+.pika-prev {
+    order: 1;
+
+    &::before {
+        transform: rotate(-135deg);
+    }
+}
+
+.pika-next {
+    order: 4;
+
+    &::before {
+        transform: rotate(45deg);
+    }
+}
+
+.pika-table th {
+    font-size: smaller;
+    font-weight: inherit;
+    opacity: 0.75;
+    padding-bottom: 0.375rem;
+}
+
+.pika-day {
+    background: transparent;
+    border: 0;
+    color: currentColor;
+    display: block;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.is-today .pika-day {
+    background-color: $highlight-bg;
+    // box-shadow: 0 0 0 0.125rem darken($highlight-bg, 2.5%);
+    color: $highlight-fg;
+    border-radius: 50%;
+}
