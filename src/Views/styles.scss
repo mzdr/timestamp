@@ -118,6 +118,8 @@ select {
 
 .pika-label {
     order: 2;
+    text-align: center;
+    width: 30%;
 
     & + & {
         font-weight: normal;
