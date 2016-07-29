@@ -11,8 +11,8 @@ class Calendar
     {
         // Create window instance
         this._window = new Electron.BrowserWindow({
-            width: 256,
-            height: 224,
+            width: 340,
+            height: 404,
             frame: false,
             resizable: false,
             alwaysOnTop: true,
@@ -43,6 +43,16 @@ class Calendar
     }
 
     /**
+     * Returns a boolean, whether the window is visible to the user.
+     *
+     * @return {boolean}
+     */
+    isVisible()
+    {
+        return this._window.isVisible();
+    }
+
+    /**
      * Sets the position of the calendar window.
      *
      * @param {number} x Position on x-axis.
@@ -50,7 +60,10 @@ class Calendar
      */
     setPosition(x, y)
     {
-        this._window.setPosition(x, y);
+        // Center calendar window to x position
+        x = x - (this._window.getSize()[0] / 2);
+
+        this._window.setPosition(x || 0, y || 0);
     }
 }
 
