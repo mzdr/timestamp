@@ -3,3 +3,7 @@
 
 # Build junk
 node_modules
+
+# Don't track (built) assets
+src/Views/*.css
+src/Views/*.map
