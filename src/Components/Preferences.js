@@ -50,7 +50,7 @@ class Preferences
      */
     setPosition(x, y)
     {
-        this._window.setPosition(x, y);
+        this._window.setPosition(x || 0, y || 0);
     }
 
     /**
