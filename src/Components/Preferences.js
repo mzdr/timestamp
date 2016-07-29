@@ -11,8 +11,8 @@ class Preferences
     {
         // Create window instance
         this._window = new Electron.BrowserWindow({
-            width: 800,
-            height: 600,
+            width: 340,
+            height: 404,
             frame: false,
             resizable: false,
             alwaysOnTop: true,
@@ -50,6 +50,9 @@ class Preferences
      */
     setPosition(x, y)
     {
+        // Center calendar window to x position
+        x = x - (this._window.getSize()[0] / 2);
+        
         this._window.setPosition(x || 0, y || 0);
     }
 

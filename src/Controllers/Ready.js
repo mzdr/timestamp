@@ -51,8 +51,13 @@ class Ready
         }
 
         // Show calendar when clicking on tray icon
-        this.app.tray.onClick = (e, bounds) => {
-            this.app.calendar.setPosition(bounds.x, bounds.y);
+        this.app.tray.onClick = () => {
+            let bounds = this.app.tray.getBounds();
+
+            this.app.calendar.setPosition(
+                bounds.x + bounds.width / 2,
+                bounds.y
+            );
 
             if (this.app.calendar.isVisible()) {
                 this.app.calendar.hide();
@@ -62,8 +67,17 @@ class Ready
         };
 
         // Glue tray menu items with app components
-        this.app.tray.onPreferencesClicked = () => this.app.preferences.show();
         this.app.tray.onQuitClicked = () => Electron.app.quit();
+        this.app.tray.onPreferencesClicked = () => {
+            let bounds = this.app.tray.getBounds();
+
+            this.app.preferences.setPosition(
+                bounds.x + bounds.width / 2,
+                bounds.y
+            );
+
+            this.app.preferences.show();
+        };
     }
 
     /**

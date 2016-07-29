@@ -31,6 +31,17 @@ class Tray
     }
 
     /**
+     * Returns the bounds of this tray icon as Object.
+     *
+     * @see http://electron.atom.io/docs/api/tray/#traygetbounds-macos-windows
+     * @return {object}
+     */
+    getBounds()
+    {
+        return this._tray.getBounds();
+    }
+
+    /**
     * Returns the right click menu template.
     *
     * @return {object} Menu template.
