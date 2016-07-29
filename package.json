@@ -5,7 +5,8 @@
   "description": "Just a simple macOS menu bar clock replacement app showing the date/time in a given format.",
   "main": "src/App.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "sass": "node-sass --watch --recursive --output src/Views --source-map true --source-map-contents src/Views"
   },
   "repository": {
     "type": "git",
