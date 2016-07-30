@@ -11,8 +11,8 @@ class Preferences
     {
         // Create window instance
         this._window = new Electron.BrowserWindow({
-            width: 340,
-            height: 404,
+            width: 300,
+            height: 187,
             frame: false,
             resizable: false,
             alwaysOnTop: true,

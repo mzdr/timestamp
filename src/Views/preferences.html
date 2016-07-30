@@ -6,11 +6,16 @@
 </head>
 <body>
     <div class="preferences-container">
-        <fieldset class="preferences-format">
-            <legend class="label">Clock format</legend>
+        <fieldset class="preferences-field">
+            <legend class="legend">Clock format</legend>
             <input class="input" type="text" data-format placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm">
+            <a target="_blank" href="http://momentjs.com/docs/#/displaying/">List of available tokens</a>
         </fieldset>
-        <a  target="_blank" href="http://momentjs.com/docs/#/displaying/">List of available tokens</a>
+
+        <fieldset class="preferences-field">
+            <input id="autostart" class="checkbox" type="checkbox" data-autostart>
+            <label for="autostart" class="label">Start at login</label>
+        </fieldset>
     </div>
     <script>new (require('../Controllers/Preferences'));</script>
 </body>
