@@ -17,19 +17,30 @@ class Preferences
             clockFormat: this.app.preferences.clockFormat
         };
 
-        // Format input field
-        const formatInput = document.getElementById('format');
-
         // Add class if in dark mode
         if (Electron.remote.systemPreferences.isDarkMode()) {
             document.documentElement.classList.add('dark-mode');
         }
+
+        // Format input field
+        const formatInput = document.querySelector('[data-format]');
 
         // Format input has been changed
         formatInput.addEventListener(
             'keyup',
             (e) => this.onFormatChanged(e.currentTarget.value)
         );
+
+        // Get all links in preferences window
+        const links = document.querySelectorAll('a[href^="http"]');
+
+        // Open links externally by default
+        for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', (e) => {
+                e.preventDefault();
+                Electron.shell.openExternal(e.currentTarget.href);
+            });
+        }
     }
 
     /**

@@ -11,14 +11,14 @@ class Tray
     {
         // HACK: empty image as of image is required
         // @see https://github.com/electron/electron/issues/1553
-        let icon = Electron.nativeImage.createEmpty();
-        // let icon = './resources/icon.png';
+        const icon = Electron.nativeImage.createEmpty();
+        // const icon = './resources/icon.png';
 
         // The tray instance of Electron
         this._tray = new Electron.Tray(icon);
 
         // Build menu from template
-        let contextMenu = Electron.Menu.buildFromTemplate(this.menuTemplate)
+        const contextMenu = Electron.Menu.buildFromTemplate(this.menuTemplate)
 
         // Hand over menu to tray
         // this._tray.setContextMenu(contextMenu);

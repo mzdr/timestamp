@@ -78,7 +78,7 @@ class Clock
      */
     set format(format)
     {
-        let type = typeof format;
+        const type = typeof format;
 
         if (type !== 'string') {
             throw new ClockException(`Format needs to be of type "string", instead "${type}" was given.`);

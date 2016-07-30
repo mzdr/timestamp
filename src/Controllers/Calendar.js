@@ -18,13 +18,13 @@ class Calendar
             document.documentElement.classList.add('dark-mode');
         }
 
-        let months = [];
-        let weekdays = [];
-        let weekdaysShort = [];
-        let date = new Date(2015, 0);
+        const months = [];
+        const weekdays = [];
+        const weekdaysShort = [];
+        const date = new Date(2015, 0);
 
         // collect translations for months
-        for (var i = 0; i < 12; i++) {
+        for (let i = 0; i < 12; i++) {
             date.setMonth(i);
             months.push(date.toLocaleString(this.app.locale, {
                 month: 'long'
@@ -35,7 +35,7 @@ class Calendar
         date.setMonth(2, 1);
 
         // collect translations for weekdays
-        for (var i = 1; i < 8; i++) {
+        for (let i = 1; i < 8; i++) {
             date.setMonth(date.getMonth(), i);
 
             weekdays.push(date.toLocaleString(this.app.locale, {
@@ -47,7 +47,7 @@ class Calendar
             }));
         }
 
-        let picker = new Pikaday({
+        const picker = new Pikaday({
             field: document.createElement('div'),
             bound: false,
             container: document.querySelector('[data-pikaday]'),
@@ -64,7 +64,7 @@ class Calendar
         });
 
         // Fetch all controls and attach listeners
-        let controls = [
+        const controls = [
             { selector: '[data-today]', fn: () => picker.gotoToday() },
             { selector: '[data-prev]',  fn: () => picker.prevMonth() },
             { selector: '[data-next]',  fn: () => picker.nextMonth() }
@@ -84,9 +84,9 @@ class Calendar
      */
     onDraw()
     {
-        let monthLabel = document.querySelector('[data-month]');
-        let yearLabel = document.querySelector('[data-year]');
-        let calendar = this.calendars[0];
+        const monthLabel = document.querySelector('[data-month]');
+        const yearLabel = document.querySelector('[data-year]');
+        const calendar = this.calendars[0];
 
         monthLabel.textContent = this.config().i18n.months[calendar.month];
         yearLabel.textContent = calendar.year;
