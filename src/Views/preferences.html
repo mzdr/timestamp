@@ -5,7 +5,13 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <input type="text" id="format">
+    <div class="preferences-container">
+        <fieldset class="preferences-format">
+            <legend class="label">Clock format</legend>
+            <input class="input" type="text" data-format placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm">
+        </fieldset>
+        <a  target="_blank" href="http://momentjs.com/docs/#/displaying/">List of available tokens</a>
+    </div>
     <script>new (require('../Controllers/Preferences'));</script>
 </body>
 </html>
