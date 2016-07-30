@@ -43,17 +43,19 @@ class Preferences
     }
 
     /**
-     * Sets the position of the calendar window.
+     * Sets the position of the preferences window.
      *
      * @param {number} x Position on x-axis.
      * @param {number} y Position on y-axis.
+     * @param {boolean} centerToX Center window to new x position or not.
      */
-    setPosition(x, y)
+    setPosition(x, y, centerToX = true)
     {
-        // Center calendar window to x position
-        x = x - (this._window.getSize()[0] / 2);
-        
-        this._window.setPosition(x || 0, y || 0);
+        if (centerToX) {
+            x = Math.round(x - this._window.getSize()[0] / 2);
+        }
+
+        this._window.setPosition(x, y);
     }
 
     /**
