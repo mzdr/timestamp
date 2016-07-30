@@ -18,20 +18,23 @@ class Ready
         // Hide dock icon
         Electron.app.dock.hide();
 
+        // Get current locale
+        this.app.locale = Electron.app.getLocale() || 'en';
+
         // Set path to views directory
         this.app.viewsDir = 'file://' + Path.normalize(`${__dirname}/../Views`);
 
         // Create tray
-        this.app.tray = new (require('../Components/Tray'))(app);
+        this.app.tray = new (require('../Components/Tray'))(this.app);
 
         // Create clock
-        this.app.clock = new (require('../Components/Clock'))(app);
+        this.app.clock = new (require('../Components/Clock'))(this.app);
 
         // Create preferences
-        this.app.preferences = new (require('../Components/Preferences'))(app);
+        this.app.preferences = new (require('../Components/Preferences'))(this.app);
 
         // Create calendar
-        this.app.calendar = new (require('../Components/Calendar'))(app);
+        this.app.calendar = new (require('../Components/Calendar'))(this.app);
 
         // Initialize tray related things
         this.initTray();
@@ -54,10 +57,7 @@ class Ready
         this.app.tray.onClick = () => {
             let bounds = this.app.tray.getBounds();
 
-            this.app.calendar.setPosition(
-                bounds.x + bounds.width / 2,
-                bounds.y
-            );
+            this.app.calendar.setPosition(bounds.x + bounds.width / 2, 0);
 
             if (this.app.calendar.isVisible()) {
                 this.app.calendar.hide();
@@ -71,11 +71,7 @@ class Ready
         this.app.tray.onPreferencesClicked = () => {
             let bounds = this.app.tray.getBounds();
 
-            this.app.preferences.setPosition(
-                bounds.x + bounds.width / 2,
-                bounds.y
-            );
-
+            this.app.preferences.setPosition(bounds.x + bounds.width / 2, 0);
             this.app.preferences.show();
         };
     }
