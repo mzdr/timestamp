@@ -74,33 +74,11 @@ select {
     visibility: hidden;
 }
 
-.calendar-container {
+.calendar-container,
+.preferences-container {
     display: inline-block;
-    height: 396px;
-    margin: 0.5rem 1rem 0;
+    padding: 0.5rem 0.75rem;
     position: relative;
-}
-
-.calendar-controls {
-    bottom: 0;
-    box-shadow: inset 0 2px 0 0 lighten(_("bright", "silver-sand"), 50%);
-    left: 0;
-    position: absolute;
-    width: 100%;
-
-    :first-child {
-        padding-left: 0;
-    }
-}
-
-.primary-button {
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    font-size: smaller;
-    outline: 0;
-    padding: 0.75rem;
-    text-transform: uppercase;
 }
 
 .pika-single {
@@ -109,64 +87,11 @@ select {
 }
 
 .pika-title {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-    padding: 0.5rem;
-}
-
-.pika-label {
-    order: 2;
-    text-align: center;
-    width: 30%;
-
-    & + & {
-        font-weight: normal;
-        order: 3;
-    }
+    display: none;
 }
 
 .pika-table td {
     padding: 0.25rem;
-}
-
-.pika-prev,
-.pika-next {
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    font-size: 0;
-    padding: inherit;
-
-    &::before {
-        $arrow-size: 0.5rem;
-        $line-size: 1px;
-
-        border-color: currentColor;
-        border-style: solid;
-        border-width: $line-size $line-size 0 0;
-        content: "";
-        display: block;
-        height: $arrow-size;
-        width: $arrow-size;
-    }
-}
-
-.pika-prev {
-    order: 1;
-
-    &::before {
-        transform: rotate(-135deg);
-    }
-}
-
-.pika-next {
-    order: 4;
-
-    &::before {
-        transform: rotate(45deg);
-    }
 }
 
 .pika-table th {
@@ -190,4 +115,92 @@ select {
     // box-shadow: 0 0 0 0.125rem darken($highlight-bg, 2.5%);
     color: $highlight-fg;
     border-radius: 50%;
+}
+
+.calendar-title {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 0.5rem;
+}
+
+.calendar-month {
+    order: 4;
+    text-align: right;
+    width: 50%;
+}
+.calendar-year {
+    font-weight: normal;
+    order: 5;
+    text-align: right;
+    width: 15%;
+}
+
+.calendar-prev,
+.calendar-next {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 0;
+    outline: 0;
+    padding: inherit;
+
+    &::before {
+        $arrow-size: 0.5rem;
+        $line-size: 1px;
+
+        border-color: currentColor;
+        border-style: solid;
+        border-width: $line-size $line-size 0 0;
+        content: "";
+        display: block;
+        height: $arrow-size;
+        width: $arrow-size;
+    }
+}
+
+.calendar-prev {
+    order: 1;
+
+    &::before {
+        transform: rotate(-135deg);
+    }
+}
+
+.calendar-next {
+    order: 3;
+
+    &::before {
+        transform: rotate(45deg);
+    }
+}
+
+.calendar-today {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    order: 2;
+    outline: 0;
+    padding: inherit;
+
+    &::before {
+        $dot-size: 0.5rem;
+
+        background: currentColor;
+        border-radius: 50%;
+        content: "";
+        display: block;
+        height: $dot-size;
+        width: $dot-size;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+.preferences-format {
+    border: 0;
+    outline: 0;
+    padding: 0.75rem;
+    width: 100%;
 }

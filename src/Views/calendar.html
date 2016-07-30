@@ -7,11 +7,14 @@
 </head>
 <body>
     <div class="calendar-container">
-        <div class="calendar-pikaday" data-pikaday></div>
-        <div class="calendar-controls">
-            <button class="primary-button" data-today>Today</button>
+        <div class="calendar-title">
+            <button class="calendar-prev" data-prev></button>
+            <button class="calendar-today" data-today></button>
+            <button class="calendar-next" data-next></button>
+            <span class="calendar-month" data-month></span>
+            <span class="calendar-year" data-year></span>
         </div>
-
+        <div class="calendar-pikaday" data-pikaday></div>
     </div>
     <script>new (require('../Controllers/Calendar'));</script>
 </body>
