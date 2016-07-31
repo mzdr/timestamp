@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/mzdr/timestamp#readme",
   "devDependencies": {
+    "auto-launch": "^2.1.0",
     "electron-prebuilt": "^1.2.0",
     "moment": "^2.14.1",
     "normalize.css": "^4.2.0",
