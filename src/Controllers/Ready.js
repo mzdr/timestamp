@@ -57,6 +57,9 @@ class Ready
      */
     initTray()
     {
+        // Set clock format
+        this.app.clock.format = this.app.preferences.get('clockFormat');
+
         // Hook clock tick with tray label
         this.app.clock.onTick = (clock) => {
             this.app.tray.label = clock.toString();
@@ -97,7 +100,9 @@ class Ready
             this.app.clock.format = data.clockFormat;
         }
 
-        // Save them here…
+        // Update preferences component and persist data
+        this.app.preferences.set(data);
+        this.app.preferences.save();
     }
 }
 

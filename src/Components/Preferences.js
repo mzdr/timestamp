@@ -1,3 +1,5 @@
+const Fs = require('fs');
+const Path = require('path');
 const Electron = require('electron');
 
 class Preferences
@@ -24,6 +26,21 @@ class Preferences
 
         // Once the user clicks beside the preferences window, it will be hidden
         this._window.on('blur', (e) => this.hide());
+
+        // Get storage file for persisting preferences
+        this.storageFile = Path.join(
+            Electron.app.getPath('userData'),
+            'user-preferences.json'
+        );
+
+        // Default preferences
+        this.data = {
+            clockFormat: 'HH:MM:ss',
+            autoStart: false
+        };
+
+        // Load preferences from disk
+        this.load();
     }
 
     /**
@@ -58,16 +75,62 @@ class Preferences
         this._window.setPosition(x, y);
     }
 
-    get()
+    /**
+     * Gets a specific part of the current preferences. If no key is provided,
+     * all preferences will be returned.
+     *
+     * @param {string} key Key of preference to return.
+     * @return {mixed}
+     */
+    get(key)
     {
-        return {
-            clockFormat: 'HH:MM:ss'
+        if (typeof key === 'string') {
+            return this.data[key];
+        }
+
+        return this.data;
+    }
+
+    /**
+     * Sets a specific part of the preferences. If the key is an object,
+     * it will be treated as a set of preferences and will replace the
+     * current ones.
+     *
+     * @param {string|object} key Key of preferences or all preferences.
+     * @param {mixed} data Preference data.
+     */
+    set(key, data)
+    {
+        if (typeof key === 'object') {
+            this.data = key;
+        } else {
+            this.data[key] = data;
         }
     }
 
-    set() {}
-    load() {}
-    save() {}
+    /**
+     * Load preferences from disk.
+     */
+    load() {
+
+        try {
+            const data = JSON.parse(Fs.readFileSync(this.storageFile, 'utf8'));
+
+            // Successfully loaded settings from disk
+            this.data = data;
+
+        } catch (e) {}
+    }
+
+    /**
+     * Save preferences to to disk.
+     */
+    save()
+    {
+        try {
+            Fs.writeFileSync(this.storageFile, JSON.stringify(this.data));
+        } catch (e) {}
+    }
 }
 
 module.exports = Preferences;
