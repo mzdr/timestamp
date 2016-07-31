@@ -58,27 +58,16 @@ class Preferences
         this._window.setPosition(x, y);
     }
 
-    /**
-     * Returns the currently set callback function which will be
-     * called once the preferences have been changed.
-     *
-     * @return {function}
-     */
-    get onChange()
+    get()
     {
-        return this._changeHandler;
+        return {
+            clockFormat: 'HH:MM:ss'
+        }
     }
 
-    /**
-     * Sets the callback function which will be called once the preferences
-     * have been changed.
-     *
-     * @param {function} fn Callback function.
-     */
-    set onChange(fn)
-    {
-        this._changeHandler = fn;
-    }
+    set() {}
+    load() {}
+    save() {}
 }
 
 module.exports = Preferences;
