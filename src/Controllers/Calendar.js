@@ -10,71 +10,92 @@ class Calendar
      */
     constructor()
     {
-        // Get access to app from main process
-        this.app = Electron.remote.getGlobal('App');
-
         // Add class if in dark mode
-        if (Electron.remote.systemPreferences.isDarkMode()) {
+        if (Electron.ipcRenderer.sendSync('app.darkmode')) {
             document.documentElement.classList.add('dark-mode');
         }
 
-        const months = [];
-        const weekdays = [];
-        const weekdaysShort = [];
-        const date = new Date(2015, 0);
+        // Get detected locale from app
+        let locale = Electron.ipcRenderer.sendSync('app.locale');
 
-        // collect translations for months
-        for (let i = 0; i < 12; i++) {
-            date.setMonth(i);
-            months.push(date.toLocaleString(this.app.locale, {
-                month: 'long'
-            }));
-        }
+        // Collect all necessary translations from current locale
+        this.translations = this.getTranslationsFromLocale(locale);
 
-        // march the first in 2015 is a sunday
-        date.setMonth(2, 1);
+        // Create pikaday calender
+        this.createPikaday();
+    }
 
-        // collect translations for weekdays
-        for (let i = 1; i < 8; i++) {
-            date.setMonth(date.getMonth(), i);
-
-            weekdays.push(date.toLocaleString(this.app.locale, {
-                weekday: 'long'
-            }));
-
-            weekdaysShort.push(date.toLocaleString(this.app.locale, {
-                weekday: 'short'
-            }));
-        }
-
-        const picker = new Pikaday({
+    /**
+     * Creates the Pikaday datepicker instance. We use it as a simple calender.
+     *
+     * @see https://dbushell.github.io/Pikaday/
+     */
+    createPikaday()
+    {
+        this.pikaday = new Pikaday({
             field: document.createElement('div'),
             bound: false,
             container: document.querySelector('[data-pikaday]'),
             showWeekNumber: false,
             showDaysInNextAndPreviousMonths: true,
             onDraw: this.onDraw,
-            i18n: {
-                previousMonth: '',
-                nextMonth: '',
-                months: months,
-                weekdays: weekdays,
-                weekdaysShort: weekdaysShort
-            }
+            i18n: this.translations
         });
 
-        // Fetch all controls and attach listeners
+        // Fetch all controls
         const controls = [
-            { selector: '[data-today]', fn: () => picker.gotoToday() },
-            { selector: '[data-prev]',  fn: () => picker.prevMonth() },
-            { selector: '[data-next]',  fn: () => picker.nextMonth() }
+            { selector: '[data-today]', fn: () => this.pikaday.gotoToday() },
+            { selector: '[data-prev]',  fn: () => this.pikaday.prevMonth() },
+            { selector: '[data-next]',  fn: () => this.pikaday.nextMonth() }
         ];
 
+        // Assign click listeners
         controls.forEach((control) => {
             document.querySelector(control.selector).addEventListener(
                 'click', control.fn
             );
         });
+    }
+
+    /**
+     * Collect all necessary weekday and month translations using the
+     * Date.prototype.toLocaleString() functionality.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
+     * @param {string} locale A string with a BCP 47 language tag.
+     * @return {object}
+     */
+    getTranslationsFromLocale(locale)
+    {
+        const date = new Date(2015, 0);
+        const months = [];
+        const weekdays = [];
+        const weekdaysShort = [];
+
+        // Collect translations for months
+        for (let i = 0; i < 12; i++) {
+            date.setMonth(i);
+            months.push(date.toLocaleString(locale, { month: 'long' }));
+        }
+
+        // March the 1st in 2015 is a sunday
+        date.setMonth(2, 1);
+
+        // Collect translations for weekdays
+        for (let i = 1; i < 8; i++) {
+            date.setMonth(date.getMonth(), i);
+            weekdays.push(date.toLocaleString(locale, { weekday: 'long' }));
+            weekdaysShort.push(date.toLocaleString(locale, { weekday: 'short' }));
+        }
+
+        return {
+            previousMonth: '',
+            nextMonth: '',
+            months: months,
+            weekdays: weekdays,
+            weekdaysShort: weekdaysShort
+        };
     }
 
     /**

@@ -9,16 +9,11 @@ class Preferences
      */
     constructor()
     {
-        // Get access to app from main process
-        this.app = Electron.remote.getGlobal('App');
-
         // Set up all available preferences and their current/default values
-        this.data = {
-            clockFormat: this.app.preferences.clockFormat
-        };
+        this.data = Electron.ipcRenderer.sendSync('preferences.get')
 
         // Add class if in dark mode
-        if (Electron.remote.systemPreferences.isDarkMode()) {
+        if (Electron.ipcRenderer.sendSync('app.darkmode')) {
             document.documentElement.classList.add('dark-mode');
         }
 
@@ -64,7 +59,7 @@ class Preferences
      */
     onChange()
     {
-        this.app.preferences.onChange(this.data);
+        Electron.ipcRenderer.send('preferences.set', this.data);
     }
 }
 

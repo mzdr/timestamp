@@ -21,26 +21,35 @@ class Ready
         // Get current locale
         this.app.locale = Electron.app.getLocale() || 'en';
 
+        // OSX: In dark mode?
+        this.app.darkMode = Electron.systemPreferences.isDarkMode();
+
         // Set path to views directory
         this.app.viewsDir = 'file://' + Path.normalize(`${__dirname}/../Views`);
 
-        // Create tray
-        this.app.tray = new (require('../Components/Tray'))(this.app);
+        // Provide access to several app related settings in renderer process
+        Electron.ipcMain.on('app.locale', (e) => e.returnValue = this.app.locale);
+        Electron.ipcMain.on('app.darkmode', (e) => e.returnValue = this.app.darkMode);
+        Electron.ipcMain.on('preferences.get', (e) => e.returnValue = this.app.preferences.get());
 
-        // Create clock
-        this.app.clock = new (require('../Components/Clock'))(this.app);
+        // We are going to need those components
+        const components = [ 'Tray', 'Clock', 'Preferences', 'Calendar' ];
 
-        // Create preferences
-        this.app.preferences = new (require('../Components/Preferences'))(this.app);
-
-        // Create calendar
-        this.app.calendar = new (require('../Components/Calendar'))(this.app);
+        // Create all of them and attach them to the app instance
+        components.forEach((component) => {
+            this.app[component.toLowerCase()] = new (
+                require(`../Components/${component}`)
+            )(this.app);
+        });
 
         // Initialize tray related things
         this.initTray();
 
         // Synchronize preferences with several components
-        this.app.preferences.onChange = (data) => this.preferencesChanged(data);
+        Electron.ipcMain.on(
+            'preferences.set',
+            (e, data) => this.preferencesChanged(data)
+        );
     }
 
     /**
@@ -87,6 +96,8 @@ class Ready
         if (data.clockFormat !== this.app.clock.format) {
             this.app.clock.format = data.clockFormat;
         }
+
+        // Save them here…
     }
 }
 
