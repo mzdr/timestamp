@@ -10,10 +10,10 @@ class Clock
     */
     constructor()
     {
-        // default format
+        // Default fallback format
         this.format = 'HH:mm:ss';
 
-        // start the clock
+        // Start the clock
         this.start();
     }
 
