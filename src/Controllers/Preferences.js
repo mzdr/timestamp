@@ -17,14 +17,33 @@ class Preferences
             document.documentElement.classList.add('dark-mode');
         }
 
-        // Format input field
-        const formatInput = document.querySelector('[data-format]');
+        // Define logic for all fields
+        const fields = [
+            {
+                selector: '[data-format]',
+                event: 'keyup',
+                onChange: (el) => this.data.clockFormat = el.value,
+                onLoad: (el) => el.value = this.data.clockFormat
+            },
+            {
+                selector: '[data-autostart]',
+                event: 'change',
+                onChange: (el) => this.data.autoStart = el.checked,
+                onLoad: (el) => el.checked = this.data.autoStart
+            }
+        ];
 
-        // Format input has been changed
-        formatInput.addEventListener(
-            'keyup',
-            (e) => this.onFormatChanged(e.currentTarget.value)
-        );
+        // Apply logic to all fields
+        fields.forEach((field) => {
+            let el = document.querySelector(field.selector);
+
+            el.addEventListener(field.event, () => {
+                field.onChange(el);
+                this.onChange();
+            });
+
+            field.onLoad(el);
+        });
 
         // Get all links in preferences window
         const links = document.querySelectorAll('a[href^="http"]');
@@ -36,22 +55,6 @@ class Preferences
                 Electron.shell.openExternal(e.currentTarget.href);
             });
         }
-    }
-
-    /**
-     * Callback handling the change of the format input field.
-     *
-     * @param {string} newFormat New clock format.
-     */
-    onFormatChanged(newFormat)
-    {
-        // Nothing changed at all
-        if (this.data.clockFormat === newFormat) {
-            return;
-        }
-
-        this.data.clockFormat = newFormat;
-        this.onChange();
     }
 
     /**
