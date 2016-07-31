@@ -55,6 +55,9 @@ class Calendar
                 'click', control.fn
             );
         });
+
+        // Redraw every minute to avoid displaying old/wrong states
+        setInterval(() => this.pikaday.draw(), 1000 * 60);
     }
 
     /**
