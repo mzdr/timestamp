@@ -1,5 +1,6 @@
 const Electron = require('electron');
 const Path = require('path');
+const AutoLaunch = require('auto-launch');
 
 class Ready
 {
@@ -26,6 +27,9 @@ class Ready
 
         // Set path to views directory
         this.app.viewsDir = 'file://' + Path.normalize(`${__dirname}/../Views`);
+
+        // Add auto start handler
+        this.app.autoStart = new AutoLaunch({ name: Electron.app.getName() });
 
         // Provide access to several app related settings in renderer process
         Electron.ipcMain.on('app.locale', (e) => e.returnValue = this.app.locale);
@@ -98,6 +102,11 @@ class Ready
         // We have a new clock format
         if (data.clockFormat !== this.app.clock.format) {
             this.app.clock.format = data.clockFormat;
+        }
+
+        // Auto start was changed
+        if (data.autoStart !== this.app.autoStart.isEnabled()) {
+            this.app.autoStart[data.autoStart ? 'enable' : 'disable']()
         }
 
         // Update preferences component and persist data
