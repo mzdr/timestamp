@@ -57,7 +57,21 @@ $font-smaller: 0.75rem;
 // }
 
 :root {
-    background-color: $primary-background;
+    --brand-primary: _("bright", "bright-navy-blue");
+    --brand-success: _("bright", "sheen-green");
+    --brand-fail: _("bright", "desire");
+    --brand-info: "";
+
+    --primary-background: _("bright", "ghost-white");
+    --primary-link: var(--brand-primary);
+    --primary-text: _("bright", "outer-space");
+    --silent-text: lighten(_("bright", "outer-space"), 35%);
+    --highlight-fg: var(--primary-background);
+    --input-bg: var(--primary-background);
+
+    --font-smaller: 0.75rem;
+
+    background-color: var(--primary-background);
     box-sizing: border-box;
     font-family: system, -apple-system, BlinkMacSystemFont, Helvetica Neue, Lucida Grande;
     font-size: 16px;
@@ -72,13 +86,13 @@ $font-smaller: 0.75rem;
 *::after {
     border-color: inherit;
     box-sizing: inherit;
-    color: $primary-text;
+    color: var(--primary-text);
     transition-duration: inherit;
     transition-property: inherit;
 }
 
 abbr[title] {
-    color: $silent-text;
+    color: var(--silent-text);
     text-decoration: none;
 }
 
@@ -88,8 +102,8 @@ select {
 }
 
 a {
-    color: $primary-link;
-    font-size: $font-smaller;
+    color: var(--primary-link);
+    font-size: var(--font-smaller);
     position: relative;
     text-decoration: none;
     text-transform: none;
@@ -132,7 +146,7 @@ a {
 }
 
 .pika-table th {
-    font-size: $font-smaller;
+    font-size: var(--font-smaller);
     font-weight: inherit;
     padding-bottom: 0.375rem;
 }
@@ -147,9 +161,9 @@ a {
 }
 
 .is-today .pika-day {
-    background-color: $brand-primary;
-    // box-shadow: 0 0 0 0.125rem darken($brand-primary, 2.5%);
-    color: $highlight-fg;
+    background-color: var(--brand-primary);
+    // box-shadow: 0 0 0 0.125rem darken(var(--brand-primary), 2.5%);
+    color: var(--highlight-fg);
     border-radius: 50%;
 }
 
@@ -183,16 +197,16 @@ a {
     padding: inherit;
 
     &::before {
-        $arrow-size: 0.5rem;
-        $line-size: 1px;
+        --arrow-size: 0.5rem;
+        --line-size: 1px;
 
         border-color: currentColor;
         border-style: solid;
-        border-width: $line-size $line-size 0 0;
+        border-width: var(--line-size) var(--line-size) 0 0;
         content: "";
         display: block;
-        height: $arrow-size;
-        width: $arrow-size;
+        height: var(--arrow-size);
+        width: var(--arrow-size);
     }
 }
 
@@ -221,14 +235,14 @@ a {
     padding: inherit;
 
     &::before {
-        $dot-size: 0.5rem;
+        --dot-size: 0.5rem;
 
         background: currentColor;
         border-radius: 50%;
         content: "";
         display: block;
-        height: $dot-size;
-        width: $dot-size;
+        height: var(--dot-size);
+        width: var(--dot-size);
     }
 }
 
@@ -241,11 +255,11 @@ a {
 }
 
 .preferences-field {
-    $toggle-size: 7rem;
-    $input-padding: 0.75rem;
+    --toggle-size: 7rem;
+    --input-padding: 0.75rem;
 
     border: 0;
-    color: $brand-primary;
+    color: var(--brand-primary);
     display: block;
     margin: 0;
     padding: 0;
@@ -255,35 +269,35 @@ a {
     }
 
     > .legend {
-        background-color: $brand-primary;
-        color: $highlight-fg;
-        font-size: $font-smaller;
-        padding: 0.25rem $input-padding;
+        background-color: var(--brand-primary);
+        color: var(--highlight-fg);
+        font-size: var(--font-smaller);
+        padding: 0.25rem var(--input-padding);
     }
 
     > .input {
-        background-color: $input-bg;
+        background-color: var(--input-bg);
         border: 0;
-        box-shadow: inset 0 0 0 2px $brand-primary;
+        box-shadow: inset 0 0 0 2px var(--brand-primary);
         color: inherit;
         margin: 0 0 0.5rem;
         outline: 0;
-        padding: $input-padding;
+        padding: var(--input-padding);
         width: 100%;
 
         &::-webkit-input-placeholder {
-            color: $silent-text;
+            color: var(--silent-text);
             opacity: 1;
         }
     }
 
     > .label {
-        background-color: $input-bg;
+        background-color: var(--input-bg);
         box-shadow: inset 0 0 0 2px currentColor;
         cursor: pointer;
-        color: $brand-fail;
+        color: var(--brand-fail);
         display: block;
-        padding: $input-padding;
+        padding: var(--input-padding);
         position: relative;
         text-transform: none;
         transition-property: box-shadow, color;
@@ -298,20 +312,20 @@ a {
         }
 
         &::before {
-            background-image: linear-gradient(to right, $brand-primary 50%, $brand-fail 50%);
-            color: $highlight-fg;
+            background-image: linear-gradient(to right, var(--brand-primary) 50%, var(--brand-fail) 50%);
+            color: var(--highlight-fg);
             content: "YES NO";
             padding: inherit;
             text-align: center;
-            width: $toggle-size;
-            word-spacing: $input-padding * 2;
+            width: var(--toggle-size);
+            word-spacing: calc(var(--input-padding) * 2);
         }
 
         &::after {
-            background-color: $input-bg;
-            transform: translateX($toggle-size / -2);
+            background-color: var(--input-bg);
+            transform: translateX(calc(var(--toggle-size) / -2));
             transition-property: transform;
-            width: $toggle-size / 2;
+            width: calc(var(--toggle-size) / 2);
         }
     }
 
@@ -320,7 +334,7 @@ a {
         visibility: hidden;
 
         &:checked + .label {
-            color: $brand-primary;
+            color: var(--brand-primary);
 
             &::after {
                 transform: translateX(0);
