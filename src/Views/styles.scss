@@ -9,7 +9,7 @@
     --primary-background: #fafafa;
     --primary-link: var(--brand-primary);
     --primary-text: #474647;
-    --silent-text: #a09fa0;
+    --silent-text: #565656;
     --highlight-fg: var(--primary-background);
     --input-bg: var(--primary-background);
 
@@ -17,12 +17,21 @@
 
     background-color: var(--primary-background);
     box-sizing: border-box;
+    color: var(--primary-text);
     font-family: system, -apple-system, BlinkMacSystemFont, Helvetica Neue, Lucida Grande;
     font-size: 16px;
     font-weight: lighter;
     text-transform: uppercase;
     transition-duration: 200ms;
     transition-property: none;
+
+    // macOS dark mode
+    &.dark-mode {
+        --primary-background: #333;
+        --primary-text: #fafafa;
+        --silent-text: #c1c1c1;
+        --highlight-fg: var(--primary-text);
+    }
 }
 
 *,
@@ -30,7 +39,7 @@
 *::after {
     border-color: inherit;
     box-sizing: inherit;
-    color: var(--primary-text);
+    color: currentColor;
     transition-duration: inherit;
     transition-property: inherit;
 }
