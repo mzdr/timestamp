@@ -1,71 +1,15 @@
 @import "../../node_modules/normalize.css/normalize";
 
-// -----------------------------------------------------------------------------
-// Get values from a nested map.
-// -----------------------------------------------------------------------------
-@function _($keys...) {
-    $track: "";
-    $map: $colors;
-
-    @each $key in $keys {
-        @if not map-has-key($map, $key) {
-            @error "No \"#{$key}\" found in \"$colors#{$track}\". Property omitted.";
-        }
-
-        $track: $track + "." + $key;
-        $map: map-get($map, $key);
-    }
-
-    @return $map;
-}
-
-// -----------------------------------------------------------------------------
-// Project variables.
-// -----------------------------------------------------------------------------
-$colors: (
-    "bright": (
-        "bright-navy-blue": #2d7dd2,
-        "ghost-white": #fafafa,
-        "outer-space": #474647,
-        "sheen-green": #97cc04,
-        "desire": #ea3546
-    ),
-    "dark": (
-        "black": #000
-    )
-);
-
-$brand-primary: _("bright", "bright-navy-blue");
-$brand-success: _("bright", "sheen-green");
-$brand-fail: _("bright", "desire");
-$brand-info: "";
-
-$primary-background: _("bright", "ghost-white");
-$primary-link: $brand-primary;
-$primary-text: _("bright", "outer-space");
-$silent-text: lighten(_("bright", "outer-space"), 35%);
-$highlight-fg: $primary-background;
-$input-bg: _("bright", "ghost-white");
-
-$font-smaller: 0.75rem;
-
-// -----------------------------------------------------------------------------
-// Styles.
-// -----------------------------------------------------------------------------
-// .dark-mode {
-//     $primary-background: _("dark", "black") !global;
-// }
-
 :root {
-    --brand-primary: _("bright", "bright-navy-blue");
-    --brand-success: _("bright", "sheen-green");
-    --brand-fail: _("bright", "desire");
+    --brand-primary: #2d7dd2;
+    --brand-success: #97cc04;
+    --brand-fail: #ea3546;
     --brand-info: "";
 
-    --primary-background: _("bright", "ghost-white");
+    --primary-background: #fafafa;
     --primary-link: var(--brand-primary);
-    --primary-text: _("bright", "outer-space");
-    --silent-text: lighten(_("bright", "outer-space"), 35%);
+    --primary-text: #474647;
+    --silent-text: #a09fa0;
     --highlight-fg: var(--primary-background);
     --input-bg: var(--primary-background);
 
