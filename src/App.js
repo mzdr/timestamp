@@ -4,7 +4,7 @@ const Path = require('path');
 class App
 {
     /**
-     * Creates an App instance.
+     * Starts the Timestamp app.
      *
      * @return {App}
      */
@@ -14,7 +14,7 @@ class App
         // initialization and is ready to create browser windows.
         // Some APIs can only be used after this event occurs.
         Electron.app.on('ready', () => {
-            new (require('./Controllers/Ready'))(this);
+            new (require(`${this.getControllersDirectory()}/Ready`))(this);
         })
     }
 
@@ -37,7 +37,17 @@ class App
      */
     getViewsDirectory()
     {
-        return `file://${Path.normalize(`${__dirname}/Views`)}`;
+        return Path.normalize(`${__dirname}/Views`);
+    }
+
+    /**
+     * Returns the path to the controllers directory.
+     *
+     * @return {string}
+     */
+    getControllersDirectory()
+    {
+        return Path.normalize(`${__dirname}/Controllers`);
     }
 
     /**
