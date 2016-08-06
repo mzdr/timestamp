@@ -31,6 +31,47 @@ class App
     }
 
     /**
+     * Collect all necessary weekday and month translations using the
+     * Date.prototype.toLocaleString() functionality.
+     *
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
+     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
+     * @param {string} locale A string with a BCP 47 language tag.
+     * @return {object}
+     */
+    getTranslationsFromLocale(locale)
+    {
+        const date = new Date(2015, 0);
+        const months = [];
+        const weekdays = [];
+        const weekdaysShort = [];
+
+        // Collect translations for months
+        for (let i = 0; i < 12; i++) {
+            date.setMonth(i);
+            months.push(date.toLocaleString(locale, { month: 'long' }));
+        }
+
+        // March the 1st in 2015 is a sunday
+        date.setMonth(2, 1);
+
+        // Collect translations for weekdays
+        for (let i = 1; i < 8; i++) {
+            date.setMonth(date.getMonth(), i);
+            weekdays.push(date.toLocaleString(locale, { weekday: 'long' }));
+            weekdaysShort.push(date.toLocaleString(locale, { weekday: 'short' }));
+        }
+
+        return {
+            previousMonth: '',
+            nextMonth: '',
+            months: months,
+            weekdays: weekdays,
+            weekdaysShort: weekdaysShort
+        };
+    }
+
+    /**
      * Returns the path to the views directory.
      *
      * @return {string}
