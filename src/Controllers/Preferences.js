@@ -9,13 +9,20 @@ class Preferences
      */
     constructor()
     {
+        // Update styles when dark mode was changed
+        Electron.ipcRenderer.on(
+            'app.darkmode',
+
+            // Add/remove dark-mode class to/from root DOM element
+            (e, darkMode) => {
+                document.documentElement.classList[
+                    darkMode ? 'add' : 'remove'
+                ]('dark-mode');
+            }
+        );
+        
         // Set up all available preferences and their current/default values
         this.data = Electron.ipcRenderer.sendSync('preferences.get')
-
-        // Add class if in dark mode
-        if (Electron.ipcRenderer.sendSync('app.darkmode')) {
-            document.documentElement.classList.add('dark-mode');
-        }
 
         // Define logic for all fields
         const fields = [

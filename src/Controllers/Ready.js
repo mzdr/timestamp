@@ -1,5 +1,4 @@
 const Electron = require('electron');
-const Path = require('path');
 const AutoLaunch = require('auto-launch');
 
 class Ready
@@ -19,21 +18,12 @@ class Ready
         // Hide dock icon
         Electron.app.dock.hide();
 
-        // Get current locale
-        this.app.locale = Electron.app.getLocale() || 'en';
-
-        // OSX: In dark mode?
-        this.app.darkMode = Electron.systemPreferences.isDarkMode();
-
-        // Set path to views directory
-        this.app.viewsDir = 'file://' + Path.normalize(`${__dirname}/../Views`);
-
         // Add auto start handler
         this.app.autoStart = new AutoLaunch({ name: Electron.app.getName() });
 
         // Provide access to several app related settings in renderer process
-        Electron.ipcMain.on('app.locale', (e) => e.returnValue = this.app.locale);
-        Electron.ipcMain.on('app.darkmode', (e) => e.returnValue = this.app.darkMode);
+        Electron.ipcMain.on('app.locale', (e) => e.returnValue = this.app.getLocale());
+        Electron.ipcMain.on('app.darkmode', (e) => e.returnValue = this.app.isDarkMode());
         Electron.ipcMain.on('preferences.get', (e) => e.returnValue = this.app.preferences.get());
 
         // We are going to need those components
@@ -54,6 +44,12 @@ class Ready
             'preferences.set',
             (e, data) => this.preferencesChanged(data)
         );
+
+        // Dark mode was changed
+        this.app.onDarkModeChanged((darkMode) => {
+            this.app.preferences.toggleDarkMode(darkMode);
+            this.app.calendar.toggleDarkMode(darkMode);
+        });
     }
 
     /**

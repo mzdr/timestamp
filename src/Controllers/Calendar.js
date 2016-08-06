@@ -10,10 +10,17 @@ class Calendar
      */
     constructor()
     {
-        // Add class if in dark mode
-        if (Electron.ipcRenderer.sendSync('app.darkmode')) {
-            document.documentElement.classList.add('dark-mode');
-        }
+        // Update styles when dark mode was changed
+        Electron.ipcRenderer.on(
+            'app.darkmode',
+
+            // Add/remove dark-mode class to/from root DOM element
+            (e, darkMode) => {
+                document.documentElement.classList[
+                    darkMode ? 'add' : 'remove'
+                ]('dark-mode');
+            }
+        );
 
         // Get detected locale from app
         let locale = Electron.ipcRenderer.sendSync('app.locale');

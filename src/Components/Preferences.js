@@ -22,7 +22,7 @@ class Preferences
         });
 
         // Load the contents
-        this._window.loadURL(`${app.viewsDir}/preferences.html`);
+        this._window.loadURL(`${app.getViewsDirectory()}/preferences.html`);
 
         // Once the user clicks beside the preferences window, it will be hidden
         this._window.on('blur', (e) => this.hide());
@@ -130,6 +130,16 @@ class Preferences
         try {
             Fs.writeFileSync(this.storageFile, JSON.stringify(this.data));
         } catch (e) {}
+    }
+
+    /**
+     * Switch between dark mode styles.
+     *
+     * @param {bool} darkMode If dark mode should be enabled or not.
+     */
+    toggleDarkMode(darkMode)
+    {
+        this._window.webContents.send('app.darkmode', darkMode);
     }
 }
 

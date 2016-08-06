@@ -20,7 +20,7 @@ class Calendar
         });
 
         // Load the contents
-        this._window.loadURL(`${app.viewsDir}/calendar.html`);
+        this._window.loadURL(`${app.getViewsDirectory()}/calendar.html`);
 
         // Once the user clicks beside the calendar window, it will be hidden
         this._window.on('blur', (e) => this.hide());
@@ -66,6 +66,16 @@ class Calendar
         }
 
         this._window.setPosition(x, y);
+    }
+
+    /**
+     * Switch between dark mode styles.
+     *
+     * @param {bool} darkMode If dark mode should be enabled or not.
+     */
+    toggleDarkMode(darkMode)
+    {
+        this._window.webContents.send('app.darkmode', darkMode);
     }
 }
 
