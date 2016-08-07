@@ -5,8 +5,9 @@
   "description": "Just a simple macOS menu bar clock replacement app showing the date/time in a given format.",
   "main": "src/App.js",
   "scripts": {
-    "start": "electron .",
-    "sass": "node-sass --watch --recursive --output src/Views --source-map true --source-map-contents src/Views"
+    "start": "electron . --enable-logging",
+    "sass": "node-sass --watch --recursive --output src/Views --source-map true --source-map-contents src/Views",
+    "package": "./node_modules/.bin/electron-packager . $npm_package_productName --app-version=$npm_package_version --out=build --ignore='^/build$' --platform=darwin --arch=x64 --overwrite"
   },
   "repository": {
     "type": "git",
@@ -21,7 +22,8 @@
   "homepage": "https://github.com/mzdr/timestamp#readme",
   "devDependencies": {
     "auto-launch": "^2.1.0",
-    "electron-prebuilt": "^1.2.0",
+    "electron-packager": "^7.5.1",
+    "electron-prebuilt": "^1.3.2",
     "moment": "^2.14.1",
     "normalize.css": "^4.2.0",
     "pikaday": "^1.4.0"
