@@ -9,34 +9,27 @@ class Preferences
      */
     constructor()
     {
-        // Update styles when dark mode was changed
-        Electron.ipcRenderer.on(
-            'app.darkmode',
+        // Remember associated component of this controller
+        this.component = Electron.remote.getCurrentWindow().component;
 
-            // Add/remove dark-mode class to/from root DOM element
-            (e, darkMode) => {
-                document.documentElement.classList[
-                    darkMode ? 'add' : 'remove'
-                ]('dark-mode');
-            }
+        // Register handler when dark mode is being changed
+        this.component.onDarkModeChanged(
+            (darkMode) => this.toggleDarkMode(darkMode)
         );
-        
-        // Set up all available preferences and their current/default values
-        this.data = Electron.ipcRenderer.sendSync('preferences.get')
 
         // Define logic for all fields
         const fields = [
             {
                 selector: '[data-format]',
                 event: 'keyup',
-                onChange: (el) => this.data.clockFormat = el.value,
-                onLoad: (el) => el.value = this.data.clockFormat
+                onChange: (el) => this.component.set('clockFormat', el.value),
+                onLoad: (el) => el.value = this.component.get('clockFormat')
             },
             {
                 selector: '[data-autostart]',
                 event: 'change',
-                onChange: (el) => this.data.autoStart = el.checked,
-                onLoad: (el) => el.checked = this.data.autoStart
+                onChange: (el) => this.component.set('autoStart', el.checked),
+                onLoad: (el) => el.checked = this.component.get('autoStart')
             }
         ];
 
@@ -44,11 +37,17 @@ class Preferences
         fields.forEach((field) => {
             let el = document.querySelector(field.selector);
 
+            // Add onChange listener
             el.addEventListener(field.event, () => {
-                field.onChange(el);
-                this.onChange();
+
+                // Update custom field
+                field.onChange(el)
+
+                // Persist new data
+                this.component.save();
             });
 
+            // Fire onLoad listener
             field.onLoad(el);
         });
 
@@ -65,11 +64,16 @@ class Preferences
     }
 
     /**
-     * At least one setting has been changed. Pass new settings to app.
+     * When the dark mode is being changed we need to adjust the styles by
+     * adding or removing the dark-mode class to the root DOM element.
+     *
+     * @param {boolean} darkMode
      */
-    onChange()
+    toggleDarkMode(darkMode)
     {
-        Electron.ipcRenderer.send('preferences.set', this.data);
+        document.documentElement.classList[
+            darkMode ? 'add' : 'remove'
+        ]('dark-mode');
     }
 }
 

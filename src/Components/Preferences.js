@@ -11,6 +11,12 @@ class Preferences
     */
     constructor(app)
     {
+        // Remember app instance
+        this.app = app;
+
+        // Default preferences
+        this.set(this.app.getDefaultPreferences());
+
         // Create window instance
         this._window = new Electron.BrowserWindow({
             width: 300,
@@ -21,11 +27,14 @@ class Preferences
             show: false
         });
 
-        // Load the contents
-        this._window.loadURL(`${app.getViewsDirectory()}/preferences.html`);
+        // Provides access to this component in renderer process
+        this._window.component = this;
 
-        // Once the user clicks beside the preferences window, it will be hidden
-        this._window.on('blur', (e) => this.hide());
+        // Load the contents
+        this._window.loadURL(`file://${app.getViewsDirectory()}/preferences.html`);
+
+        // Register onBlur callback
+        this._window.on('blur', (e) => this.onBlur(e));
 
         // Get storage file for persisting preferences
         this.storageFile = Path.join(
@@ -33,14 +42,13 @@ class Preferences
             'user-preferences.json'
         );
 
-        // Default preferences
-        this.data = {
-            clockFormat: 'HH:MM:ss',
-            autoStart: false
-        };
-
         // Load preferences from disk
         this.load();
+
+        // Register window controller
+        this._window.webContents.executeJavaScript(
+            `new (require('${this.app.getControllersDirectory()}/Preferences'));`
+        );
     }
 
     /**
@@ -48,6 +56,11 @@ class Preferences
      */
     show()
     {
+        // Do not miss any dark mode changes
+        if (typeof this._darkModeHandler === 'function') {
+            this._darkModeHandler(this.app.isDarkMode());
+        }
+
         this._window.show();
     }
 
@@ -85,10 +98,10 @@ class Preferences
     get(key)
     {
         if (typeof key === 'string') {
-            return this.data[key];
+            return this._data[key];
         }
 
-        return this.data;
+        return this._data;
     }
 
     /**
@@ -102,9 +115,9 @@ class Preferences
     set(key, data)
     {
         if (typeof key === 'object') {
-            this.data = key;
+            this._data = key;
         } else {
-            this.data[key] = data;
+            this._data[key] = data;
         }
     }
 
@@ -117,7 +130,10 @@ class Preferences
             const data = JSON.parse(Fs.readFileSync(this.storageFile, 'utf8'));
 
             // Successfully loaded settings from disk
-            this.data = data;
+            this.set(data);
+
+            // Pass loaded settings to app
+            this.app.onPreferencesChanged(data);
 
         } catch (e) {}
     }
@@ -128,18 +144,34 @@ class Preferences
     save()
     {
         try {
-            Fs.writeFileSync(this.storageFile, JSON.stringify(this.data));
+            const data = this.get();
+
+            // Try writing data to disk
+            Fs.writeFileSync(this.storageFile, JSON.stringify(data));
+
+            // Pass new preferences to app
+            this.app.onPreferencesChanged(data);
+
         } catch (e) {}
     }
 
     /**
-     * Switch between dark mode styles.
-     *
-     * @param {bool} darkMode If dark mode should be enabled or not.
+     * Called when the window loses focus. In our case once the user clicks
+     * beside the preferences window, it will be hidden.
      */
-    toggleDarkMode(darkMode)
+    onBlur()
     {
-        this._window.webContents.send('app.darkmode', darkMode);
+        this.hide();
+    }
+
+    /**
+     * Register callback which will be called when dark mode was changed.
+     *
+     * @param {function} callback
+     */
+    onDarkModeChanged(callback)
+    {
+        this._darkModeHandler = callback;
     }
 }
 

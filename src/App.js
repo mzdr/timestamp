@@ -10,6 +10,13 @@ class App
      */
     constructor()
     {
+        this.requiredComponents = [
+            'Tray',
+            'Clock',
+            'Preferences',
+            'Calendar'
+        ];
+
         // This method will be called when Electron has finished
         // initialization and is ready to create browser windows.
         // Some APIs can only be used after this event occurs.
@@ -72,6 +79,19 @@ class App
     }
 
     /**
+     * Returns the default preferences for this app.
+     *
+     * @return {object}
+     */
+    getDefaultPreferences()
+    {
+        return {
+            clockFormat: 'HH:mm:ss',
+            autoStart: false
+        };
+    }
+
+    /**
      * Returns the path to the views directory.
      *
      * @return {string}
@@ -89,6 +109,16 @@ class App
     getControllersDirectory()
     {
         return Path.normalize(`${__dirname}/Controllers`);
+    }
+
+    /**
+     * Returns the path to the components directory.
+     *
+     * @return {string}
+     */
+    getComponentsDirectory()
+    {
+        return Path.normalize(`${__dirname}/Components`);
     }
 
     /**
@@ -115,6 +145,24 @@ class App
             'AppleInterfaceThemeChangedNotification',
             () => callback(this.isDarkMode())
         );
+    }
+
+    /**
+     * Handle change of preferences.
+     *
+     * @param {object} preferences New preferences.
+     */
+    onPreferencesChanged(preferences)
+    {
+        // We have a new clock format
+        if (preferences.clockFormat !== this.clock.format) {
+            this.clock.format = preferences.clockFormat;
+        }
+
+        // Auto start was changed
+        if (preferences.autoStart !== this.autoStart.isEnabled()) {
+            this.autoStart[preferences.autoStart ? 'enable' : 'disable']()
+        }
     }
 }
 
