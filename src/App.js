@@ -155,8 +155,8 @@ class App
     onPreferencesChanged(preferences)
     {
         // We have a new clock format
-        if (preferences.clockFormat !== this.clock.format) {
-            this.clock.format = preferences.clockFormat;
+        if (preferences.clockFormat !== this.clock.getFormat()) {
+            this.clock.setFormat(preferences.clockFormat);
         }
 
         // Auto start was changed

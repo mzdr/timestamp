@@ -44,9 +44,9 @@ class Ready
     initTray()
     {
         // Hook clock tick with tray label
-        this.app.clock.onTick = (clock) => {
+        this.app.clock.onTick((clock) => {
             this.app.tray.label = clock.toString();
-        }
+        });
 
         // Show calendar when clicking on tray icon
         this.app.tray.onClick = () => {

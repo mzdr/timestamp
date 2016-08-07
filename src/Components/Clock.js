@@ -11,7 +11,7 @@ class Clock
     constructor()
     {
         // Default fallback format
-        this.format = 'HH:mm:ss';
+        this.setFormat('HH:mm:ss');
 
         // Start the clock
         this.start();
@@ -22,7 +22,14 @@ class Clock
      */
     start()
     {
-        this.interval = setInterval(() => this.onTick(this), 1000);
+        if (typeof this._onTick !== 'function') {
+            this._onTick = () => {};
+        }
+
+        this.intervalId = setInterval(
+            () => this._onTick(this),
+            1000
+        );
     }
 
     /**
@@ -30,34 +37,19 @@ class Clock
      */
     stop()
     {
-        if (this.interval) {
-            this.interval = clearInterval(this.interval);
+        if (this.intervalId) {
+            this.intervalId = clearInterval(this.intervalId);
         }
-    }
-
-    /**
-     * Returns the currently set callback function which will be
-     * called on each tick.
-     *
-     * @return {function}
-     */
-    get onTick()
-    {
-        if (typeof this._onTick !== 'function') {
-            this._onTick = () => {};
-        }
-
-        return this._onTick;
     }
 
     /**
      * Sets the callback function which will be called on each tick.
      *
-     * @param {function} fn Tick function to call.
+     * @param {function} callback Tick function to call.
      */
-    set onTick(fn)
+    onTick(callback)
     {
-        this._onTick = fn;
+        this._onTick = callback;
     }
 
     /**
@@ -65,7 +57,7 @@ class Clock
      *
      * @return {string}
      */
-    get format()
+    getFormat()
     {
         return this._format;
     }
@@ -76,7 +68,7 @@ class Clock
      * @see http://momentjs.com/docs/#/displaying/format/
      * @param {string} format Clock format.
      */
-    set format(format)
+    setFormat(format)
     {
         const type = typeof format;
 
@@ -94,7 +86,7 @@ class Clock
      */
     toString()
     {
-        return Moment().format(this.format);
+        return Moment().format(this.getFormat());
     }
 }
 
