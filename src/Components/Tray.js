@@ -50,6 +50,10 @@ class Tray
                 role: 'about'
             },
             {
+                label: `Version ${Electron.app.getVersion()}`,
+                enabled: false
+            },
+            {
                 type: 'separator'
             },
             {
