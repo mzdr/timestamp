@@ -12,7 +12,6 @@ class Tray
         // HACK: empty image as of image is required
         // @see https://github.com/electron/electron/issues/1553
         const icon = Electron.nativeImage.createEmpty();
-        // const icon = './resources/icon.png';
 
         // The tray instance of Electron
         this._tray = new Electron.Tray(icon);
@@ -20,11 +19,8 @@ class Tray
         // Build menu from template
         const contextMenu = Electron.Menu.buildFromTemplate(this.getMenuTemplate())
 
-        // Hand over menu to tray
-        // this._tray.setContextMenu(contextMenu);
-
         // Fire click handler on a simple (left) click
-        this._tray.on('click', () => this._clickHandler() || (() => {}));
+        this._tray.on('click', () => (this._clickHandler || (() => {}))());
 
         // Bring up the context menu on a right click
         this._tray.on('right-click', () => this._tray.popUpContextMenu(contextMenu));
@@ -59,7 +55,7 @@ class Tray
             {
                 label: 'Preferences…',
                 accelerator: 'Command+,',
-                click: () => this._preferencesHandler() || (() => {})
+                click: () => (this._preferencesHandler || (() => {}))()
             },
             {
                 type: 'separator'
@@ -67,7 +63,7 @@ class Tray
             {
                 label: 'Quit',
                 accelerator: 'Command+Q',
-                click: () => this._quitHandler() || (() => {})
+                click: () => (this._quitHandler || (() => {}))()
             }
         ];
     }
