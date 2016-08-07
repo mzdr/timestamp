@@ -18,16 +18,16 @@ class Tray
         this._tray = new Electron.Tray(icon);
 
         // Build menu from template
-        const contextMenu = Electron.Menu.buildFromTemplate(this.menuTemplate)
+        const contextMenu = Electron.Menu.buildFromTemplate(this.getMenuTemplate())
 
         // Hand over menu to tray
         // this._tray.setContextMenu(contextMenu);
 
         // Fire click handler on a simple (left) click
-        this._tray.on('click', (e, bounds) => this.onClick(e, bounds));
+        this._tray.on('click', () => this._clickHandler() || (() => {}));
 
         // Bring up the context menu on a right click
-        this._tray.on('right-click', (event, bounds) => this._tray.popUpContextMenu(contextMenu));
+        this._tray.on('right-click', () => this._tray.popUpContextMenu(contextMenu));
     }
 
     /**
@@ -46,7 +46,7 @@ class Tray
     *
     * @return {object} Menu template.
     */
-    get menuTemplate()
+    getMenuTemplate()
     {
         return [
             {
@@ -59,7 +59,7 @@ class Tray
             {
                 label: 'Preferences…',
                 accelerator: 'Command+,',
-                click: () => this.onPreferencesClicked()
+                click: () => this._preferencesHandler() || (() => {})
             },
             {
                 type: 'separator'
@@ -67,7 +67,7 @@ class Tray
             {
                 label: 'Quit',
                 accelerator: 'Command+Q',
-                click: () => this.onQuitClicked()
+                click: () => this._quitHandler() || (() => {})
             }
         ];
     }
@@ -77,7 +77,7 @@ class Tray
      *
      * @return {string}
      */
-    get label()
+    getLabel()
     {
         return this._label;
     }
@@ -87,23 +87,9 @@ class Tray
      *
      * @param {string} label
      */
-    set label(label)
+    setLabel(label)
     {
         this._tray.setTitle(this._label = label);
-    }
-
-    /**
-     * Returns the current set function which handles clicks on the tray icon.
-     *
-     * @return {function}
-     */
-    get onClick()
-    {
-        if (typeof this._clickHandler !== 'function') {
-            this._clickHandler = () => {};
-        }
-
-        return this._clickHandler;
     }
 
     /**
@@ -111,23 +97,9 @@ class Tray
      *
      * @param {function} fn
      */
-    set onClick(fn)
+    onClick(fn)
     {
         this._clickHandler = fn;
-    }
-
-    /**
-     * Returns the current set handler for the quit menu item.
-     *
-     * @return {function}
-     */
-    get onQuitClicked()
-    {
-        if (typeof this._quitHandler !== 'function') {
-            this._quitHandler = () => {};
-        }
-
-        return this._quitHandler;
     }
 
     /**
@@ -135,23 +107,9 @@ class Tray
      *
      * @param {function} fn
      */
-    set onQuitClicked(fn)
+    onQuitClicked(fn)
     {
         this._quitHandler = fn;
-    }
-
-    /**
-     * Returns the current set handler for the preferences menu item.
-     *
-     * @return {function}
-     */
-    get onPreferencesClicked()
-    {
-        if (typeof this._preferencesHandler !== 'function') {
-            this._preferencesHandler = () => {};
-        }
-
-        return this._preferencesHandler;
     }
 
     /**
@@ -159,7 +117,7 @@ class Tray
      *
      * @param {function} fn
      */
-    set onPreferencesClicked(fn)
+    onPreferencesClicked(fn)
     {
         this._preferencesHandler = fn;
     }

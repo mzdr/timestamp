@@ -45,11 +45,11 @@ class Ready
     {
         // Hook clock tick with tray label
         this.app.clock.onTick((clock) => {
-            this.app.tray.label = clock.toString();
+            this.app.tray.setLabel(clock.toString());
         });
 
         // Show calendar when clicking on tray icon
-        this.app.tray.onClick = () => {
+        this.app.tray.onClick(() => {
             const bounds = this.app.tray.getBounds();
 
             this.app.calendar.setPosition(bounds.x + bounds.width / 2, 0);
@@ -59,16 +59,16 @@ class Ready
             } else {
                 this.app.calendar.show();
             }
-        };
+        });
 
         // Glue tray menu items with app components
-        this.app.tray.onQuitClicked = () => Electron.app.quit();
-        this.app.tray.onPreferencesClicked = () => {
+        this.app.tray.onQuitClicked(() => Electron.app.quit());
+        this.app.tray.onPreferencesClicked(() => {
             const bounds = this.app.tray.getBounds();
 
             this.app.preferences.setPosition(bounds.x + bounds.width / 2, 0);
             this.app.preferences.show();
-        };
+        });
     }
 }
 
