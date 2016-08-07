@@ -4,56 +4,51 @@ const Electron = require('electron');
 class Calendar
 {
     /**
-     * Creates an instance of the Calendar controller.
+     * Creates an instance of the Calendar controller which is responsible for
+     * controlling the renderer process of the calendar view.
      *
      * @return {Calendar}
      */
     constructor()
     {
-        // Update styles when dark mode was changed
-        Electron.ipcRenderer.on(
-            'app.darkmode',
-
-            // Add/remove dark-mode class to/from root DOM element
-            (e, darkMode) => {
-                document.documentElement.classList[
-                    darkMode ? 'add' : 'remove'
-                ]('dark-mode');
-            }
-        );
-
-        // Get detected locale from app
-        let locale = Electron.ipcRenderer.sendSync('app.locale');
-
-        // Collect all necessary translations from current locale
-        this.translations = this.getTranslationsFromLocale(locale);
+        // Remember associated component of this controller
+        this.component = Electron.remote.getCurrentWindow().component;
 
         // Create pikaday calender
-        this.createPikaday();
+        this.createPikaday({
+            translations: this.component.getTranslations(),
+            onDraw: this.onDraw
+        });
+
+        // Register handler when dark mode is being changed
+        this.component.onDarkModeChanged(
+            (darkMode) => this.toggleDarkMode(darkMode)
+        );
     }
 
     /**
      * Creates the Pikaday datepicker instance. We use it as a simple calender.
      *
      * @see https://dbushell.github.io/Pikaday/
+     * @param {object} options Calendar options.
      */
-    createPikaday()
+    createPikaday(options)
     {
-        this.pikaday = new Pikaday({
+        const pikaday = new Pikaday({
             field: document.createElement('div'),
             bound: false,
             container: document.querySelector('[data-pikaday]'),
             showWeekNumber: false,
             showDaysInNextAndPreviousMonths: true,
-            onDraw: this.onDraw,
-            i18n: this.translations
+            onDraw: options.onDraw,
+            i18n: options.translations
         });
 
         // Fetch all controls
         const controls = [
-            { selector: '[data-today]', fn: () => this.pikaday.gotoToday() },
-            { selector: '[data-prev]',  fn: () => this.pikaday.prevMonth() },
-            { selector: '[data-next]',  fn: () => this.pikaday.nextMonth() }
+            { selector: '[data-today]', fn: () => pikaday.gotoToday() },
+            { selector: '[data-prev]',  fn: () => pikaday.prevMonth() },
+            { selector: '[data-next]',  fn: () => pikaday.nextMonth() }
         ];
 
         // Assign click listeners
@@ -64,48 +59,7 @@ class Calendar
         });
 
         // Redraw every minute to avoid displaying old/wrong states
-        setInterval(() => this.pikaday.draw(), 1000 * 60);
-    }
-
-    /**
-     * Collect all necessary weekday and month translations using the
-     * Date.prototype.toLocaleString() functionality.
-     *
-     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString
-     * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
-     * @param {string} locale A string with a BCP 47 language tag.
-     * @return {object}
-     */
-    getTranslationsFromLocale(locale)
-    {
-        const date = new Date(2015, 0);
-        const months = [];
-        const weekdays = [];
-        const weekdaysShort = [];
-
-        // Collect translations for months
-        for (let i = 0; i < 12; i++) {
-            date.setMonth(i);
-            months.push(date.toLocaleString(locale, { month: 'long' }));
-        }
-
-        // March the 1st in 2015 is a sunday
-        date.setMonth(2, 1);
-
-        // Collect translations for weekdays
-        for (let i = 1; i < 8; i++) {
-            date.setMonth(date.getMonth(), i);
-            weekdays.push(date.toLocaleString(locale, { weekday: 'long' }));
-            weekdaysShort.push(date.toLocaleString(locale, { weekday: 'short' }));
-        }
-
-        return {
-            previousMonth: '',
-            nextMonth: '',
-            months: months,
-            weekdays: weekdays,
-            weekdaysShort: weekdaysShort
-        };
+        setInterval(() => pikaday.draw(), 1000 * 60);
     }
 
     /**
@@ -121,6 +75,19 @@ class Calendar
 
         monthLabel.textContent = this.config().i18n.months[calendar.month];
         yearLabel.textContent = calendar.year;
+    }
+
+    /**
+     * When the dark mode is being changed we need to adjust the styles by
+     * adding or removing the dark-mode class to the root DOM element.
+     *
+     * @param {boolean} darkMode
+     */
+    toggleDarkMode(darkMode)
+    {
+        document.documentElement.classList[
+            darkMode ? 'add' : 'remove'
+        ]('dark-mode');
     }
 }
 

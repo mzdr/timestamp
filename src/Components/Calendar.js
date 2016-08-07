@@ -9,6 +9,9 @@ class Calendar
     */
     constructor(app)
     {
+        // Remember app instance
+        this.app = app;
+
         // Create window instance
         this._window = new Electron.BrowserWindow({
             width: 332,
@@ -19,11 +22,19 @@ class Calendar
             show: false
         });
 
-        // Load the contents
-        this._window.loadURL(`${app.getViewsDirectory()}/calendar.html`);
+        // Provides access to this component in renderer process
+        this._window.component = this;
 
-        // Once the user clicks beside the calendar window, it will be hidden
-        this._window.on('blur', (e) => this.hide());
+        // Load the contents aka the view
+        this._window.loadURL(`file://${this.app.getViewsDirectory()}/calendar.html`);
+
+        // Register onBlur callback
+        this._window.on('blur', (e) => this.onBlur(e));
+
+        // Register window controller
+        this._window.webContents.executeJavaScript(
+            `new (require('${this.app.getControllersDirectory()}/Calendar'));`
+        );
     }
 
     /**
@@ -31,6 +42,11 @@ class Calendar
      */
     show()
     {
+        // Do not miss any dark mode changes
+        if (typeof this._darkModeHandler === 'function') {
+            this._darkModeHandler(this.app.isDarkMode());
+        }
+
         this._window.show();
     }
 
@@ -69,13 +85,32 @@ class Calendar
     }
 
     /**
-     * Switch between dark mode styles.
+     * Returns all available translations of this application.
      *
-     * @param {bool} darkMode If dark mode should be enabled or not.
+     * @return {object}
      */
-    toggleDarkMode(darkMode)
+    getTranslations()
     {
-        this._window.webContents.send('app.darkmode', darkMode);
+        return this.app.getTranslationsFromLocale(this.app.getLocale());
+    }
+
+    /**
+     * Called when the window loses focus. In our case once the user clicks
+     * beside the calendar window, it will be hidden.
+     */
+    onBlur()
+    {
+        this.hide();
+    }
+
+    /**
+     * Register callback which will be called when dark mode was changed.
+     *
+     * @param {function} callback
+     */
+    onDarkModeChanged(callback)
+    {
+        this._darkModeHandler = callback;
     }
 }
 
