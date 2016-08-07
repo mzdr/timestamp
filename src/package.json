@@ -1,0 +1,17 @@
+{
+  "name": "timestamp",
+  "productName": "Timestamp",
+  "description": "A better macOS menu bar clock with a customizable date/time display and a calendar.",
+  "version": "1.0.0",
+  "author": "Sebastian Prein <hi@sebastianprein.com>",
+  "copyright": "© 2016 Sebastian Prein",
+  "homepage": "https://github.com/mzdr/timestamp",
+  "license": "MIT",
+  "main": "App.js",
+  "dependencies": {
+    "auto-launch": "^2.1.0",
+    "moment": "^2.14.1",
+    "normalize.css": "^4.2.0",
+    "pikaday": "^1.4.0"
+  }
+}
