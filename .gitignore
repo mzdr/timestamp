@@ -3,7 +3,6 @@
 
 # Build junk
 node_modules
-build
 dist
 
 # Don't track (built) assets
