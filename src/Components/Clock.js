@@ -8,8 +8,14 @@ class Clock
     *
     * @return {Clock}
     */
-    constructor()
+    constructor(app)
     {
+        // Remember app instance
+        this.app = app;
+
+        // Set locale for Moment.js
+        Moment.locale(this.app.getLocale());
+
         // Default fallback format
         this.setFormat('HH:mm:ss');
 
