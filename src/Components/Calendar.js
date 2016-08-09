@@ -1,3 +1,4 @@
+const Moment = require('moment');
 const Electron = require('electron');
 
 class Calendar
@@ -11,6 +12,9 @@ class Calendar
     {
         // Remember app instance
         this.app = app;
+
+        // Set locale for Moment.js
+        Moment.locale(this.app.getLocale());
 
         // Create window instance
         this._window = new Electron.BrowserWindow({
@@ -85,13 +89,20 @@ class Calendar
     }
 
     /**
-     * Returns all available translations of this application.
+     * Returns the translations for the calendar.
      *
+     * @see http://momentjs.com/docs/#/i18n/listing-months-weekdays/
      * @return {object}
      */
     getTranslations()
     {
-        return this.app.getTranslationsFromLocale(this.app.getLocale());
+        return {
+            previousMonth: '',  // don't need that, will never be shown
+            nextMonth: '',      // ↳ same here
+            months: Moment.months(),
+            weekdays: Moment.weekdays(),
+            weekdaysShort: Moment.weekdaysShort()
+        };
     }
 
     /**
