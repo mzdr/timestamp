@@ -124,21 +124,26 @@ class Preferences
     /**
      * Load preferences from disk.
      */
-    load() {
-
+    load()
+    {
         try {
-            const data = JSON.parse(Fs.readFileSync(this.storageFile, 'utf8'));
+            var data = Fs.readFileSync(this.storageFile, 'utf8')
+        } catch (e) {
 
-            // Merge loaded preferences from disk with current ones
-            const newPreferences = Object.assign({}, this.get(), data);
+            // It's probably the first time the app has been started,
+            // just save default preferences and that's it for today
+            return this.save();
 
-            // Store it internally
-            this.set(newPreferences);
+        }
 
-            // Pass them to the app
-            this.app.onPreferencesChanged(newPreferences);
+        // Merge loaded preferences from disk with current ones
+        const newPreferences = Object.assign({}, this.get(), JSON.parse(data));
 
-        } catch (e) {}
+        // Store it internally
+        this.set(newPreferences);
+
+        // Pass them to the app
+        this.app.onPreferencesChanged(newPreferences);
     }
 
     /**
@@ -146,16 +151,13 @@ class Preferences
      */
     save()
     {
-        try {
-            const data = this.get();
+        const data = this.get();
 
-            // Try writing data to disk
-            Fs.writeFileSync(this.storageFile, JSON.stringify(data));
+        // Try writing data to disk
+        Fs.writeFileSync(this.storageFile, JSON.stringify(data));
 
-            // Pass new preferences to app
-            this.app.onPreferencesChanged(data);
-
-        } catch (e) {}
+        // Pass new preferences to app
+        this.app.onPreferencesChanged(data);
     }
 
     /**
