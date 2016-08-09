@@ -129,11 +129,14 @@ class Preferences
         try {
             const data = JSON.parse(Fs.readFileSync(this.storageFile, 'utf8'));
 
-            // Successfully loaded settings from disk
-            this.set(data);
+            // Merge loaded preferences from disk with current ones
+            const newPreferences = Object.assign({}, this.get(), data);
 
-            // Pass loaded settings to app
-            this.app.onPreferencesChanged(data);
+            // Store it internally
+            this.set(newPreferences);
+
+            // Pass them to the app
+            this.app.onPreferencesChanged(newPreferences);
 
         } catch (e) {}
     }
