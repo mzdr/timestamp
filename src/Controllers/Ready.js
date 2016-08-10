@@ -31,6 +31,9 @@ class Ready
         // Initialize tray related things
         this.initTray();
 
+        // Check for update on startup
+        this.handleUpdateCheckingProcess();
+
         // Dark mode was changed
         // this.app.onDarkModeChanged((darkMode) => {
         //     this.app.preferences.toggleDarkMode(darkMode);
@@ -86,11 +89,10 @@ class Ready
     /**
      * Handles the update checking process by showing and hiding relevant
      * menu items.
-     *
-     * @param {MenuItem} checkForUpdateItem The clicked menu item.
      */
-    handleUpdateCheckingProcess(checkForUpdateItem)
+    handleUpdateCheckingProcess()
     {
+        let checkForUpdateItem = this.app.tray.getMenuItem('checkForUpdate');
         let restartAndInstallUpdateItem = this.app.tray.getMenuItem('restartAndInstallUpdate');
         let youAreUpToDateItem = this.app.tray.getMenuItem('youAreUpToDate');
         let downloadingUpdateItem = this.app.tray.getMenuItem('downloadingUpdate');
