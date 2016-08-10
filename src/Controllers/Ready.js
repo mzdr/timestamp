@@ -61,14 +61,90 @@ class Ready
             }
         });
 
-        // Glue tray menu items with app components
+        // Quit the app
         this.app.tray.onQuitClicked(() => Electron.app.quit());
+
+        // Show preferences
         this.app.tray.onPreferencesClicked(() => {
             const bounds = this.app.tray.getBounds();
 
             this.app.preferences.setPosition(bounds.x + bounds.width / 2, 0);
             this.app.preferences.show();
         });
+
+        // Check for update menu item has been clicked
+        this.app.tray.onCheckForUpdateClicked(
+            (item) => this.handleUpdateCheckingProcess(item)
+        );
+
+        // Restart and install update
+        this.app.tray.onRestartAndInstallUpdate(
+            () => this.app.updater.quitAndInstall()
+        );
+    }
+
+    /**
+     * Handles the update checking process by showing and hiding relevant
+     * menu items.
+     *
+     * @param {MenuItem} checkForUpdateItem The clicked menu item.
+     */
+    handleUpdateCheckingProcess(checkForUpdateItem)
+    {
+        let restartAndInstallUpdateItem = this.app.tray.getMenuItem('restartAndInstallUpdate');
+        let youAreUpToDateItem = this.app.tray.getMenuItem('youAreUpToDate');
+        let downloadingUpdateItem = this.app.tray.getMenuItem('downloadingUpdate');
+        let downloadingUpdateFailedItem = this.app.tray.getMenuItem('downloadingUpdateFailed');
+
+        // Disable the check for update menu item to avoid running into
+        // multiple checks
+        checkForUpdateItem.enabled = false;
+
+        // Run the updater to see if there is an update
+        this.app.updater.checkForUpdate()
+
+            // We have an update!
+            .then(() => {
+
+                // Tell user we are downloading the update
+                downloadingUpdateItem.visible = true;
+                checkForUpdateItem.visible = false;
+                checkForUpdateItem.enabled = true;
+
+                // Wait for the download to finish
+                this.app.updater.onUpdateDownloaded()
+
+                    // Enable the restart and install update menu item
+                    .then(() => {
+                        downloadingUpdateItem.visible = false;
+                        restartAndInstallUpdateItem.visible = true;
+                    })
+
+                    // Failed to download update
+                    .catch(() => {
+                        downloadingUpdateFailedItem.visible = true;
+                        downloadingUpdateItem.visible = false;
+
+                        // Enable check for update after 1 min
+                        setTimeout(() => {
+                            checkForUpdateItem.visible = true;
+                            downloadingUpdateFailedItem.visible = false;
+                        }, 1000 * 60);
+                    });
+            })
+
+            // Nope, all up to date
+            .catch(() => {
+                youAreUpToDateItem.visible = true;
+                checkForUpdateItem.visible = false;
+                checkForUpdateItem.enabled = true;
+
+                // Enable check for update after 1 min
+                setTimeout(() => {
+                    checkForUpdateItem.visible = true;
+                    youAreUpToDateItem.visible = false;
+                }, 1000 * 60);
+            });
     }
 }
 

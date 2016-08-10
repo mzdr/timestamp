@@ -14,7 +14,8 @@ class App
             'Tray',
             'Clock',
             'Preferences',
-            'Calendar'
+            'Calendar',
+            'Updater'
         ];
 
         // This method will be called when Electron has finished

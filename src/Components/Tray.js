@@ -16,14 +16,41 @@ class Tray
         // The tray instance of Electron
         this._tray = new Electron.Tray(icon);
 
-        // Build menu from template
-        const contextMenu = Electron.Menu.buildFromTemplate(this.getMenuTemplate())
-
         // Fire click handler on a simple (left) click
         this._tray.on('click', () => (this._clickHandler || (() => {}))());
 
+        // Build right click menu
+        this.buildMenu(this.getMenuTemplate());
+
         // Bring up the context menu on a right click
-        this._tray.on('right-click', () => this._tray.popUpContextMenu(contextMenu));
+        this._tray.on('right-click', () => this._tray.popUpContextMenu(
+            this.getMenu()
+        ));
+    }
+
+    /**
+     * Create the right click menu.
+     *
+     * @param {object} template The menu template.
+     * @return {Menu}
+     */
+    buildMenu(template)
+    {
+        this._contextMenu = new Electron.Menu();
+        this._menuItems = {};
+
+        template.forEach((item) => {
+            let menuItem = new Electron.MenuItem(item);
+
+            this._contextMenu.append(menuItem);
+
+            // Save menu item under given id for later access
+            if (item.id) {
+                this._menuItems[item.id] = menuItem;
+            }
+        });
+
+        return this._contextMenu;
     }
 
     /**
@@ -35,6 +62,32 @@ class Tray
     getBounds()
     {
         return this._tray.getBounds();
+    }
+
+    /**
+     * Returns the context menu for this tray.
+     *
+     * @return {Menu}
+     */
+    getMenu()
+    {
+        // Menu has not yet been built
+        if (this._contextMenu === undefined) {
+            return new Electron.Menu();
+        }
+
+        return this._contextMenu;
+    }
+
+    /**
+     * Returns a specific menu item from the current menu.
+     *
+     * @param {string} id Menu item id.
+     * @return {MenuItem}
+     */
+    getMenuItem(id)
+    {
+        return this._menuItems[id];
     }
 
     /**
@@ -52,6 +105,39 @@ class Tray
             {
                 label: `Version ${Electron.app.getVersion()}`,
                 enabled: false
+            },
+            {
+                id: 'checkForUpdate',
+                label: 'Check for update',
+                click: (menuItem) => (
+                    this._checkForUpdateHandler || (() => {})
+                )(menuItem)
+            },
+            {
+                id: 'youAreUpToDate',
+                label: 'You are up to date!',
+                enabled: false,
+                visible: false
+            },
+            {
+                id: 'downloadingUpdate',
+                label: 'Downloading update…',
+                enabled: false,
+                visible: false
+            },
+            {
+                id: 'downloadingUpdateFailed',
+                label: 'Downloading update failed',
+                enabled: false,
+                visible: false
+            },
+            {
+                id: 'restartAndInstallUpdate',
+                label: 'Restart and install update',
+                visible: false,
+                click: (menuItem) => (
+                    this._restartAndInstallUpdateHandler || (() => {})
+                )(menuItem)
             },
             {
                 type: 'separator'
@@ -120,6 +206,26 @@ class Tray
     onPreferencesClicked(fn)
     {
         this._preferencesHandler = fn;
+    }
+
+    /**
+     * Sets the handler for the check for update menu item.
+     *
+     * @param {function} fn
+     */
+    onCheckForUpdateClicked(fn)
+    {
+        this._checkForUpdateHandler = fn;
+    }
+
+    /**
+     * Sets the handler for the restart and install update menu item.
+     *
+     * @param {function} fn
+     */
+    onRestartAndInstallUpdate(fn)
+    {
+        this._restartAndInstallUpdateHandler = fn;
     }
 }
 
