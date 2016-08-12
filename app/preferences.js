@@ -51,6 +51,11 @@ class Preferences
 
         // Received request to save preferences to disk from renderer
         Electron.ipcMain.on('preferences.save', () => this.saveToDisk());
+
+        // Preferences view is ready and idling now
+        Electron.ipcMain.on('preferences.idle', () => {
+            this.onDarkModeChanged(this.app.isDarkMode());
+        });
     }
 
     /**
@@ -238,6 +243,8 @@ class Preferences
         Electron.ipcRenderer.on('preferences.darkmode',
             (e, darkMode) => this.toggleDarkMode(darkMode)
         );
+
+        Electron.ipcRenderer.send('preferences.idle');
     }
 
     /**

@@ -36,6 +36,11 @@ class Calendar
         Electron.ipcMain.on('calendar.translations', (e) =>
             e.returnValue = this.getTranslations()
         );
+
+        // Calendar view is ready and idling now
+        Electron.ipcMain.on('calendar.idle', () => {
+            this.onDarkModeChanged(this.app.isDarkMode());
+        });
     }
 
     /**
@@ -136,6 +141,8 @@ class Calendar
             translations: translations,
             onDraw: this.onDraw
         });
+
+        Electron.ipcRenderer.send('calendar.idle');
     }
 
     /**
