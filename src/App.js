@@ -52,6 +52,19 @@ class App
     }
 
     /**
+     * Returns the path to the file where all the user preferences are stored.
+     *
+     * @return {string}
+     */
+    getUserPreferencesPath()
+    {
+        return Path.join(
+            Electron.app.getPath('userData'),
+            'UserPreferences.json'
+        );
+    }
+
+    /**
      * Returns the path to the views directory.
      *
      * @return {string}
