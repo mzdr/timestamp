@@ -19,8 +19,15 @@ class App
         // Hide dock icon
         Electron.app.dock.hide();
 
+        // Weird workaround for current bug in auto-launch
+        // @see https://github.com/Teamwork/node-auto-launch/issues/28
+        const launchOptions = {
+            name: Electron.app.getName(),
+            path: `${Electron.app.getPath('exe').split('.app/Content')[0]}.app`
+        };
+
         // Create all necessary components
-        this.autoStart = new AutoLaunch({ name: Electron.app.getName() });
+        this.autoStart = new AutoLaunch(launchOptions);
         this.tray = new Tray(this);
         this.clock = new Clock(this);
         this.preferences = new Preferences(this);
