@@ -27,9 +27,6 @@ class Preferences
             show: false
         });
 
-        // Provides access to this component in renderer process
-        this._window.component = this;
-
         // Load the contents
         this._window.loadURL(`file://${app.getViewsDirectory()}/preferences.html`);
 
@@ -37,18 +34,23 @@ class Preferences
         this._window.on('blur', (e) => this.onBlur(e));
 
         // Get storage file for persisting preferences
-        this.storageFile = Path.join(
-            Electron.app.getPath('userData'),
-            'user-preferences.json'
-        );
+        this.storageFile = this.app.getUserPreferencesPath();
 
         // Load preferences from disk
-        this.load();
+        this.loadFromDisk();
 
-        // Register window controller
-        this._window.webContents.executeJavaScript(
-            `new (require('${this.app.getControllersDirectory()}/Preferences'));`
+        // Return preference values to renderer
+        Electron.ipcMain.on('preferences.get', (e, key, value) =>
+            e.returnValue = this.get(key, value)
         );
+
+        // Save new preference values from renderer
+        Electron.ipcMain.on('preferences.set',
+            (e, key, value) => this.set(key, value)
+        );
+
+        // Received request to save preferences to disk from renderer
+        Electron.ipcMain.on('preferences.save', () => this.saveToDisk());
     }
 
     /**
@@ -56,11 +58,6 @@ class Preferences
      */
     show()
     {
-        // Do not miss any dark mode changes
-        if (typeof this._darkModeHandler === 'function') {
-            this._darkModeHandler(this.app.isDarkMode());
-        }
-
         this._window.show();
     }
 
@@ -124,7 +121,7 @@ class Preferences
     /**
      * Load preferences from disk.
      */
-    load()
+    loadFromDisk()
     {
         try {
             var data = Fs.readFileSync(this.storageFile, 'utf8')
@@ -132,7 +129,7 @@ class Preferences
 
             // It's probably the first time the app has been started,
             // just save default preferences and that's it for today
-            return this.save();
+            return this.saveToDisk();
 
         }
 
@@ -149,7 +146,7 @@ class Preferences
     /**
      * Save preferences to to disk.
      */
-    save()
+    saveToDisk()
     {
         const data = this.get();
 
@@ -170,13 +167,90 @@ class Preferences
     }
 
     /**
-     * Register callback which will be called when dark mode was changed.
+     * When dark mode was change notify the renderer process.
      *
-     * @param {function} callback
+     * @param {bool} darkMode If dark mode is enabled or disabled.
      */
-    onDarkModeChanged(callback)
+    onDarkModeChanged(darkMode)
     {
-        this._darkModeHandler = callback;
+        this._window.webContents.send('preferences.darkmode', darkMode);
+    }
+
+    /**
+     * Provide static render function to execute logic in renderer process.
+     */
+    static render()
+    {
+        // Define logic for all fields
+        const fields = [
+            {
+                selector: '[data-format]',
+                event: 'keyup',
+                onLoad: (el) => el.value = Electron.ipcRenderer.sendSync(
+                    'preferences.get', 'clockFormat'
+                ),
+                onChange: (el) => Electron.ipcRenderer.send(
+                    'preferences.set', 'clockFormat', el.value
+                )
+            },
+            {
+                selector: '[data-autostart]',
+                event: 'change',
+                onLoad: (el) => el.checked = Electron.ipcRenderer.sendSync(
+                    'preferences.get', 'autoStart'
+                ),
+                onChange: (el) => Electron.ipcRenderer.send(
+                    'preferences.set', 'autoStart', el.checked
+                )
+            }
+        ];
+
+        // Apply logic to all fields
+        fields.forEach((field) => {
+            let el = document.querySelector(field.selector);
+
+            // Add onChange listener
+            el.addEventListener(field.event, () => {
+
+                // Update custom field
+                field.onChange(el)
+
+                // Persist new data
+                Electron.ipcRenderer.send('preferences.save');
+            });
+
+            // Fire onLoad listener
+            field.onLoad(el);
+        });
+
+        // Get all links in preferences window
+        const links = document.querySelectorAll('a[href^="http"]');
+
+        // Open links externally by default
+        for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', (e) => {
+                e.preventDefault();
+                Electron.shell.openExternal(e.currentTarget.href);
+            });
+        }
+
+        // Watch for dark mode changes
+        Electron.ipcRenderer.on('preferences.darkmode',
+            (e, darkMode) => this.toggleDarkMode(darkMode)
+        );
+    }
+
+    /**
+     * When the dark mode is being changed we need to adjust the styles by
+     * adding or removing the dark-mode class to the root DOM element.
+     *
+     * @param {boolean} darkMode Enable/disable dark mode styles.
+     */
+    static toggleDarkMode(darkMode)
+    {
+        document.documentElement.classList[
+            darkMode ? 'add' : 'remove'
+        ]('dark-mode');
     }
 }
 
