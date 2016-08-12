@@ -4,7 +4,4 @@
 # Build junk
 node_modules
 dist
-
-# Don't track (built) assets
-src/Views/*.css
-src/Views/*.map
+app/*.css
