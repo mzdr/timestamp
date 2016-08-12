@@ -194,13 +194,13 @@ class Preferences
                 )
             },
             {
-                selector: '[data-autostart]',
+                selector: '[data-startatlogin]',
                 event: 'change',
                 onLoad: (el) => el.checked = Electron.ipcRenderer.sendSync(
-                    'preferences.get', 'autoStart'
+                    'preferences.get', 'startAtLogin'
                 ),
                 onChange: (el) => Electron.ipcRenderer.send(
-                    'preferences.set', 'autoStart', el.checked
+                    'preferences.set', 'startAtLogin', el.checked
                 )
             }
         ];

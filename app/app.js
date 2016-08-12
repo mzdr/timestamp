@@ -27,7 +27,7 @@ class App
         };
 
         // Create all necessary components
-        this.autoStart = new AutoLaunch(launchOptions);
+        this.startAtLogin = new AutoLaunch(launchOptions);
         this.tray = new Tray(this);
         this.clock = new Clock(this);
         this.preferences = new Preferences(this);
@@ -176,7 +176,7 @@ class App
     {
         return {
             clockFormat: 'HH:mm:ss',
-            autoStart: false
+            startAtLogin: false
         };
     }
 
@@ -231,9 +231,9 @@ class App
             this.clock.setFormat(preferences.clockFormat);
         }
 
-        // Auto start was changed
-        if (preferences.autoStart !== this.autoStart.isEnabled()) {
-            this.autoStart[preferences.autoStart ? 'enable' : 'disable']()
+        // Start at login was changed
+        if (preferences.startAtLogin !== this.startAtLogin.isEnabled()) {
+            this.startAtLogin[preferences.startAtLogin ? 'enable' : 'disable']()
         }
     }
 }
