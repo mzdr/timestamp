@@ -1,10 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "start": "electron ./app --enable-logging",
-    "sass": "node-sass --watch --recursive --output src/Views --source-map true --source-map-contents src/Views",
-    "pack": "build --dir",
-    "dist": "build",
+    "start": "npm run build && electron ./app --enable-logging",
+    "sass": "node-sass ./app/stylesheets/styles.scss ./app/styles.css",
+    "build": "npm run sass",
+    "pack": "npm install && npm run build && build --dir",
+    "dist": "npm install && npm run build && build",
     "postinstall": "install-app-deps"
   },
   "dependencies": {
