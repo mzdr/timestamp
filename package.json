@@ -22,7 +22,7 @@
   },
   "build": {
     "appId": "com.electron.timestamp",
-    "app-category-type": "public.app-category.utilities",
+    "category": "public.app-category.utilities",
     "mac": {
       "icon": "resources/osx/icon.icns"
     },
