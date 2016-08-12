@@ -27,7 +27,7 @@ class Calendar
         });
 
         // Load the contents aka the view
-        this._window.loadURL(`file://${this.app.getViewsDirectory()}/calendar.html`);
+        this._window.loadURL(`file://${__dirname}/calendar.html`);
 
         // Register onBlur callback
         this._window.on('blur', (e) => this.onBlur(e));

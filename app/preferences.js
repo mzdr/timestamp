@@ -28,7 +28,7 @@ class Preferences
         });
 
         // Load the contents
-        this._window.loadURL(`file://${app.getViewsDirectory()}/preferences.html`);
+        this._window.loadURL(`file://${__dirname}/preferences.html`);
 
         // Register onBlur callback
         this._window.on('blur', (e) => this.onBlur(e));

@@ -7,7 +7,6 @@
   "copyright": "© 2016 Sebastian Prein",
   "homepage": "https://github.com/mzdr/timestamp",
   "license": "MIT",
-  "main": "../src/App.js",
   "dependencies": {
     "auto-launch": "^2.1.0",
     "got": "^6.3.0",

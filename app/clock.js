@@ -1,5 +1,4 @@
 const Moment = require('moment');
-const ClockException = require('./ClockException');
 
 class Clock
 {
@@ -76,10 +75,9 @@ class Clock
      */
     setFormat(format)
     {
-        const type = typeof format;
-
-        if (type !== 'string') {
-            throw new ClockException(`Format needs to be of type "string", instead "${type}" was given.`);
+        // Ignore jibberish
+        if (typeof format !== 'string') {
+            return;
         }
 
         this._format = format;
