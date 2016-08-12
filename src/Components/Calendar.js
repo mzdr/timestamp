@@ -26,18 +26,15 @@ class Calendar
             show: false
         });
 
-        // Provides access to this component in renderer process
-        this._window.component = this;
-
         // Load the contents aka the view
         this._window.loadURL(`file://${this.app.getViewsDirectory()}/calendar.html`);
 
         // Register onBlur callback
         this._window.on('blur', (e) => this.onBlur(e));
 
-        // Register window controller
-        this._window.webContents.executeJavaScript(
-            `new (require('${this.app.getControllersDirectory()}/Calendar'));`
+        // Return calendar translations to renderer process
+        Electron.ipcMain.on('calendar.translations', (e) =>
+            e.returnValue = this.getTranslations()
         );
     }
 
@@ -46,11 +43,6 @@ class Calendar
      */
     show()
     {
-        // Do not miss any dark mode changes
-        if (typeof this._darkModeHandler === 'function') {
-            this._darkModeHandler(this.app.isDarkMode());
-        }
-
         this._window.show();
     }
 
@@ -115,13 +107,100 @@ class Calendar
     }
 
     /**
-     * Register callback which will be called when dark mode was changed.
+     * When dark mode was change notify the renderer process.
      *
-     * @param {function} callback
+     * @param {bool} darkMode If dark mode is enabled or disabled.
      */
-    onDarkModeChanged(callback)
+    onDarkModeChanged(darkMode)
     {
-        this._darkModeHandler = callback;
+        this._window.webContents.send('calendar.darkmode', darkMode);
+    }
+
+    /**
+     * Provide static render function to execute logic in renderer process.
+     */
+    static render()
+    {
+        // Get translations for the Pikaday calendar from Moment.js locale
+        let translations = Electron.ipcRenderer.sendSync(
+            'calendar.translations'
+        );
+
+        // Watch for dark mode changes
+        Electron.ipcRenderer.on(
+            'calendar.darkmode', (e, darkMode) => this.toggleDarkMode(darkMode)
+        );
+
+        // Create pikaday calendar
+        this.createPikaday({
+            translations: translations,
+            onDraw: this.onDraw
+        });
+    }
+
+    /**
+     * Creates the Pikaday datepicker instance. We use it as a simple calendar.
+     *
+     * @see https://dbushell.github.io/Pikaday/
+     * @param {object} options Calendar options.
+     */
+    static createPikaday(options)
+    {
+        // Have to require Pikaday over here because in main process it crashes
+        const pikaday = new (require('pikaday'))({
+            field: document.createElement('div'),
+            bound: false,
+            container: document.querySelector('[data-pikaday]'),
+            showWeekNumber: false,
+            showDaysInNextAndPreviousMonths: true,
+            onDraw: options.onDraw,
+            i18n: options.translations
+        });
+
+        // Fetch all controls
+        const controls = [
+            { selector: '[data-today]', fn: () => pikaday.gotoToday() },
+            { selector: '[data-prev]',  fn: () => pikaday.prevMonth() },
+            { selector: '[data-next]',  fn: () => pikaday.nextMonth() }
+        ];
+
+        // Assign click listeners
+        controls.forEach((control) => {
+            document.querySelector(control.selector).addEventListener(
+                'click', control.fn
+            );
+        });
+
+        // Redraw every minute to avoid displaying old/wrong states
+        setInterval(() => pikaday.draw(), 1000 * 60);
+    }
+
+    /**
+     * Callback function for when the picker draws a new month.
+     *
+     * @see https://github.com/dbushell/Pikaday#configuration
+     */
+    static onDraw()
+    {
+        const monthLabel = document.querySelector('[data-month]');
+        const yearLabel = document.querySelector('[data-year]');
+        const calendar = this.calendars[0];
+
+        monthLabel.textContent = this.config().i18n.months[calendar.month];
+        yearLabel.textContent = calendar.year;
+    }
+
+    /**
+     * When the dark mode is being changed we need to adjust the styles by
+     * adding or removing the dark-mode class to the root DOM element.
+     *
+     * @param {boolean} darkMode Enable/disable dark mode styles.
+     */
+    static toggleDarkMode(darkMode)
+    {
+        document.documentElement.classList[
+            darkMode ? 'add' : 'remove'
+        ]('dark-mode');
     }
 }
 
