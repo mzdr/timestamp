@@ -8,14 +8,14 @@
 <body>
     <div class="preferences-container">
         <fieldset class="preferences-field">
-            <legend class="legend">Clock format</legend>
+            <legend class="legend" data-locale-key="clockFormat"></legend>
             <input class="input" type="text" data-format placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm">
-            <a target="_blank" href="http://momentjs.com/docs/#/displaying/">List of available tokens</a>
+            <a href="http://momentjs.com/docs/#/displaying/" data-locale-key="listOfAvailableTokens"></a>
         </fieldset>
 
         <fieldset class="preferences-field">
             <input id="startAtLogin" class="checkbox" type="checkbox" data-startatlogin>
-            <label for="startAtLogin" class="label">Start at Login</label>
+            <label for="startAtLogin" class="label" data-locale-key="startAtLogin"></label>
         </fieldset>
     </div>
     <script>require('./preferences').render()</script>

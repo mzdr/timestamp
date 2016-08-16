@@ -56,6 +56,11 @@ class Preferences
         Electron.ipcMain.on('preferences.idle', () => {
             this.onDarkModeChanged(this.app.isDarkMode());
         });
+
+        // Return translation strings
+        Electron.ipcMain.on('translate', (e, key) =>
+            e.returnValue = this.app.translator.getString(key)
+        );
     }
 
     /**
@@ -237,6 +242,17 @@ class Preferences
                 e.preventDefault();
                 Electron.shell.openExternal(e.currentTarget.href);
             });
+        }
+
+        // Get all labels which should be translated
+        const labels = document.querySelectorAll('[data-locasle-key]');
+
+        // Translate all of them
+        for (let label of labels) {
+            let key = label.getAttribute('data-locale-key');
+            let translation = Electron.ipcRenderer.sendSync('translate', key);
+
+            label.textContent = translation;
         }
 
         // Watch for dark mode changes

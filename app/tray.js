@@ -7,8 +7,11 @@ class Tray
     *
     * @return {Tray}
     */
-    constructor()
+    constructor(app)
     {
+        // Remember app instance
+        this.app = app;
+
         // HACK: empty image as of image is required
         // @see https://github.com/electron/electron/issues/1553
         const icon = Electron.nativeImage.createEmpty();
@@ -99,41 +102,41 @@ class Tray
     {
         return [
             {
-                label: `About ${Electron.app.getName()}`,
+                label: `${this.app.translator.getString('about')} ${Electron.app.getName()}`,
                 role: 'about'
             },
             {
-                label: `Version ${Electron.app.getVersion()}`,
+                label: `${this.app.translator.getString('version')} ${Electron.app.getVersion()}`,
                 enabled: false
             },
             {
                 id: 'checkForUpdate',
-                label: 'Check for update',
+                label: this.app.translator.getString('checkForUpdate'),
                 click: (menuItem) => (
                     this._checkForUpdateHandler || (() => {})
                 )(menuItem)
             },
             {
                 id: 'youAreUpToDate',
-                label: 'You are up to date!',
+                label: this.app.translator.getString('youAreUpToDate'),
                 enabled: false,
                 visible: false
             },
             {
                 id: 'downloadingUpdate',
-                label: 'Downloading update…',
+                label: this.app.translator.getString('downloadingUpdate'),
                 enabled: false,
                 visible: false
             },
             {
                 id: 'downloadingUpdateFailed',
-                label: 'Downloading update failed',
+                label: this.app.translator.getString('downloadingUpdateFailed'),
                 enabled: false,
                 visible: false
             },
             {
                 id: 'restartAndInstallUpdate',
-                label: 'Restart and install update',
+                label: this.app.translator.getString('restartAndInstallUpdate'),
                 visible: false,
                 click: (menuItem) => (
                     this._restartAndInstallUpdateHandler || (() => {})
@@ -143,7 +146,7 @@ class Tray
                 type: 'separator'
             },
             {
-                label: 'Preferences…',
+                label: this.app.translator.getString('preferences'),
                 accelerator: 'Command+,',
                 click: () => (this._preferencesHandler || (() => {}))()
             },
@@ -151,7 +154,7 @@ class Tray
                 type: 'separator'
             },
             {
-                label: 'Quit',
+                label: this.app.translator.getString('quit'),
                 accelerator: 'Command+Q',
                 click: () => (this._quitHandler || (() => {}))()
             }

@@ -6,6 +6,7 @@ const Clock = require('./clock');
 const Preferences = require('./preferences');
 const Calendar = require('./calendar');
 const Updater = require('./updater');
+const Translator = require('./translator');
 
 class App
 {
@@ -28,6 +29,7 @@ class App
 
         // Create all necessary components
         this.startAtLogin = new AutoLaunch(launchOptions);
+        this.translator = new Translator(this.getLocale());
         this.tray = new Tray(this);
         this.clock = new Clock(this);
         this.preferences = new Preferences(this);
