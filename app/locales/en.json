@@ -1,0 +1,14 @@
+{
+  "startAtLogin": "Start at Login",
+  "clockFormat": "Clock format",
+  "listOfAvailableTokens": "List of available tokens",
+  "preferences": "Preferences…",
+  "quit": "Quit",
+  "about": "About",
+  "version": "Version",
+  "checkForUpdate": "Check for update",
+  "youAreUpToDate": "You are up to date!",
+  "downloadingUpdate": "Downloading update…",
+  "downloadingUpdateFailed": "Downloading update failed",
+  "restartAndInstallUpdate": "Restart and install update"
+}

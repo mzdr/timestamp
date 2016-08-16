@@ -1,0 +1,14 @@
+{
+  "startAtLogin": "Beim Anmelden starten",
+  "clockFormat": "Uhrzeitformat",
+  "listOfAvailableTokens": "Liste der verfügbaren Kürzel",
+  "preferences": "Einstellungen…",
+  "quit": "Beenden",
+  "about": "Über",
+  "version": "Version",
+  "checkForUpdate": "Nach Updates suchen",
+  "youAreUpToDate": "Alles ist aktuell!",
+  "downloadingUpdate": "Lade Update herunter…",
+  "downloadingUpdateFailed": "Herunterladen fehlgeschlagen",
+  "restartAndInstallUpdate": "Neustarten und Update installieren"
+}
