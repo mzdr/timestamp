@@ -233,16 +233,13 @@ class Preferences
             field.onLoad(el);
         });
 
-        // Get all links in preferences window
-        const links = document.querySelectorAll('a[href^="http"]');
-
         // Open links externally by default
-        for (let i = 0; i < links.length; i++) {
-            links[i].addEventListener('click', (e) => {
+        document.documentElement.addEventListener('click', (e) => {
+            if (e.target.matches('a[href^="http"]')) {
                 e.preventDefault();
-                Electron.shell.openExternal(e.currentTarget.href);
-            });
-        }
+                Electron.shell.openExternal(e.target.href);
+            }
+        });
 
         // Get all labels which should be translated
         const labels = document.querySelectorAll('[data-locasle-key]');
