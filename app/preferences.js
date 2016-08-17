@@ -1,5 +1,4 @@
 const Fs = require('fs');
-const Path = require('path');
 const Electron = require('electron');
 
 class Preferences
