@@ -268,7 +268,7 @@ class Calendar
     {
         document.documentElement.classList[
             darkMode ? 'add' : 'remove'
-    ]('dark-mode');
+        ]('dark-mode');
     }
 }
 

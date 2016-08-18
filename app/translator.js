@@ -11,7 +11,7 @@ class Translator
         // Load default locale, which is english
         this._strings = require('./locales/en.json');
 
-        const [ language, country ] = locale.toLowerCase().split('-');
+        const [language, country] = locale.toLowerCase().split('-');
 
         try {
 
