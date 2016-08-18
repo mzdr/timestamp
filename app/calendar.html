@@ -7,15 +7,24 @@
 </head>
 <body>
     <div class="calendar-container">
-        <div class="calendar-title">
-            <button class="calendar-prev" data-prev></button>
-            <button class="calendar-today" data-today></button>
-            <button class="calendar-next" data-next></button>
-            <span class="calendar-month" data-month></span>
-            <span class="calendar-year" data-year></span>
+        <div class="calendar-actions">
+            <button class="prev" data-calendar-prev></button>
+            <button class="today" data-calendar-today></button>
+            <button class="next" data-calendar-next></button>
+            <span class="month" data-calendar-month></span>
+            <span class="year" data-calendar-year></span>
         </div>
-        <div class="calendar-pikaday" data-pikaday></div>
+        <div class="calendar-overview" data-calendar-overview></div>
     </div>
+
+    <template data-template-calendar-week>
+        <div class="calendar-week" data-calendar-week></div>
+    </template>
+
+    <template data-template-calendar-day>
+        <div class="calendar-day" data-calendar-day></div>
+    </template>
+
     <script>require('./calendar').render()</script>
 </body>
 </html>
