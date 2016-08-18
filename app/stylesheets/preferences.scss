@@ -1,0 +1,94 @@
+.preferences-container {
+    display: inline-block;
+    padding: 1rem;
+    width: 300px;
+}
+
+.preferences-field {
+    --toggle-size: 7rem;
+    --input-padding: 0.75rem;
+
+    border: 0;
+    color: var(--brand-primary);
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    & + & {
+        margin-top: 1.5rem;
+    }
+
+    > .legend {
+        background-color: var(--brand-primary);
+        color: var(--highlight-fg);
+        font-size: var(--font-smaller);
+        padding: 0.25rem var(--input-padding);
+    }
+
+    > .input {
+        background-color: var(--input-bg);
+        border: 0;
+        box-shadow: inset 0 0 0 2px var(--brand-primary);
+        color: inherit;
+        margin: 0 0 0.5rem;
+        outline: 0;
+        padding: var(--input-padding);
+        width: 100%;
+
+        &::-webkit-input-placeholder {
+            color: var(--silent-text);
+            opacity: 1;
+        }
+    }
+
+    > .label {
+        background-color: var(--input-bg);
+        box-shadow: inset 0 0 0 2px currentColor;
+        cursor: pointer;
+        color: var(--brand-fail);
+        display: block;
+        padding: var(--input-padding);
+        position: relative;
+        text-transform: none;
+        transition-property: box-shadow, color;
+
+        &::before,
+        &::after {
+            content: "";
+            bottom: 2px;
+            position: absolute;
+            right: 2px;
+            top: 2px;
+        }
+
+        &::before {
+            background-image: linear-gradient(to right, var(--brand-primary) 50%, var(--brand-fail) 50%);
+            color: var(--highlight-fg);
+            content: "YES NO";
+            padding: inherit;
+            text-align: center;
+            width: var(--toggle-size);
+            word-spacing: calc(var(--input-padding) * 2);
+        }
+
+        &::after {
+            background-color: var(--input-bg);
+            transform: translateX(calc(var(--toggle-size) / -2));
+            transition-property: transform;
+            width: calc(var(--toggle-size) / 2);
+        }
+    }
+
+    > .checkbox {
+        position: absolute;
+        visibility: hidden;
+
+        &:checked + .label {
+            color: var(--brand-primary);
+
+            &::after {
+                transform: translateX(0);
+            }
+        }
+    }
+}

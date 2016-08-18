@@ -1,0 +1,68 @@
+:root {
+    --brand-primary: #2d7dd2;
+    --brand-success: #97cc04;
+    --brand-fail: #ea3546;
+    --brand-info: "";
+
+    --primary-background: #fafafa;
+    --primary-link: var(--brand-primary);
+    --primary-text: #474647;
+    --silent-text: #ccc;
+    --highlight-fg: var(--primary-background);
+    --input-bg: var(--primary-background);
+
+    --font-smaller: 0.75rem;
+
+    background-color: var(--primary-background);
+    box-sizing: border-box;
+    color: var(--primary-text);
+    font-family: system, -apple-system, BlinkMacSystemFont, Helvetica Neue, Lucida Grande;
+    font-size: 16px;
+    font-weight: lighter;
+    text-transform: uppercase;
+    transition-duration: 200ms;
+    transition-property: none;
+
+    // macOS dark mode
+    &.dark-mode {
+        --primary-background: #333;
+        --primary-text: #fafafa;
+        --silent-text: #c1c1c1;
+        --highlight-fg: var(--primary-text);
+    }
+}
+
+*,
+*::before,
+*::after {
+    border-color: inherit;
+    box-sizing: inherit;
+    color: currentColor;
+    transition-duration: inherit;
+    transition-property: inherit;
+}
+
+a {
+    color: var(--primary-link);
+    font-size: var(--font-smaller);
+    position: relative;
+    text-decoration: none;
+    text-transform: none;
+
+    &::before {
+        color: inherit;
+        background-color: currentColor;
+        bottom: -1px;
+        content: "";
+        height: 1px;
+        left: 0;
+        position: absolute;
+        transition-property: transform, opacity;
+        width: 100%;
+    }
+
+    &:hover::before {
+        transform: translateY(2px);
+        opacity: 0;
+    }
+}
