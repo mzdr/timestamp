@@ -13,13 +13,10 @@ class Calendar
         // Remember app instance
         this.app = app;
 
-        // Set locale for Moment.js
-        Moment.locale(this.app.getLocale());
-
         // Create window instance
         this._window = new Electron.BrowserWindow({
-            width: 332,
-            height: 364,
+            width: 368,
+            height: 388,
             frame: false,
             resizable: false,
             alwaysOnTop: true,
@@ -32,9 +29,10 @@ class Calendar
         // Register onBlur callback
         this._window.on('blur', (e) => this.onBlur(e));
 
-        // Return calendar translations to renderer process
-        Electron.ipcMain.on('calendar.translations', (e) =>
-            e.returnValue = this.getTranslations()
+        // Provide locale detection
+        Electron.ipcMain.on(
+            'calendar.locale',
+            (e) => e.returnValue = this.app.getLocale()
         );
 
         // Calendar view is ready and idling now
@@ -86,23 +84,6 @@ class Calendar
     }
 
     /**
-     * Returns the translations for the calendar.
-     *
-     * @see http://momentjs.com/docs/#/i18n/listing-months-weekdays/
-     * @return {object}
-     */
-    getTranslations()
-    {
-        return {
-            previousMonth: '',  // don't need that, will never be shown
-            nextMonth: '',      // ↳ same here
-            months: Moment.months(),
-            weekdays: Moment.weekdays(),
-            weekdaysShort: Moment.weekdaysShort()
-        };
-    }
-
-    /**
      * Called when the window loses focus. In our case once the user clicks
      * beside the calendar window, it will be hidden.
      */
@@ -126,75 +107,155 @@ class Calendar
      */
     static render()
     {
-        // Get translations for the Pikaday calendar from Moment.js locale
-        let translations = Electron.ipcRenderer.sendSync(
-            'calendar.translations'
-        );
-
         // Watch for dark mode changes
         Electron.ipcRenderer.on(
             'calendar.darkmode', (e, darkMode) => this.toggleDarkMode(darkMode)
         );
 
-        // Create pikaday calendar
-        this.createPikaday({
-            translations: translations,
-            onDraw: this.onDraw
-        });
+        // Set locale for Moment.js
+        Moment.locale(Electron.ipcRenderer.sendSync('calendar.locale'));
 
-        Electron.ipcRenderer.send('calendar.idle');
-    }
-
-    /**
-     * Creates the Pikaday datepicker instance. We use it as a simple calendar.
-     *
-     * @see https://dbushell.github.io/Pikaday/
-     * @param {object} options Calendar options.
-     */
-    static createPikaday(options)
-    {
-        // Have to require Pikaday over here because in main process it crashes
-        const pikaday = new (require('pikaday'))({
-            field: document.createElement('div'),
-            bound: false,
-            container: document.querySelector('[data-pikaday]'),
-            showWeekNumber: false,
-            showDaysInNextAndPreviousMonths: true,
-            onDraw: options.onDraw,
-            i18n: options.translations
-        });
+        let calendar = Moment();
 
         // Fetch all controls
         const controls = [
-            { selector: '[data-today]', fn: () => pikaday.gotoToday() },
-            { selector: '[data-prev]',  fn: () => pikaday.prevMonth() },
-            { selector: '[data-next]',  fn: () => pikaday.nextMonth() }
+            {
+                selector: '[data-calendar-today]',
+                fn: () => calendar = Moment()
+            },
+            {
+                selector: '[data-calendar-prev]',
+                fn: () => calendar.subtract(1, 'month')
+            },
+            {
+                selector: '[data-calendar-next]',
+                fn: () => calendar.add(1, 'month')
+            }
         ];
 
         // Assign click listeners
         controls.forEach((control) => {
             document.querySelector(control.selector).addEventListener(
-                'click', control.fn
+                'click', () => {
+                    control.fn();
+                    this.draw(calendar);
+                }
             );
         });
 
+        // Draw for the first time
+        this.draw(calendar);
+
         // Redraw every minute to avoid displaying old/wrong states
-        setInterval(() => pikaday.draw(), 1000 * 60);
+        setInterval(() => this.draw(calendar), 1000 * 60);
+
+        // Idling now…
+        Electron.ipcRenderer.send('calendar.idle');
     }
 
     /**
-     * Callback function for when the picker draws a new month.
-     *
-     * @see https://github.com/dbushell/Pikaday#configuration
+     * Returns the week template node ready for injection.
      */
-    static onDraw()
+    static getWeekNode()
     {
-        const monthLabel = document.querySelector('[data-month]');
-        const yearLabel = document.querySelector('[data-year]');
-        const calendar = this.calendars[0];
+        return document.querySelector('[data-template-calendar-week]')
+            .content
+            .cloneNode(true)
+            .querySelector('[data-calendar-week]');
+    }
 
-        monthLabel.textContent = this.config().i18n.months[calendar.month];
-        yearLabel.textContent = calendar.year;
+    /**
+     * Returns the day template node ready for injection.
+     */
+    static getDayNode()
+    {
+        return document.querySelector('[data-template-calendar-day]')
+            .content
+            .cloneNode(true)
+            .querySelector('[data-calendar-day]');
+    }
+
+    /**
+     * Returns a legend in form of all weekdays.
+     */
+    static getWeekdaysLegend()
+    {
+        const legend = this.getWeekNode();
+
+        // Build weekdays legend
+        Moment.weekdaysShort().forEach((weekday) => {
+            let day = this.getDayNode();
+
+            legend.classList.add('-weekdays');
+            legend.appendChild(day);
+
+            day.classList.add('-weekday');
+            day.textContent = weekday;
+        });
+
+        return legend;
+    }
+
+    /**
+     * Draws the actual calendar.
+     */
+    static draw(calendar)
+    {
+        // Fetch DOM nodes
+        const overview = document.querySelector('[data-calendar-overview]');
+        const monthLabel = document.querySelector('[data-calendar-month]');
+        const yearLabel = document.querySelector('[data-calendar-year]');
+
+        // Prepare Moment instances
+        const [year, month] = [calendar.year(), calendar.month()];
+        const current = Moment([year, month]);
+        const lastDate = Moment(current).endOf('month').weekday(6);
+        const today = Moment();
+
+        let week;
+
+        // Update labels
+        monthLabel.textContent = current.format('MMMM');
+        yearLabel.textContent = current.format('YYYY');
+
+        // Set back to start of the week
+        current.weekday(0);
+
+        // Clean up old days
+        while (overview.firstChild) {
+            overview.removeChild(overview.firstChild);
+        }
+
+        // Build weekdays legend
+        overview.appendChild(this.getWeekdaysLegend());
+
+        do {
+            let day = this.getDayNode();
+
+            // New week
+            if (current.weekday() === 0) {
+                week = this.getWeekNode();
+                overview.appendChild(week);
+            }
+
+            // Add muted state to days not within the requested month
+            if (current.month() !== month) {
+                day.classList.add('-muted');
+            }
+
+            // Add active state to today and week
+            if (current.isSame(today, 'day')) {
+                week.classList.add('-current');
+                day.classList.add('-today');
+            }
+
+            day.textContent = current.format('D');
+            week.appendChild(day);
+
+            // Next day
+            current.add(1, 'days');
+
+        } while (Moment.min(current, lastDate) === current);
     }
 
     /**
@@ -207,7 +268,7 @@ class Calendar
     {
         document.documentElement.classList[
             darkMode ? 'add' : 'remove'
-        ]('dark-mode');
+    ]('dark-mode');
     }
 }
 
