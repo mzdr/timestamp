@@ -241,7 +241,7 @@ class Preferences
         });
 
         // Get all labels which should be translated
-        const labels = document.querySelectorAll('[data-locasle-key]');
+        const labels = document.querySelectorAll('[data-locale-key]');
 
         // Translate all of them
         for (let label of labels) {
