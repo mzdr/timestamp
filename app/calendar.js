@@ -117,30 +117,21 @@ class Calendar
 
         let calendar = Moment();
 
-        // Fetch all controls
-        const controls = [
-            {
-                selector: '[data-calendar-today]',
-                fn: () => calendar = Moment()
-            },
-            {
-                selector: '[data-calendar-prev]',
-                fn: () => calendar.subtract(1, 'month')
-            },
-            {
-                selector: '[data-calendar-next]',
-                fn: () => calendar.add(1, 'month')
-            }
-        ];
+        // Assign click handling logic to calendar actions
+        document.addEventListener('click', (e) => {
+            let el = e.target;
 
-        // Assign click listeners
-        controls.forEach((control) => {
-            document.querySelector(control.selector).addEventListener(
-                'click', () => {
-                    control.fn();
-                    this.draw(calendar);
-                }
-            );
+            if (el.matches('[data-calendar-today]')) {
+                calendar = Moment();
+            } else if (el.matches('[data-calendar-next]')) {
+                calendar.add(1, 'month');
+            } else if (el.matches('[data-calendar-prev]')) {
+                calendar.subtract(1, 'month');
+            } else {
+                return;
+            }
+
+            this.draw(calendar);
         });
 
         // Draw for the first time
