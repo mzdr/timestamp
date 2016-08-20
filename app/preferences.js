@@ -16,22 +16,6 @@ class Preferences
         // Default preferences
         this.set(this.app.getDefaultPreferences());
 
-        // Create window instance
-        this._window = new Electron.BrowserWindow({
-            width: 300,
-            height: 187,
-            frame: false,
-            resizable: false,
-            alwaysOnTop: true,
-            show: false
-        });
-
-        // Load the contents
-        this._window.loadURL(`file://${__dirname}/preferences.html`);
-
-        // Register onBlur callback
-        this._window.on('blur', (e) => this.onBlur(e));
-
         // Get storage file for persisting preferences
         this.storageFile = this.app.getUserPreferencesPath();
 
@@ -51,11 +35,6 @@ class Preferences
         // Received request to save preferences to disk from renderer
         Electron.ipcMain.on('preferences.save', () => this.saveToDisk());
 
-        // Preferences view is ready and idling now
-        Electron.ipcMain.on('preferences.idle', () => {
-            this.onDarkModeChanged(this.app.isDarkMode());
-        });
-
         // Return translation strings
         Electron.ipcMain.on('translate', (e, key) =>
             e.returnValue = this.app.translator.getString(key)
@@ -67,31 +46,26 @@ class Preferences
      */
     show()
     {
-        this._window.show();
-    }
+        // Create window instance
+        this._window = new Electron.BrowserWindow({
+            width: 300,
+            height: 187,
+            resizable: false,
+            center: true,
+            minimizable: false,
+            maximizable: false,
+            title: this.app.translator.getString('preferences'),
+            alwaysOnTop: true,
+            show: false
+        });
 
-    /**
-     * Hides the preferences window.
-     */
-    hide()
-    {
-        this._window.hide();
-    }
+        // Load the contents
+        this._window.loadURL(`file://${__dirname}/preferences.html`);
 
-    /**
-     * Sets the position of the preferences window.
-     *
-     * @param {number} x Position on x-axis.
-     * @param {number} y Position on y-axis.
-     * @param {boolean} centerToX Center window to new x position or not.
-     */
-    setPosition(x, y, centerToX = true)
-    {
-        if (centerToX) {
-            x = Math.round(x - this._window.getSize()[0] / 2);
-        }
-
-        this._window.setPosition(x, y);
+        // While loading the page, the ready-to-show event will be emitted when
+        // renderer process has done drawing for the first time, showing window
+        // after this event will have no visual flash
+        this._window.once('ready-to-show', () => this._window.show());
     }
 
     /**
@@ -167,25 +141,6 @@ class Preferences
     }
 
     /**
-     * Called when the window loses focus. In our case once the user clicks
-     * beside the preferences window, it will be hidden.
-     */
-    onBlur()
-    {
-        this.hide();
-    }
-
-    /**
-     * When dark mode was change notify the renderer process.
-     *
-     * @param {bool} darkMode If dark mode is enabled or disabled.
-     */
-    onDarkModeChanged(darkMode)
-    {
-        this._window.webContents.send('preferences.darkmode', darkMode);
-    }
-
-    /**
      * Provide static render function to execute logic in renderer process.
      */
     static render()
@@ -250,26 +205,6 @@ class Preferences
 
             label.textContent = translation;
         }
-
-        // Watch for dark mode changes
-        Electron.ipcRenderer.on('preferences.darkmode',
-            (e, darkMode) => this.toggleDarkMode(darkMode)
-        );
-
-        Electron.ipcRenderer.send('preferences.idle');
-    }
-
-    /**
-     * When the dark mode is being changed we need to adjust the styles by
-     * adding or removing the dark-mode class to the root DOM element.
-     *
-     * @param {boolean} darkMode Enable/disable dark mode styles.
-     */
-    static toggleDarkMode(darkMode)
-    {
-        document.documentElement.classList[
-            darkMode ? 'add' : 'remove'
-        ]('dark-mode');
     }
 }
 

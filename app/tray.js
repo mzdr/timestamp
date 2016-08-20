@@ -146,7 +146,7 @@ class Tray
                 type: 'separator'
             },
             {
-                label: this.app.translator.getString('preferences'),
+                label: `${this.app.translator.getString('preferences')}…`,
                 accelerator: 'Command+,',
                 click: () => (this._preferencesHandler || (() => {}))()
             },

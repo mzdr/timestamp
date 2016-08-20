@@ -76,12 +76,7 @@ class App
         this.tray.onQuitClicked(() => Electron.app.quit());
 
         // Show preferences
-        this.tray.onPreferencesClicked(() => {
-            const bounds = this.tray.getBounds();
-
-            this.preferences.setPosition(bounds.x + bounds.width / 2, 0);
-            this.preferences.show();
-        });
+        this.tray.onPreferencesClicked(() => this.preferences.show());
 
         // Check for update menu item has been clicked
         this.tray.onCheckForUpdateClicked(
