@@ -1,0 +1,100 @@
+:root {
+    --native-bg: #ececec;
+    --native-font-size: 13px;
+    --native-text: #000;
+    --native-border: #cecece;
+    --native-input-border: 1px solid var(--native-border);
+    --native-input-padding: 4px 5px;
+    --native-highlight: #157efb;
+    --native-outline: rgba(21, 126, 251, 0.5);
+    --native-hr: #d5d5d5;
+}
+
+.help-button {
+    --help-button-size: 20px;
+
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--native-border), 0 1px 1px var(--native-border);
+    color: var(--native-highlight);
+    display: inline-block;
+    font-size: 15px;
+    font-weight: lighter;
+    line-height: var(--help-button-size);
+    margin: auto;
+    min-height: var(--help-button-size);
+    min-width: var(--help-button-size);
+    text-align: center;
+    text-decoration: none;
+
+    &::before {
+        content: "\3f";
+        display: block;
+    }
+}
+
+.text-input {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+
+    &:not(:last-child) {
+        margin-right: 0.5rem;
+    }
+
+    > .input {
+        border: var(--native-input-border);
+        display: block;
+        font-size: var(--native-font-size);
+        outline: 0;
+        padding: var(--native-input-padding);
+        position: relative;
+        transition-property: border-color;
+        width: 100%;
+        z-index: 1;
+
+        &:focus {
+            border-color: var(--native-outline);
+
+            + .outline {
+                box-shadow: 0 0 0 3px var(--native-outline);
+                transition-property: box-shadow;
+            }
+        }
+    }
+
+    > .outline {
+        border-radius: 1px;
+        bottom: 0;
+        box-shadow: 0 0 0 20px transparent;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transition-property: none;
+        z-index: 0;
+    }
+}
+
+.checkbox-input {
+    -webkit-user-select: none;
+
+    > .checkbox {
+        height: 14px;
+        margin: 0;
+        width: 14px;
+    }
+
+    > .label {
+        cursor: default;
+    }
+}
+
+.horizontal-rule {
+    background-color: var(--native-hr);
+    border: 0;
+    display: block;
+    height: 1px;
+    margin: 1.25rem 0;
+    width: 100%;
+}
