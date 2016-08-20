@@ -48,8 +48,6 @@ class Preferences
     {
         // Create window instance
         this._window = new Electron.BrowserWindow({
-            width: 300,
-            height: 187,
             resizable: false,
             center: true,
             minimizable: false,
@@ -200,11 +198,19 @@ class Preferences
 
         // Translate all of them
         for (let label of labels) {
-            let key = label.getAttribute('data-locale-key');
+            let data = label.getAttribute('data-locale-key');
+            let [key, target = 'textContent'] = data.split(':');
             let translation = Electron.ipcRenderer.sendSync('translate', key);
 
-            label.textContent = translation;
+            label[target] = translation;
         }
+
+        // Set window size
+        Electron.remote.getCurrentWindow().setContentSize(
+            document.body.offsetWidth,
+            document.body.offsetHeight,
+            false
+        );
     }
 }
 

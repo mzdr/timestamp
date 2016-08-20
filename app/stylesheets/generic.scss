@@ -9,17 +9,13 @@
     --primary-text: #474647;
     --silent-text: #ccc;
     --highlight-fg: var(--primary-background);
-    --input-bg: var(--primary-background);
-
-    --font-smaller: 0.75rem;
+    --highlight-bg: var(--brand-primary);
 
     background-color: var(--primary-background);
     box-sizing: border-box;
     color: var(--primary-text);
     font-family: system, -apple-system, BlinkMacSystemFont, Helvetica Neue, Lucida Grande;
     font-size: 16px;
-    font-weight: lighter;
-    text-transform: uppercase;
     transition-duration: 200ms;
     transition-property: none;
 
@@ -42,27 +38,6 @@
     transition-property: inherit;
 }
 
-a {
-    color: var(--primary-link);
-    font-size: var(--font-smaller);
-    position: relative;
-    text-decoration: none;
-    text-transform: none;
-
-    &::before {
-        color: inherit;
-        background-color: currentColor;
-        bottom: -1px;
-        content: "";
-        height: 1px;
-        left: 0;
-        position: absolute;
-        transition-property: transform, opacity;
-        width: 100%;
-    }
-
-    &:hover::before {
-        transform: translateY(2px);
-        opacity: 0;
-    }
+body {
+    margin: 0;
 }

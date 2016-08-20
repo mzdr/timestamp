@@ -1,23 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html class="preferences">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="preferences-container">
-        <fieldset class="preferences-field">
-            <legend class="legend" data-locale-key="clockFormat"></legend>
-            <input class="input" type="text" data-format placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm">
-            <a href="http://momentjs.com/docs/#/displaying/" data-locale-key="listOfAvailableTokens"></a>
-        </fieldset>
+    <fieldset class="preferences-field">
+        <legend class="legend" data-locale-key="clockFormat">Clock format</legend>
+        <div class="content">
+            <div class="text-input">
+                <input class="input" type="text" data-format placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm">
+                <span class="outline"></span>
+            </div>
+            <a class="help-button"
+               href="http://momentjs.com/docs/#/displaying/"
+               data-locale-key="listOfAvailableTokens:title"></a>
+        </div>
+    </fieldset>
 
-        <fieldset class="preferences-field">
+    <hr class="horizontal-rule"></hr>
+
+    <fieldset class="preferences-field">
+        <div class="checkbox-input">
             <input id="startAtLogin" class="checkbox" type="checkbox" data-startatlogin>
-            <label for="startAtLogin" class="label" data-locale-key="startAtLogin"></label>
-        </fieldset>
-    </div>
+            <label for="startAtLogin" class="label" data-locale-key="startAtLogin">Start at Login</label>
+        </div>
+    </fieldset>
     <script>require('./preferences').render()</script>
 </body>
 </html>
