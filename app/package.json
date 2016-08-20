@@ -11,7 +11,6 @@
     "auto-launch": "^2.1.0",
     "got": "^6.3.0",
     "moment": "^2.14.1",
-    "normalize.css": "^4.2.0",
     "semver": "^5.3.0"
   },
   "keywords": [
