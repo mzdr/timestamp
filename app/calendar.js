@@ -115,23 +115,18 @@ class Calendar
         // Set locale for Moment.js
         Moment.locale(Electron.ipcRenderer.sendSync('calendar.locale'));
 
-        let calendar = Moment();
+        // The main Moment instance that's responsible for the calendar view
+        const calendar = Moment();
 
         // Assign click handling logic to calendar actions
         document.addEventListener('click', (e) => {
-            let el = e.target;
-
-            if (el.matches('[data-calendar-today]')) {
-                calendar = Moment();
-            } else if (el.matches('[data-calendar-next]')) {
-                calendar.add(1, 'month');
-            } else if (el.matches('[data-calendar-prev]')) {
-                calendar.subtract(1, 'month');
-            } else {
-                return;
+            if (e.target.matches('[data-calendar-today]')) {
+                this.goToToday(calendar);
+            } else if (e.target.matches('[data-calendar-next]')) {
+                this.nextMonth(calendar);
+            } else if (e.target.matches('[data-calendar-prev]')) {
+                this.previousMonth(calendar);
             }
-
-            this.draw(calendar);
         });
 
         // Add ability to change the calendar by pressing keys
@@ -143,16 +138,14 @@ class Calendar
             }
 
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                calendar = Moment();
+                this.goToToday(calendar);
             } else if (e.key === 'ArrowRight') {
-                calendar.add(1, 'month');
+                this.nextMonth(calendar);
             } else if (e.key === 'ArrowLeft') {
-                calendar.subtract(1, 'month');
+                this.previousMonth(calendar);
             } else {
                 return;
             }
-
-            this.draw(calendar);
 
             // Consume the event to avoid it being handled twice
             e.preventDefault();
@@ -166,6 +159,46 @@ class Calendar
 
         // Idling now…
         Electron.ipcRenderer.send('calendar.idle');
+    }
+
+    /**
+     * Changes the given calendar to the next month.
+     *
+     * @param {Moment} calendar
+     */
+    static nextMonth(calendar)
+    {
+        calendar.add(1, 'month');
+        this.draw(calendar);
+    }
+
+    /**
+     * Changes the given calendar to the previous month.
+     *
+     * @param {Moment} calendar
+     */
+    static previousMonth(calendar)
+    {
+        calendar.subtract(1, 'month');
+        this.draw(calendar);
+    }
+
+    /**
+     * Changes the given calendar to today.
+     *
+     * @param {Moment} calendar
+     */
+    static goToToday(calendar)
+    {
+        let now = Moment();
+
+        calendar.set({
+            'year': now.year(),
+            'month': now.month(),
+            'day': now.day()
+        });
+
+        this.draw(calendar);
     }
 
     /**
@@ -213,6 +246,8 @@ class Calendar
 
     /**
      * Draws the actual calendar.
+     *
+     * @param {Moment} calendar Current calendar instance.
      */
     static draw(calendar)
     {
