@@ -226,18 +226,20 @@ class Calendar
      */
     static getWeekdaysLegend()
     {
+        const startOfWeek = Moment().startOf('week');
         const legend = this.getWeekNode();
 
         // Build weekdays legend
-        Moment.weekdaysShort().forEach((weekday) => {
+        for (var i = 0; i < 7; i++) {
             let day = this.getDayNode();
 
             legend.classList.add('-weekdays');
             legend.appendChild(day);
 
             day.classList.add('-weekday');
-            day.textContent = weekday;
-        });
+            day.textContent = startOfWeek.format('ddd');
+            startOfWeek.add(1, 'day');
+        }
 
         return legend;
     }
