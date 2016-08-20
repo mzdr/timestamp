@@ -134,6 +134,30 @@ class Calendar
             this.draw(calendar);
         });
 
+        // Add ability to change the calendar by pressing keys
+        window.addEventListener('keydown', (e) => {
+
+            // Should do nothing if the key event was already consumed.
+            if (e.defaultPrevented) {
+                return;
+            }
+
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                calendar = Moment();
+            } else if (e.key === 'ArrowRight') {
+                calendar.add(1, 'month');
+            } else if (e.key === 'ArrowLeft') {
+                calendar.subtract(1, 'month');
+            } else {
+                return;
+            }
+
+            this.draw(calendar);
+
+            // Consume the event to avoid it being handled twice
+            e.preventDefault();
+        }, true);
+
         // Draw for the first time
         this.draw(calendar);
 
