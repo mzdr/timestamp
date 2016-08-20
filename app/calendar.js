@@ -15,8 +15,6 @@ class Calendar
 
         // Create window instance
         this._window = new Electron.BrowserWindow({
-            width: 368,
-            height: 388,
             frame: false,
             resizable: false,
             alwaysOnTop: true,
@@ -306,6 +304,13 @@ class Calendar
             current.add(1, 'days');
 
         } while (Moment.min(current, lastDate) === current);
+
+        // Set window size dynamically
+        Electron.remote.getCurrentWindow().setSize(
+            document.body.offsetWidth,
+            document.body.offsetHeight,
+            true
+        );
     }
 
     /**
