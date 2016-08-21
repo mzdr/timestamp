@@ -10,5 +10,10 @@
   "youAreUpToDate": "Alles ist aktuell!",
   "downloadingUpdate": "Lade Update herunter…",
   "downloadingUpdateFailed": "Herunterladen fehlgeschlagen",
-  "restartAndInstallUpdate": "Neustarten und Update installieren"
+  "restartAndInstallUpdate": "Neustarten und Update installieren",
+  "visitOfficialWebsite": "Offizielle Webseite besuchen",
+  "reportAnIssue": "Ein Problem melden",
+  "developedBy": "Entwickelt von",
+  "poweredBy": "Mit Hilfe von",
+  "releasedUnderMIT": "Unter der MIT Lizenz veröffentlicht"
 }
