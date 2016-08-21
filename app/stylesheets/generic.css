@@ -19,7 +19,7 @@
     transition-duration: 200ms;
     transition-property: none;
 
-    // macOS dark mode
+    /* macOS dark mode */
     &.dark-mode {
         --primary-background: #333;
         --primary-text: #fafafa;

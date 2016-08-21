@@ -1,0 +1,39 @@
+:root.preferences {
+    background-color: var(--native-bg);
+    color: var(--native-text);
+    display: inline-block;
+}
+
+:root.preferences body {
+    display: inline-block;
+    font-size: var(--native-font-size);
+    padding: 1rem;
+}
+
+.preferences-field {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 260px;
+}
+
+.preferences-field ~ .preferences-field {
+    margin-top: 1.25rem;
+}
+
+.preferences-field > .legend {
+    cursor: default;
+    margin-bottom: 0.25rem;
+    padding: 0;
+
+    -webkit-user-select: none;
+}
+
+.preferences-field > .legend::after {
+    content: "\3a";
+}
+
+.preferences-field > .content {
+    align-items: center;
+    display: flex;
+}

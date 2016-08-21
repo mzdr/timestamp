@@ -1,0 +1,14 @@
+@import "./components/native-button.css";
+@import "./components/native-checkbox.css";
+@import "./components/native-text.css";
+@import "./components/native-line.css";
+@import "./components/native-label.css";
+
+:root {
+    --native-bg: #ececec;
+    --native-font-size: 13px;
+    --native-text: #000;
+    --native-highlight: 21, 126, 251; /* #157efb */
+    --native-hr: #d5d5d5;
+    --native-focus-start-size: 20px;
+}

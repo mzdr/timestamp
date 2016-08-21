@@ -1,0 +1,42 @@
+.native-text {
+    display: inline-block;
+    padding: 0 0.5px;
+    position: relative;
+    width: 100%;
+}
+
+.native-text > .input {
+    border: 0;
+    box-shadow: 0 0 0 0.5px rgb(177, 177, 177), inset 0 0 0 0.5px rgb(240, 240, 240);
+    display: block;
+    font-size: var(--native-font-size);
+    outline: 0;
+    padding: 4px;
+    position: relative;
+    width: 100%;
+    z-index: 1;
+}
+
+.native-text > .outline {
+    background-color: currentColor;
+    border-radius: 1px;
+    bottom: -2px;
+    box-shadow: 0 0 0 var(--native-focus-start-size) currentColor;
+    color: rgb(var(--native-highlight));
+    left: -1.5px;
+    opacity: 0;
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    z-index: -1;
+}
+
+.native-text > .input:focus + .outline {
+    box-shadow: 0 0 0 2px currentColor;
+    opacity: 0.4;
+    transition-property: box-shadow, opacity;
+}
+
+.native-text + .native-button.-help {
+    margin-left: 0.5rem;
+}

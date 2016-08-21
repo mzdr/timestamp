@@ -1,0 +1,72 @@
+.native-button {
+    background: #fff;
+    border-radius: 3.5px;
+    border: 0;
+    box-shadow: 0 0 0 var(--native-focus-start-size) transparent,
+                0 0.5px 0 0 rgb(170, 170, 170),
+                0 0 0 0.5px rgb(200, 200, 200),
+                0 1.1px 0.1px -0.5px rgb(170, 170, 170);
+    font-size: var(--native-font-size);
+    padding: 2px 13px;
+    position: relative;
+    outline: 0;
+}
+
+.native-button:focus {
+    box-shadow: 0 0 0 3px rgba(var(--native-highlight), 0.4),
+                0 0.5px 0 0 rgb(170, 170, 170),
+                0 0 0 0.5px rgb(200, 200, 200),
+                0 1.1px 0.1px -0.5px rgb(170, 170, 170);
+    transition-property: box-shadow;
+}
+
+.native-button:focus:active {
+    box-shadow: 0 0 0 3px rgba(var(--native-highlight), 0.4),
+                0 0.5px 0 0 rgb(170, 170, 170),
+                0 0 0 0.5px rgb(200, 200, 200),
+                0 1.1px 0.1px -0.5px rgb(170, 170, 170),
+                inset 0 0.5px 0 0 #247eff,
+                inset 0.5px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.native-button:active {
+    color: #fff;
+    background: linear-gradient(to top, #0664e3, #4b98fe);
+    box-shadow: inset 0 0.5px 0 0 #247eff,
+                inset 0.5px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.native-button.-help {
+    --help-button-size: 19px;
+
+    background: #fff;
+    border: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 0 var(--native-focus-start-size) transparent,
+                0 0 0 0.5px rgb(195, 195, 195),
+                0 1px 0.5px -0.5px rgb(102, 102, 102);
+    color: rgb(var(--native-highlight));
+    display: inline-block;
+    font-size: 15px;
+    font-weight: lighter;
+    height: var(--help-button-size);
+    line-height: var(--help-button-size);
+    margin: auto;
+    min-height: var(--help-button-size);
+    min-width: var(--help-button-size);
+    padding: 0;
+    text-align: center;
+    text-decoration: none;
+    width: var(--help-button-size);
+}
+
+.native-button.-help::before {
+    content: "\3f";
+    display: block;
+}
+
+.native-button.-help:focus {
+    box-shadow: 0 0 0 3px rgba(var(--native-highlight), 0.4),
+                0 0 0 0.5px rgb(195, 195, 195),
+                0 1px 0.5px -0.5px rgb(102, 102, 102);
+}

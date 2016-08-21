@@ -9,23 +9,21 @@
     <fieldset class="preferences-field">
         <legend class="legend" data-locale-key="clockFormat">Clock format</legend>
         <div class="content">
-            <div class="text-input">
+            <div class="native-text">
                 <input class="input" type="text" data-format placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm">
                 <span class="outline"></span>
             </div>
-            <a class="help-button"
+            <a class="native-button -help"
                href="http://momentjs.com/docs/#/displaying/"
                data-locale-key="listOfAvailableTokens:title"></a>
         </div>
     </fieldset>
 
-    <hr class="horizontal-rule"></hr>
+    <hr class="native-line"></hr>
 
     <fieldset class="preferences-field">
-        <div class="checkbox-input">
-            <input id="startAtLogin" class="checkbox" type="checkbox" data-startatlogin>
-            <label for="startAtLogin" class="label" data-locale-key="startAtLogin">Start at Login</label>
-        </div>
+        <input id="startAtLogin" class="native-checkbox" type="checkbox" data-startatlogin>
+        <label for="startAtLogin" data-locale-key="startAtLogin">Start at Login</label>
     </fieldset>
     <script>require('./preferences').render()</script>
 </body>

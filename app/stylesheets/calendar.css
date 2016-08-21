@@ -1,0 +1,123 @@
+:root.calendar body {
+    display: inline-block;
+    font-size: 14px;
+}
+
+.calendar-container {
+    display: inline-block;
+    padding: 1rem;
+    position: relative;
+    text-transform: uppercase;
+}
+
+.calendar-actions {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+    padding: 0.5rem;
+}
+
+.calendar-actions > .prev,
+.calendar-actions > .next {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-size: 0;
+    outline: 0;
+    padding: inherit;
+}
+
+.calendar-actions > .prev::before,
+.calendar-actions > .next::before {
+    --arrow-size: 0.5rem;
+    --line-size: 1px;
+
+    border-color: currentColor;
+    border-style: solid;
+    border-width: var(--line-size) var(--line-size) 0 0;
+    content: "";
+    display: block;
+    height: var(--arrow-size);
+    width: var(--arrow-size);
+}
+
+.calendar-actions > .prev::before {
+    transform: rotate(-135deg);
+}
+
+.calendar-actions > .next::before {
+    transform: rotate(45deg);
+}
+
+.calendar-actions > .today {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    outline: 0;
+    padding: inherit;
+}
+
+.calendar-actions > .today::before {
+    --dot-size: 0.5rem;
+
+    background: currentColor;
+    border-radius: 50%;
+    content: "";
+    display: block;
+    height: var(--dot-size);
+    width: var(--dot-size);
+}
+
+.calendar-actions > .month {
+    text-align: right;
+    width: 50%;
+}
+
+.calendar-actions > .year {
+    font-weight: normal;
+    text-align: right;
+    width: 15%;
+}
+
+.calendar-week {
+    display: flex;
+    position: relative;
+}
+
+.calendar-week.-weekdays {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.calendar-week.-current::before {
+    background-color: var(--brand-primary);
+    border-radius: 3rem;
+    bottom: 0.125rem;
+    content: "";
+    left: 0.25rem;
+    opacity: 0.1;
+    position: absolute;
+    right: 0.25rem;
+    top: 0.125rem;
+}
+
+.calendar-day {
+    --day-size: 2.5rem;
+
+    height: var(--day-size);
+    line-height: var(--day-size);
+    margin: 0.125rem 0.25rem;
+    text-align: center;
+    width: var(--day-size);
+}
+
+.calendar-day.-muted {
+    color: var(--silent-text);
+}
+
+.calendar-day.-today {
+    background-color: var(--highlight-bg);
+    border-radius: 50%;
+    color: var(--highlight-fg);
+}
