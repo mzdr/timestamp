@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html class="about">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="about-container">
+        <div class="column">
+            <div class="about-id">
+                <span class="logo"></span>
+                <span class="name">Timestamp</span>
+                <span class="version native-silent">1.0.0</span>
+            </div>
+        </div>
+        <div class="column">
+            <div class="about-details">
+                <a href="https://mzdr.github.io/timestamp"
+                   class="native-button link"
+                   data-locale-key="visitOfficialWebsite">Visit Official Website</a>
+                <a href="https://github.com/mzdr/timestamp/issues"
+                   class="native-button link"
+                   data-locale-key="reportAnIssue">Report an Issue</a>
+                <p class="line">Developed by <a href="https://sebastianprein.com">Sebastian Prein</a>. Powered by <a href="http://electron.atom.io/">Electron</a>.</p>
+                <p class="line native-silent">&copy; 2016 Sebastian Prein. Released under the MIT License.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>require('./about').render()</script>
+</body>
+</html>

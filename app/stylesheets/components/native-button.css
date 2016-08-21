@@ -6,10 +6,13 @@
                 0 0.5px 0 0 rgb(170, 170, 170),
                 0 0 0 0.5px rgb(200, 200, 200),
                 0 1.1px 0.1px -0.5px rgb(170, 170, 170);
+    cursor: default;
+    display: inline-block;
     font-size: var(--native-font-size);
+    outline: 0;
     padding: 2px 13px;
     position: relative;
-    outline: 0;
+    text-decoration: none;
 }
 
 .native-button:focus {

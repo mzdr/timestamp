@@ -7,6 +7,7 @@ const Preferences = require('./preferences');
 const Calendar = require('./calendar');
 const Updater = require('./updater');
 const Translator = require('./translator');
+const About = require('./about');
 
 class App
 {
@@ -35,6 +36,7 @@ class App
         this.preferences = new Preferences(this);
         this.calendar = new Calendar(this);
         this.updater = new Updater(this);
+        this.about = new About(this);
 
         // Initialize tray related things
         this.initTray();
@@ -72,21 +74,12 @@ class App
             }
         });
 
-        // Quit the app
+        // Set up menu items
         this.tray.onQuitClicked(() => Electron.app.quit());
-
-        // Show preferences
+        this.tray.onAboutClicked(() => this.about.show());
         this.tray.onPreferencesClicked(() => this.preferences.show());
-
-        // Check for update menu item has been clicked
-        this.tray.onCheckForUpdateClicked(
-            (item) => this.handleUpdateCheckingProcess(item)
-        );
-
-        // Restart and install update
-        this.tray.onRestartAndInstallUpdate(
-            () => this.updater.quitAndInstall()
-        );
+        this.tray.onCheckForUpdateClicked(() => this.handleUpdateCheckingProcess());
+        this.tray.onRestartAndInstallUpdate(() => this.updater.quitAndInstall());
     }
 
     /**

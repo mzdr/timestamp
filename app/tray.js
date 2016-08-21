@@ -103,7 +103,7 @@ class Tray
         return [
             {
                 label: `${this.app.translator.getString('about')} ${Electron.app.getName()}`,
-                role: 'about'
+                click: () => (this._aboutHandler || (() => {}))()
             },
             {
                 label: `${this.app.translator.getString('version')} ${Electron.app.getVersion()}`,
@@ -112,9 +112,7 @@ class Tray
             {
                 id: 'checkForUpdate',
                 label: this.app.translator.getString('checkForUpdate'),
-                click: (menuItem) => (
-                    this._checkForUpdateHandler || (() => {})
-                )(menuItem)
+                click: () => (this._checkForUpdateHandler || (() => {}))()
             },
             {
                 id: 'youAreUpToDate',
@@ -138,9 +136,7 @@ class Tray
                 id: 'restartAndInstallUpdate',
                 label: this.app.translator.getString('restartAndInstallUpdate'),
                 visible: false,
-                click: (menuItem) => (
-                    this._restartAndInstallUpdateHandler || (() => {})
-                )(menuItem)
+                click: () => (this._restartAndInstallUpdateHandler || (() => {}))()
             },
             {
                 type: 'separator'
@@ -189,6 +185,16 @@ class Tray
     onClick(fn)
     {
         this._clickHandler = fn;
+    }
+
+    /**
+     * Sets the handler for the about menu item.
+     *
+     * @param {function} fn
+     */
+    onAboutClicked(fn)
+    {
+        this._aboutHandler = fn;
     }
 
     /**

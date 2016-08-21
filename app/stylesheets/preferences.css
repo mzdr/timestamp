@@ -1,7 +1,6 @@
 :root.preferences {
     background-color: var(--native-bg);
     color: var(--native-text);
-    display: inline-block;
 }
 
 :root.preferences body {
@@ -22,11 +21,8 @@
 }
 
 .preferences-field > .legend {
-    cursor: default;
     margin-bottom: 0.25rem;
     padding: 0;
-
-    -webkit-user-select: none;
 }
 
 .preferences-field > .legend::after {
