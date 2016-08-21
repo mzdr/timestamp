@@ -30,7 +30,6 @@ class About
             minimizable: false,
             maximizable: false,
             title: `${this.app.translator.getString('about')} ${Electron.app.getName()}`,
-            alwaysOnTop: true,
             show: false
         });
 
@@ -48,6 +47,12 @@ class About
      */
     static render()
     {
+        let nameNode = document.querySelector('[data-name]');
+        let versionNode = document.querySelector('[data-version]');
+
+        nameNode.textContent = Electron.remote.app.getName();
+        versionNode.textContent = Electron.remote.app.getVersion();
+
         // Open links externally by default
         document.documentElement.addEventListener('click', (e) => {
             if (e.target.matches('a[href^="http"]')) {
