@@ -12,6 +12,10 @@ Built with [Electron] and [Moment.js].
 - Fully [customizable] date/time display
 - Starts automatically at login (if you wish)
 
+## Install
+
+[**Download**], unzip, and move `Timestamp.app` to the `/Applications` directory. 
+
 ## Support
 
 **Bugs and requests**: Please use the project's [issue tracker].  
@@ -31,3 +35,4 @@ Built with [Electron] and [Moment.js].
 [tweet]: https://twitter.com/intent/tweet?url=https://github.com/mzdr/timestamp&text=Timestamp,%20a%20better%20macOS%20menu%20bar%20clock%20with%20a%20customizable%20date/time%20display%20and%20a%20calendar.%20%E2%80%94
 [102]: http://momentjs.com/#multiple-locale-support
 [customizable]: http://momentjs.com/docs/#/displaying/format/
+[**Download**]: https://github.com/mzdr/timestamp/releases/latest
