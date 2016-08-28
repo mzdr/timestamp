@@ -46,7 +46,6 @@ class App
 
         // Dark mode was changed
         this.onDarkModeChanged((darkMode) => {
-            this.preferences.onDarkModeChanged(darkMode);
             this.calendar.onDarkModeChanged(darkMode);
         });
     }
