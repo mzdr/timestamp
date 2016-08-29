@@ -1,5 +1,5 @@
 # Timestamp [![GitHub release](https://img.shields.io/github/release/mzdr/timestamp.svg?maxAge=86400)]() [![donate](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTED8SARNCBRG) [![Flattr](https://img.shields.io/badge/donate-Flattr-green.svg)](https://flattr.com/profile/mzdr)
-![Screenshot of Timestamp app](https://mzdr.github.io/timestamp/screenshot.png)
+![Screenshot of Timestamp app](https://mzdr.github.io/timestamp/screenshot.jpg)
 
 A better macOS menu bar clock with a customizable date/time display and a calendar. Inspired by [Day-O].
 
@@ -14,7 +14,7 @@ Built with [Electron] and [Moment.js].
 
 ## Install
 
-[**Download**], unzip, and move `Timestamp.app` to the `/Applications` directory. 
+[**Download**], unzip, and move `Timestamp.app` to the `/Applications` directory.
 
 ## Support
 
