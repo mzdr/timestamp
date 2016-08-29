@@ -21,6 +21,10 @@ class App
         // Hide dock icon
         Electron.app.dock.hide();
 
+        // On OS X it is common for applications and their menu bar
+        // to stay active until the user quits explicitly with Cmd + Q
+        Electron.app.on('window-all-closed', () => {});
+
         // Weird workaround for current bug in auto-launch
         // @see https://github.com/Teamwork/node-auto-launch/issues/28
         const launchOptions = {

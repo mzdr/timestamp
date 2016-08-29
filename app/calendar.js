@@ -14,29 +14,48 @@ class Calendar
         this.app = app;
 
         // Create window instance
-        this._window = new Electron.BrowserWindow({
+        this._window = this.createWindow({
+            darkMode: this.app.isDarkMode()
+        });
+
+        // Provide locale detection
+        Electron.ipcMain.on('calendar.locale', (e) =>
+            e.returnValue = this.app.getLocale()
+        );
+
+        // Provide dark mode detection
+        Electron.ipcMain.on('calendar.darkmode', (e) =>
+            e.returnValue = this.app.isDarkMode()
+        );
+    }
+
+    /**
+     * Creates the actual calendar window.
+     *
+     * @param {boolean} darkMode Are we in dark mode?
+     * @return {BrowserWindow}
+     */
+    createWindow({
+        darkMode = false
+    } = {})
+    {
+        const win = new Electron.BrowserWindow({
             frame: false,
             resizable: false,
             alwaysOnTop: true,
-            show: false
+            show: false,
+
+            // Keep in sync with generic.css
+            backgroundColor: darkMode ? '#333' : '#fafafa'
         });
 
         // Load the contents aka the view
-        this._window.loadURL(`file://${__dirname}/calendar.html`);
+        win.loadURL(`file://${__dirname}/calendar.html`);
 
         // Register onBlur callback
-        this._window.on('blur', (e) => this.onBlur(e));
+        win.on('blur', () => this.onBlur());
 
-        // Provide locale detection
-        Electron.ipcMain.on(
-            'calendar.locale',
-            (e) => e.returnValue = this.app.getLocale()
-        );
-
-        // Calendar view is ready and idling now
-        Electron.ipcMain.on('calendar.idle', () => {
-            this.onDarkModeChanged(this.app.isDarkMode());
-        });
+        return win;
     }
 
     /**
@@ -97,7 +116,13 @@ class Calendar
      */
     onDarkModeChanged(darkMode)
     {
-        this._window.webContents.send('calendar.darkmode', darkMode);
+        // Close old window
+        this._window.close();
+
+        // Recreate calendar window with dark mode settings
+        this._window = this.createWindow({
+            darkMode: darkMode
+        });
     }
 
     /**
@@ -105,16 +130,19 @@ class Calendar
      */
     static render()
     {
-        // Watch for dark mode changes
-        Electron.ipcRenderer.on(
-            'calendar.darkmode', (e, darkMode) => this.toggleDarkMode(darkMode)
-        );
+        const locale = Electron.ipcRenderer.sendSync('calendar.locale');
+        const darkMode = Electron.ipcRenderer.sendSync('calendar.darkmode');
 
         // Set locale for Moment.js
-        Moment.locale(Electron.ipcRenderer.sendSync('calendar.locale'));
+        Moment.locale(locale);
 
         // The main Moment instance that's responsible for the calendar view
         const calendar = Moment();
+
+        // We are in dark mode
+        if (darkMode) {
+            document.documentElement.classList.add('dark-mode');
+        }
 
         // Assign click handling logic to calendar actions
         document.addEventListener('click', (e) => {
@@ -154,9 +182,6 @@ class Calendar
 
         // Redraw every minute to avoid displaying old/wrong states
         setInterval(() => this.draw(calendar), 1000 * 60);
-
-        // Idling now…
-        Electron.ipcRenderer.send('calendar.idle');
     }
 
     /**
@@ -313,19 +338,6 @@ class Calendar
             document.body.offsetHeight,
             true
         );
-    }
-
-    /**
-     * When the dark mode is being changed we need to adjust the styles by
-     * adding or removing the dark-mode class to the root DOM element.
-     *
-     * @param {boolean} darkMode Enable/disable dark mode styles.
-     */
-    static toggleDarkMode(darkMode)
-    {
-        document.documentElement.classList[
-            darkMode ? 'add' : 'remove'
-        ]('dark-mode');
     }
 }
 
