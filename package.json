@@ -2,8 +2,8 @@
   "private": true,
   "scripts": {
     "start": "electron ./app --enable-logging",
-    "pack": "npm install && build --dir",
-    "dist": "npm install && build",
+    "pack": "build --dir",
+    "dist": "build",
     "postinstall": "install-app-deps"
   },
   "dependencies": {
