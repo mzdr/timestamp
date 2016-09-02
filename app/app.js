@@ -224,10 +224,19 @@ class App
             this.clock.setFormat(preferences.clockFormat);
         }
 
-        // Start at login was changed
-        if (preferences.startAtLogin !== this.startAtLogin.isEnabled()) {
-            this.startAtLogin[preferences.startAtLogin ? 'enable' : 'disable']()
-        }
+        // Check if start at login was changed and enable/disable accordingly
+        this.startAtLogin
+            .isEnabled()
+            .then((enabled) => {
+                if (preferences.startAtLogin === enabled) {
+                    return;
+                }
+
+                return this.startAtLogin[
+                    preferences.startAtLogin ? 'enable' : 'disable'
+                ]();
+            })
+            .catch((error) => console.log(error));
     }
 }
 
