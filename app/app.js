@@ -245,7 +245,7 @@ class App
                 ]();
             })
             .catch((error) => {
-                if (this.debug === false) {
+                if (this.debug) {
                     console.log(error);
                 }
             });
