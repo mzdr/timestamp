@@ -18,6 +18,9 @@ class App
     */
     constructor()
     {
+        // Check if we are in debug mode
+        this.debug = process && process.env && process.env.DEBUG;
+
         // Hide dock icon
         Electron.app.dock.hide();
 
@@ -104,48 +107,53 @@ class App
         // Run the updater to see if there is an update
         this.updater.checkForUpdate()
 
-        // We have an update!
-        .then(() => {
-
-            // Tell user we are downloading the update
-            downloadingUpdateItem.visible = true;
-            checkForUpdateItem.visible = false;
-            checkForUpdateItem.enabled = true;
-
-            // Wait for the download to finish
-            this.updater.onUpdateDownloaded()
-
-            // Enable the restart and install update menu item
+            // We have an update!
             .then(() => {
-                downloadingUpdateItem.visible = false;
-                restartAndInstallUpdateItem.visible = true;
+
+                // Tell user we are downloading the update
+                downloadingUpdateItem.visible = true;
+                checkForUpdateItem.visible = false;
+                checkForUpdateItem.enabled = true;
+
+                // Wait for the download to finish
+                this.updater.onUpdateDownloaded()
+
+                    // Enable the restart and install update menu item
+                    .then(() => {
+                        downloadingUpdateItem.visible = false;
+                        restartAndInstallUpdateItem.visible = true;
+                    })
+
+                    // Failed to download update
+                    .catch(() => {
+                        downloadingUpdateFailedItem.visible = true;
+                        downloadingUpdateItem.visible = false;
+
+                        // Enable check for update after 1 min
+                        setTimeout(() => {
+                            checkForUpdateItem.visible = true;
+                            downloadingUpdateFailedItem.visible = false;
+                        }, 1000 * 60);
+                    });
             })
 
-            // Failed to download update
-            .catch(() => {
-                downloadingUpdateFailedItem.visible = true;
-                downloadingUpdateItem.visible = false;
+            // Nope, all up to date
+            .catch((error) => {
+
+                if (this.debug) {
+                    console.log(error);
+                }
+
+                youAreUpToDateItem.visible = true;
+                checkForUpdateItem.visible = false;
+                checkForUpdateItem.enabled = true;
 
                 // Enable check for update after 1 min
                 setTimeout(() => {
                     checkForUpdateItem.visible = true;
-                    downloadingUpdateFailedItem.visible = false;
+                    youAreUpToDateItem.visible = false;
                 }, 1000 * 60);
             });
-        })
-
-        // Nope, all up to date
-        .catch(() => {
-            youAreUpToDateItem.visible = true;
-            checkForUpdateItem.visible = false;
-            checkForUpdateItem.enabled = true;
-
-            // Enable check for update after 1 min
-            setTimeout(() => {
-                checkForUpdateItem.visible = true;
-                youAreUpToDateItem.visible = false;
-            }, 1000 * 60);
-        });
     }
 
     /**
@@ -236,7 +244,11 @@ class App
                     preferences.startAtLogin ? 'enable' : 'disable'
                 ]();
             })
-            .catch((error) => console.log(error));
+            .catch((error) => {
+                if (this.debug === false) {
+                    console.log(error);
+                }
+            });
     }
 }
 

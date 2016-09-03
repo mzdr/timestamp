@@ -11,78 +11,40 @@ class Updater
     */
     constructor()
     {
-        // Going to use GitHub API to check for latest release
-        this.releasesUrl = 'https://api.github.com/repos/mzdr/timestamp/releases';
+        this.updateUrl = 'https://mzdr.github.io/timestamp/update.json';
     }
 
     /**
      * Tries to parse the response as a JSON.
      *
      * @param {Response} response The HTTP response.
-     * @return {Promise|string}
+     * @return {string}
      */
     getJsonFromResponse(response)
     {
-        if (response.statusCode === 200) {
-            try {
-                return JSON.parse(response.body);
-            } catch (e) {
-                return Promise.reject('Failed to parse response.');
-            }
+        if (response.statusCode !== 200) {
+            throw Error('Request failed.');
         }
 
-        return Promise.reject('Request failed.');
-    }
-
-    /**
-     * Tries to get the latest release from the JSON object. On failure a
-     * rejected promise will be returned.
-     *
-     * @param {object} json
-     * @return {Promise|object}
-     */
-    getLatestReleaseFromJson(json)
-    {
-        let latestRelease = json[0];
-
-        if (typeof latestRelease !== 'object') {
-            return Promise.reject('Parsed response has invalid data.');
-        }
-
-        return latestRelease;
+        return JSON.parse(response.body);
     }
 
     /**
      * Checks if the latest release is newer than the currently running app. If
-     * it's true the release object will be passed along, otherwise a rejected
-     * promise will returned.
+     * it's true, the update url will be passed along.
      *
      * @param {object} release The latest release to compare against.
-     * @return {Promise|object}
+     * @return {string}
      */
     isNewerThanCurrentVersion(release)
     {
         let currentVersion = Electron.app.getVersion();
 
-        if (Semver.lt(currentVersion, release.tag_name) === false) {
-            return Promise.reject('We are up to date.');
+        if (Semver.lt(currentVersion, release.version) === false) {
+            throw Error('We are up to date.');
         }
 
-        return release;
-    }
-
-    /**
-     * Tries to extract the download link from the release object.
-     *
-     * @param {object} release Release data.
-     * @return {Promise|string}
-     */
-    getDownloadLink(release) {
-        try {
-            return release.assets[0].browser_download_url;
-        } catch (e) {
-            return Promise.reject('Unable to get download link for latest release.');
-        }
+        return this.updateUrl;
     }
 
     /**
@@ -94,21 +56,35 @@ class Updater
     checkForUpdate()
     {
         return new Promise((updateAvailable, updateNotAvailable) => {
-
-            Got.get(this.releasesUrl)
-                .then(this.getJsonFromResponse)
-                .then(this.getLatestReleaseFromJson)
-                .then(this.isNewerThanCurrentVersion)
-                .then(this.getDownloadLink)
-                .then((downloadLink) => {
-                    Electron.autoUpdater.setFeedURL(downloadLink);
-                    Electron.autoUpdater.checkForUpdates();
-                    Electron.autoUpdater.on('update-available', updateAvailable);
-                    Electron.autoUpdater.on('update-not-available', updateNotAvailable);
-                    Electron.autoUpdater.on('error', updateNotAvailable);
-                })
+            Got
+                .get(this.updateUrl)
+                .then((response) => this.getJsonFromResponse(response))
+                .then((release) => this.isNewerThanCurrentVersion(release))
+                .then((url) => this.runAutoUpdater(
+                    url,
+                    updateAvailable,
+                    updateNotAvailable
+                ))
                 .catch(updateNotAvailable);
         });
+    }
+
+    /**
+     * Update checks have been successful and we are now firing up the auto
+     * updating process.
+     *
+     * @param {string} url URL to the update.json file
+     * @param {function} updateAvailable Function to approve available update
+     * @param {function} updateNotAvailable Function to deny avaiable update
+     * @see https://github.com/Squirrel/Squirrel.Mac#server-support
+     */
+    runAutoUpdater(url, updateAvailable, updateNotAvailable)
+    {
+        Electron.autoUpdater.setFeedURL(url);
+        Electron.autoUpdater.checkForUpdates();
+        Electron.autoUpdater.on('update-available', updateAvailable);
+        Electron.autoUpdater.on('update-not-available', updateNotAvailable);
+        Electron.autoUpdater.on('error', updateNotAvailable);
     }
 
     /**
