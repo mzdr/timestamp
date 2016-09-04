@@ -33,9 +33,10 @@
 }
 
 .about-id > .logo {
-    /*background-image: url("");*/
+    background-image: url("../images/icon.svg");
     background-position: center;
     background-repeat: no-repeat;
+    background-size: contain;
     display: block;
     height: 4rem;
     margin: 0 auto 1rem;
