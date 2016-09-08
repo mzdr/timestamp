@@ -70,8 +70,13 @@ class App
         // Show calendar when clicking on tray icon
         this.tray.onClick(() => {
             const bounds = this.tray.getBounds();
+            const currentMousePosition = Electron.screen.getCursorScreenPoint();
+            const currentDisplay = Electron.screen.getDisplayNearestPoint(currentMousePosition);
 
-            this.calendar.setPosition(bounds.x + bounds.width / 2, 0);
+            this.calendar.setPosition(
+                bounds.x + bounds.width / 2,
+                currentDisplay.workArea.y
+            );
 
             if (this.calendar.isVisible()) {
                 this.calendar.hide();
