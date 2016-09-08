@@ -46,6 +46,13 @@ class Preferences
      */
     show()
     {
+        // Don't create multiple windows, focus on last created one instead
+        if (this._window && this._window.isDestroyed() === false) {
+            this._window.show();
+
+            return;
+        }
+
         // Create window instance
         this._window = new Electron.BrowserWindow({
             resizable: false,
