@@ -2,7 +2,7 @@
   "name": "timestamp",
   "productName": "Timestamp",
   "description": "A better macOS menu bar clock with a customizable date/time display and a calendar.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Sebastian Prein <hi@sebastianprein.com>",
   "copyright": "© 2016 Sebastian Prein",
   "homepage": "https://github.com/mzdr/timestamp",
