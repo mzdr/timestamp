@@ -171,6 +171,16 @@ class Preferences
                 onChange: (el) => Electron.ipcRenderer.send(
                     'preferences.set', 'startAtLogin', el.checked
                 )
+            },
+            {
+                selector: '[data-opencalendaronclick]',
+                event: 'change',
+                onLoad: (el) => el.checked = Electron.ipcRenderer.sendSync(
+                    'preferences.get', 'clickingDateOpensCalendar'
+                ),
+                onChange: (el) => Electron.ipcRenderer.send(
+                    'preferences.set', 'clickingDateOpensCalendar', el.checked
+                )
             }
         ];
 

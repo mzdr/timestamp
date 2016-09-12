@@ -182,7 +182,8 @@ class App
     {
         return {
             clockFormat: 'HH:mm:ss',
-            startAtLogin: false
+            startAtLogin: false,
+            clickingDateOpensCalendar: true
         };
     }
 

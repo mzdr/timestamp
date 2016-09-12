@@ -22,9 +22,15 @@
     <hr class="native-line"></hr>
 
     <fieldset class="preferences-field">
-        <input id="startAtLogin" class="native-checkbox" type="checkbox" data-startatlogin>
-        <label for="startAtLogin" data-locale-key="startAtLogin">Start at Login</label>
+        <input id="startAtLogin" class="native-checkbox checkbox" type="checkbox" data-startatlogin>
+        <label for="startAtLogin" class="label" data-locale-key="startAtLogin">Start at Login</label>
     </fieldset>
+
+    <fieldset class="preferences-field">
+        <input id="clickingDateOpensCalendar" class="native-checkbox checkbox" type="checkbox" data-opencalendaronclick>
+        <label for="clickingDateOpensCalendar" class="label" data-locale-key="clickingDateOpensCalendar">Klicks auf ein Datum öffnen den Kalender</label>
+    </fieldset>
+
     <script>require('./preferences').render()</script>
 </body>
 </html>

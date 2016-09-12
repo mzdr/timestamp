@@ -139,6 +139,10 @@ class Calendar
      */
     onDayClicked(daysFromToday)
     {
+        if (this.app.preferences.get('clickingDateOpensCalendar') === false) {
+            return;
+        }
+        
         const script = `
             tell application "Calendar"
                 set requestedDate to (current date) + (${daysFromToday} * days)

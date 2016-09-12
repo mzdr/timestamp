@@ -15,5 +15,6 @@
   "reportAnIssue": "Report an Issue",
   "developedBy": "Developed by",
   "poweredBy": "Powered by",
-  "releasedUnderMIT": "Released under the MIT License"
+  "releasedUnderMIT": "Released under the MIT License",
+  "clickingDateOpensCalendar": "Clicking a date opens the calendar"
 }
