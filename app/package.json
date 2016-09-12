@@ -8,6 +8,7 @@
   "homepage": "https://github.com/mzdr/timestamp",
   "license": "MIT",
   "dependencies": {
+    "applescript": "1.0.0",
     "auto-launch": "4.0.0",
     "got": "6.3.0",
     "moment": "2.14.1",

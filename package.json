@@ -7,6 +7,7 @@
     "postinstall": "install-app-deps"
   },
   "dependencies": {
+    "applescript": "1.0.0",
     "auto-launch": "4.0.0",
     "got": "6.3.0",
     "moment": "2.14.1",
