@@ -1,5 +1,6 @@
 const Moment = require('moment');
 const Electron = require('electron');
+const AppleScript = require('applescript');
 
 class Calendar
 {
@@ -26,6 +27,11 @@ class Calendar
         // Provide dark mode detection
         Electron.ipcMain.on('calendar.darkmode', (e) =>
             e.returnValue = this.app.isDarkMode()
+        );
+
+        // Provide link to macOS calendar app
+        Electron.ipcMain.on('calendar.day.clicked', (e, daysFromToday) =>
+            this.onDayClicked(daysFromToday)
         );
     }
 
@@ -126,6 +132,29 @@ class Calendar
     }
 
     /**
+     * A day has been clicked in the calendar overview. In our case we are
+     * going to open the clicked day in the macOS calendar app.
+     *
+     * @param {number} daysFromToday Amount of days from today.
+     */
+    onDayClicked(daysFromToday)
+    {
+        const script = `
+            tell application "Calendar"
+                set requestedDate to (current date) + (${daysFromToday} * days)
+                switch view to day view
+                view calendar at requestedDate
+            end tell
+        `;
+
+        AppleScript.execString(script, (error) => {
+            if (error && this.app.debug) {
+                console.log(error);
+            }
+        });
+    }
+
+    /**
      * Provide static render function to execute logic in renderer process.
      */
     static render()
@@ -144,44 +173,51 @@ class Calendar
             document.documentElement.classList.add('dark-mode');
         }
 
-        // Assign click handling logic to calendar actions
-        document.addEventListener('click', (e) => {
-            if (e.target.matches('[data-calendar-today]')) {
-                this.goToToday(calendar);
-            } else if (e.target.matches('[data-calendar-next]')) {
-                this.nextMonth(calendar);
-            } else if (e.target.matches('[data-calendar-prev]')) {
-                this.previousMonth(calendar);
-            }
-        });
-
-        // Add ability to change the calendar by pressing keys
-        window.addEventListener('keydown', (e) => {
-
-            // Should do nothing if the key event was already consumed.
-            if (e.defaultPrevented) {
-                return;
-            }
-
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                this.goToToday(calendar);
-            } else if (e.key === 'ArrowRight') {
-                this.nextMonth(calendar);
-            } else if (e.key === 'ArrowLeft') {
-                this.previousMonth(calendar);
-            } else {
-                return;
-            }
-
-            // Consume the event to avoid it being handled twice
-            e.preventDefault();
-        }, true);
+        // Attach click logic to different interface elements
+        document.addEventListener('click', (e) => this.onClick(
+            calendar, e.target
+        ));
 
         // Draw for the first time
         this.draw(calendar);
 
         // Redraw every minute to avoid displaying old/wrong states
         setInterval(() => this.draw(calendar), 1000 * 60);
+    }
+
+    /**
+     * Click handler for several interface elements.
+     *
+     * @param {Moment} calendar
+     * @param {HTMLElement} el
+     */
+    static onClick(calendar, el)
+    {
+        if (el.hasAttribute('data-calendar-today')) {
+            return this.goToToday(calendar);
+        }
+
+        if (el.hasAttribute('data-calendar-next-month')) {
+            return this.nextMonth(calendar);
+        }
+
+        if (el.hasAttribute('data-calendar-prev-month')) {
+            return this.previousMonth(calendar);
+        }
+
+        if (el.hasAttribute('data-calendar-next-year')) {
+            return this.nextYear(calendar);
+        }
+
+        if (el.hasAttribute('data-calendar-prev-year')) {
+            return this.previousYear(calendar);
+        }
+
+        if (el.hasAttribute('data-calendar-day')) {
+            let day = parseInt(el.getAttribute('data-calendar-day'), 10) || 0;
+
+            return Electron.ipcRenderer.send('calendar.day.clicked', day);
+        }
     }
 
     /**
@@ -203,6 +239,28 @@ class Calendar
     static previousMonth(calendar)
     {
         calendar.subtract(1, 'month');
+        this.draw(calendar);
+    }
+
+    /**
+     * Changes the given calendar to the next year.
+     *
+     * @param {Moment} calendar
+     */
+    static nextYear(calendar)
+    {
+        calendar.add(1, 'year');
+        this.draw(calendar);
+    }
+
+    /**
+     * Changes the given calendar to the previous year.
+     *
+     * @param {Moment} calendar
+     */
+    static previousYear(calendar)
+    {
+        calendar.subtract(1, 'year');
         this.draw(calendar);
     }
 
@@ -247,26 +305,15 @@ class Calendar
     }
 
     /**
-     * Returns a legend in form of all weekdays.
+     * Removes all child nodes from the given element(s).
      */
-    static getWeekdaysLegend()
+    static clean(elements)
     {
-        const startOfWeek = Moment().startOf('week');
-        const legend = this.getWeekNode();
-
-        // Build weekdays legend
-        for (var i = 0; i < 7; i++) {
-            let day = this.getDayNode();
-
-            legend.classList.add('-weekdays');
-            legend.appendChild(day);
-
-            day.classList.add('-weekday');
-            day.textContent = startOfWeek.format('ddd');
-            startOfWeek.add(1, 'day');
-        }
-
-        return legend;
+        elements.forEach((el) => {
+            while (el.firstChild) {
+                el.removeChild(el.firstChild);
+            }
+        })
     }
 
     /**
@@ -276,16 +323,20 @@ class Calendar
      */
     static draw(calendar)
     {
+        // Extract year and month of given calender
+        const [year, month] = [calendar.year(), calendar.month()];
+
         // Fetch DOM nodes
         const overview = document.querySelector('[data-calendar-overview]');
+        const legend = document.querySelector('[data-calendar-legend]');
         const monthLabel = document.querySelector('[data-calendar-month]');
         const yearLabel = document.querySelector('[data-calendar-year]');
 
         // Prepare Moment instances
-        const [year, month] = [calendar.year(), calendar.month()];
         const current = Moment([year, month]);
         const lastDate = Moment(current).endOf('month').weekday(6);
-        const today = Moment();
+        const today = Moment().startOf('date');
+        const weekdays = Moment.weekdaysShort(true);
 
         let week;
 
@@ -296,13 +347,17 @@ class Calendar
         // Set back to start of the week
         current.weekday(0);
 
-        // Clean up old days
-        while (overview.firstChild) {
-            overview.removeChild(overview.firstChild);
-        }
+        // Clean up old calendar data
+        this.clean([overview, legend]);
 
         // Build weekdays legend
-        overview.appendChild(this.getWeekdaysLegend());
+        weekdays.forEach((weekday) => {
+            let weekdayNode = document.createElement('div');
+
+            weekdayNode.textContent = weekday;
+            weekdayNode.classList.add('weekday');
+            legend.appendChild(weekdayNode);
+        })
 
         do {
             let day = this.getDayNode();
@@ -325,6 +380,7 @@ class Calendar
             }
 
             day.textContent = current.format('D');
+            day.setAttribute('data-calendar-day', current.diff(today, 'days'));
             week.appendChild(day);
 
             // Next day
