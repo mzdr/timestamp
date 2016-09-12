@@ -1,3 +1,6 @@
+@import "./generic.css";
+@import "./native.css";
+
 :root.about {
     background-color: var(--native-bg);
     color: var(--native-text);

@@ -1,3 +1,6 @@
+@import "./generic.css";
+@import "./native.css";
+
 :root.preferences {
     background-color: var(--native-bg);
     color: var(--native-text);

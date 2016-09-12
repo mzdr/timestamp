@@ -7,13 +7,15 @@
     --primary-background: #fafafa;
     --primary-link: var(--brand-primary);
     --primary-text: #474647;
-    --silent-text: #ccc;
+    --silent-fg: #ccc;
+    --silent-bg: #f2f2f2;
     --highlight-fg: var(--primary-background);
     --highlight-bg: var(--brand-primary);
 
     background-color: var(--primary-background);
     box-sizing: border-box;
     color: var(--primary-text);
+    cursor: default;
     font-family: system, -apple-system, BlinkMacSystemFont, Helvetica Neue, Lucida Grande;
     font-size: 16px;
     transition-duration: 200ms;
@@ -24,7 +26,7 @@
 :root.dark-mode {
     --primary-background: #333;
     --primary-text: #fafafa;
-    --silent-text: #666;
+    --silent-fg: #666;
     --highlight-fg: var(--primary-text);
 }
 
@@ -34,6 +36,7 @@
     border-color: inherit;
     box-sizing: inherit;
     color: currentColor;
+    line-height: inherit;
     transition-duration: inherit;
     transition-property: inherit;
 }
