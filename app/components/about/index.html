@@ -3,29 +3,23 @@
 <script src="./AboutView.js"></script>
 <script src="./About.js"></script>
 
-<template>
+<template id="view">
     <about-view>
-        <div class="column">
-            <div class="about-id">
-                <span class="logo"></span>
-                <span class="name" data-name>Timestamp</span>
-                <span class="version" data-version>1.0.0</span>
-            </div>
-        </div>
-        <div class="column">
-            <div class="about-details">
+        <figure class="about-logo"></figure>
+        <section class="about-details">
+            <span class="name" data-name>Timestamp</span>
+            <span class="version" data-version>1.0.0</span>
+
+            <nav class="about-links">
                 <a href="https://mzdr.github.io/timestamp" class="link">
                     <translate-string>visitOfficialWebsite</translate-string>
                 </a>
+
                 <a href="https://github.com/mzdr/timestamp/issues" class="link">
                     <translate-string>reportAnIssue</translate-string>
                 </a>
-                <p class="line">
-                    <translate-string>developedBy</translate-string>
-                    <translate-string>poweredBy</translate-string>
-                </p>
-                <p class="line -silent">&copy; 2016 Sebastian Prein. <translate-string>releasedUnderMIT</translate-string></p>
-            </div>
-        </div>
+            </nav>
+        </section>
+        <footer class="about-footer">&copy; 2016 Sebastian Prein. <translate-string>releasedUnderMIT</translate-string></footer>
     </about-view>
 </template>

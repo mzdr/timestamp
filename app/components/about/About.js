@@ -2,7 +2,7 @@ class About
 {
     constructor()
     {
-        const template = this.constructor.document.querySelector('template');
+        const template = this.constructor.document.querySelector('#view');
         const clone = document.importNode(template.content, true);
         const target = document.querySelector('#about-view');
         const nameNode = clone.querySelector('[data-name]');
