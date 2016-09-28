@@ -26,10 +26,18 @@ class Preferences
             // Update the window size
             Electron.remote.getCurrentWindow().setContentSize(
                 document.body.offsetWidth,
-                document.body.offsetHeight,
-                false
+                document.body.offsetHeight
             );
         });
+
+        // Received request to deliver current content size
+        Electron.ipcRenderer.once('preferences.content.size',
+            () => Electron.ipcRenderer.send(
+                'preferences.content.size',
+                document.body.offsetWidth,
+                document.body.offsetHeight
+            )
+        );
     }
 
     /**
