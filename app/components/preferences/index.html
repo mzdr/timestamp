@@ -1,0 +1,236 @@
+<link rel="stylesheet" href="styles.css">
+<script src="./PreferencesEvent.js"></script>
+<script src="./PreferencesItem.js"></script>
+<script src="./PreferencesItemData.js"></script>
+<script src="./PreferencesItemTitle.js"></script>
+<script src="./PreferencesItemDescription.js"></script>
+<script src="./PreferencesView.js"></script>
+<script src="./Preferences.js"></script>
+
+<template id="view">
+    <preferences-view>
+        <tab-bar>
+            <button is="tab-bar-item" tab="general" class="-active">
+                <i class="icon-general icon"></i>
+                <translate-string class="label">general</translate-string>
+            </button>
+            <button is="tab-bar-item" tab="clock">
+                <i class="icon-clock icon"></i>
+                <translate-string class="label">clock</translate-string>
+            </button>
+            <button is="tab-bar-item" tab="calendar">
+                <i class="icon-calendar icon"></i>
+                <translate-string class="label">calendar</translate-string>
+            </button>
+            <button is="tab-bar-item" tab="about">
+                <i class="icon-about icon"></i>
+                <translate-string class="label">about</translate-string>
+            </button>
+            <button is="tab-bar-item" tab="quit">
+                <i class="icon-quit icon"></i>
+                <translate-string class="label">quit</translate-string>
+            </button>
+        </tab-bar>
+
+        <tab-container>
+
+            <tab-content tab="general" class="-active">
+                <preferences-item>
+                    <preferences-item-data key="startAtLogin" type="toggle"></preferences-item-data>
+                    <preferences-item-title>
+                        <translate-string>startAtLogin</translate-string>
+                    </preferences-item-title>
+                    <preferences-item-description>
+                        <translate-string>startAtLoginDescription</translate-string>
+                    </preferences-item-description>
+                </preferences-item>
+            </tab-content>
+
+            <tab-content tab="clock">
+                <preferences-item>
+                    <preferences-item-title>
+                        <translate-string>clockFormat</translate-string>
+                    </preferences-item-title>
+                    <preferences-item-description>
+                        <translate-string>clockFormatDescription</translate-string>
+                    </preferences-item-description>
+                    <preferences-item-data
+                        key="clockFormat"
+                        type="input"
+                        placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm"></preferences-item-data>
+                </preferences-item>
+            </tab-content>
+
+            <tab-content tab="calendar">
+
+                <preferences-item>
+                    <preferences-item-data type="toggle" key="showWeekOfYear"></preferences-item-data>
+                    <preferences-item-title>
+                        <translate-string>showWeekOfYear</translate-string>
+                    </preferences-item-title>
+                    <preferences-item-description>
+                        <translate-string>showWeekOfYearDescription</translate-string>
+                    </preferences-item-description>
+                </preferences-item>
+
+                <preferences-item>
+                    <preferences-item-data type="toggle" key="clickingDateOpensCalendar"></preferences-item-data>
+                    <preferences-item-title>
+                        <translate-string>clickingDateOpensCalendar</translate-string>
+                    </preferences-item-title>
+                    <preferences-item-description>
+                        <translate-string>clickingDateOpensCalendarDescription</translate-string>
+                    </preferences-item-description>
+                </preferences-item>
+            </tab-content>
+
+            <tab-content id="about-view" tab="about"></tab-content>
+        </tab-container>
+    </preferences-view>
+</template>
+
+
+<template id="item-data-input">
+    <style>
+        :host {
+            display: block;
+        }
+
+        input {
+            background: transparent;
+            border: 0;
+            color: currentColor;
+            display: block;
+            font-family: inherit;
+            font-size: inherit;
+            height: 100%;
+            margin: 0;
+            outline: 0;
+            padding: 0;
+            width: 100%;
+        }
+    </style>
+    <input type="text">
+</template>
+
+<template id="item-data-toggle">
+    <style>
+        :host {
+            display: inline-block;
+            position: relative;
+        }
+
+        input {
+            height: 100%;
+            left: 0;
+            margin: 0;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        input:checked + .switch-container .switch-track {
+            transform: translate3d(calc(-100% * 1/3), 0 , 0);
+        }
+
+        input:checked + .switch-container .switch-knob {
+            transform: translate3d(-100%, 0 , 0);
+        }
+
+        .switch-container {
+            display: block;
+            height: 2em;
+            margin: 0.125em;
+            position: relative;
+            width: 4em;
+        }
+
+        .switch-container > .clip {
+            border-radius: 1em;
+            display: block;
+            height: 100%;
+            overflow: hidden;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .switch-track,
+        .switch-knob {
+            transition-duration: 200ms;
+            transition-property: transform;
+            transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+        }
+
+        .switch-track {
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent),
+                              linear-gradient(to right, var(--brand-fail) 50%, var(--highlight-bg) 50%);
+            border-radius: inherit;
+            box-shadow: inset 0 0.125em 0.1875em -0.1875em rgba(0, 0, 0, 1);
+            display: flex;
+            height: 100%;
+            justify-content: space-between;
+            transform: translate3d(0, 0, 0);
+            width: 150%;
+        }
+
+        .switch-knob {
+            background-color: currentColor;
+            border-radius: 50%;
+            box-shadow: 0 0.0625em 0.0625em 0 rgba(0, 0, 0, 0.25);
+            color: var(--primary-bg);
+            height: calc(100% + 0.125em);
+            position: absolute;
+            right: -0.0625em;
+            top: -0.0625em;
+            width: calc(50% + 0.125em);
+        }
+
+        .switch-track > .on,
+        .switch-track > .off {
+            height: 100%;
+            position: relative;
+            width: calc(100% / 3);
+        }
+
+        .switch-track > .off::before,
+        .switch-track > .off::after {
+            background-color: var(--highlight-fg);
+            content: "";
+            height: 7.5%;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            width: 50%;
+        }
+
+        .switch-track > .off::before {
+            transform: translate(-33%, -50%) rotate(45deg);
+        }
+
+        .switch-track > .off::after {
+            transform: translate(-33%, -50%) rotate(-45deg);
+        }
+
+        .switch-track > .on::before {
+            box-shadow: inset 0.125em -0.125em 0 0 var(--highlight-fg);
+            content: "";
+            height: 22.5%;
+            left: 50%;
+            position: absolute;
+            top: 50%;
+            transform: translate(-70%, -75%) rotate(-45deg);
+            width: 50%;
+        }
+    </style>
+    <input type="checkbox">
+    <span class="switch-container">
+        <span class="clip">
+            <span class="switch-track">
+                <span class="off"></span>
+                <span class="on"></span>
+            </span>
+        </span>
+        <span class="switch-knob"></span>
+    </span>
+</template>

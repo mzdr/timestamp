@@ -7,7 +7,6 @@ const Preferences = require('./preferences');
 const Calendar = require('./calendar');
 const Updater = require('./updater');
 const Translator = require('./translator');
-const About = require('./about');
 
 class App
 {
@@ -43,54 +42,63 @@ class App
         this.preferences = new Preferences(this);
         this.calendar = new Calendar(this);
         this.updater = new Updater(this);
-        this.about = new About(this);
-
-        // Initialize tray related things
-        this.initTray();
 
         // Check for update on startup
-        this.handleUpdateCheckingProcess();
+        // this.handleUpdateCheckingProcess();
 
-        // Dark mode was changed
-        this.onDarkModeChanged((darkMode) => {
-            this.calendar.onDarkModeChanged(darkMode);
+        // Register listeners for clock, tray, system nofitications and so on…
+        this.registerListeners();
+
+        // Finally create the app window
+        this._window = this.createWindow({
+            darkMode: this.isDarkMode()
         });
     }
 
     /**
-    * Initialize everything that belongs to the tray.
+    * Registers listeners for system notification, messages from the
+    * renderer process, clock events and tray events.
     */
-    initTray()
+    registerListeners()
     {
         // Hook clock tick with tray label
         this.clock.onTick((clock) => {
             this.tray.setLabel(clock.toString());
         });
 
-        // Show calendar when clicking on tray icon
+        // Show app when clicking on tray icon
         this.tray.onClick(() => {
             const bounds = this.tray.getBounds();
             const currentMousePosition = Electron.screen.getCursorScreenPoint();
             const currentDisplay = Electron.screen.getDisplayNearestPoint(currentMousePosition);
 
-            this.calendar.setPosition(
+            this.setPosition(
                 bounds.x + bounds.width / 2,
                 currentDisplay.workArea.y
             );
 
-            if (this.calendar.isVisible()) {
-                this.calendar.hide();
+            if (this.isVisible()) {
+                this.hide();
             } else {
-                this.calendar.show();
+                this.show();
             }
         });
 
-        // Set up menu items
-        this.tray.onQuitClicked(() => Electron.app.quit());
-        this.tray.onAboutClicked(() => this.about.show());
-        this.tray.onPreferencesClicked(() => this.preferences.show());
-        this.tray.onCheckForUpdateClicked(() => this.handleUpdateCheckingProcess());
-        this.tray.onRestartAndInstallUpdate(() => this.updater.quitAndInstall());
+        // Listen for dark mode changed notification
+        Electron.systemPreferences.subscribeNotification(
+            'AppleInterfaceThemeChangedNotification',
+            () => this.onDarkModeChanged(this.isDarkMode())
+        );
+
+        // Provide locale detection to renderer
+        Electron.ipcMain.on('app.locale', (e) =>
+            e.sender.send('app.locale', this.getLocale())
+        );
+
+        // Provide dark mode detection to renderer
+        Electron.ipcMain.on('app.darkmode', (e) =>
+            e.sender.send('app.darkmode', this.isDarkMode())
+        );
     }
 
     /**
@@ -213,20 +221,6 @@ class App
     }
 
     /**
-    * Calls a given callback when dark mode in macOS is being enabled/disabled.
-    *
-    * @see http://electron.atom.io/docs/api/system-preferences/#systempreferencessubscribenotificationevent-callback-macos
-    * @param {Function} callback
-    */
-    onDarkModeChanged(callback)
-    {
-        Electron.systemPreferences.subscribeNotification(
-            'AppleInterfaceThemeChangedNotification',
-            () => callback(this.isDarkMode())
-        );
-    }
-
-    /**
     * Handle change of preferences.
     *
     * @param {object} preferences New preferences.
@@ -255,6 +249,104 @@ class App
                     console.log(error);
                 }
             });
+    }
+
+    /**
+     * Creates the actual app window.
+     *
+     * @param {boolean} darkMode Are we in dark mode?
+     * @return {BrowserWindow}
+     */
+    createWindow({
+        darkMode = false
+    } = {})
+    {
+        const win = new Electron.BrowserWindow({
+            frame: false,
+            resizable: true,
+            alwaysOnTop: true,
+            show: false,
+
+            // Keep in sync with generic.css
+            backgroundColor: darkMode ? '#333' : '#fafafa'
+        });
+
+        // Load the contents aka the view
+        win.loadURL(`file://${__dirname}/app.html`);
+
+        // Register onBlur callback
+        win.on('blur', () => this.onBlur());
+
+        return win;
+    }
+
+    /**
+     * Shows the app window.
+     */
+    show()
+    {
+        this._window.show();
+    }
+
+    /**
+     * Hides the app window.
+     */
+    hide()
+    {
+        this._window.hide();
+    }
+
+    /**
+     * Returns a boolean, whether the window is visible to the user.
+     *
+     * @return {boolean}
+     */
+    isVisible()
+    {
+        return this._window.isVisible();
+    }
+
+    /**
+     * Sets the position of the app window.
+     *
+     * @param {number} x Position on x-axis.
+     * @param {number} y Position on y-axis.
+     * @param {boolean} centerToX Center window to new x position or not.
+     */
+    setPosition(x, y, centerToX = true)
+    {
+        if (centerToX) {
+            x = Math.round(x - this._window.getSize()[0] / 2);
+        }
+
+        this._window.setPosition(x, y);
+    }
+
+    /**
+     * Called when the window loses focus. In our case once the user clicks
+     * beside the app window, it will be hidden.
+     */
+    onBlur()
+    {
+        this.hide();
+    }
+
+    /**
+     * When dark mode was changed we are going to recreate the application
+     * window with it's appropriate settings.
+     *
+     * @see http://electron.atom.io/docs/api/system-preferences/#systempreferencessubscribenotificationevent-callback-macos
+     * @param {bool} darkMode If dark mode is enabled or disabled.
+     */
+    onDarkModeChanged(darkMode)
+    {
+        // Close old window
+        this._window.close();
+
+        // Recreate app window with dark mode settings
+        this._window = this.createWindow({
+            darkMode: darkMode
+        });
     }
 }
 

@@ -24,25 +24,23 @@ class Preferences
 
         // Return preference values to renderer
         Electron.ipcMain.on('preferences.get', (e, key, value) =>
-            e.returnValue = this.get(key, value)
+            e.sender.send('preferences.get', key, this.get(key, value))
         );
 
         // Save new preference values from renderer
-        Electron.ipcMain.on('preferences.set',
-            (e, key, value) => this.set(key, value)
-        );
+        Electron.ipcMain.on('preferences.set', (e, key, value) => {
+            this.set(key, value)
+                .saveToDisk();
+        });
 
-        // Received request to save preferences to disk from renderer
-        Electron.ipcMain.on('preferences.save', () => this.saveToDisk());
-
-        // Return translation strings
-        Electron.ipcMain.on('translate', (e, key) =>
-            e.returnValue = this.app.translator.getString(key)
-        );
+        // Received request to show preferences window
+        Electron.ipcMain.on('preferences.show', () => this.show());
     }
 
     /**
      * Shows the preferences window.
+     *
+     * @return {Preferences}
      */
     show()
     {
@@ -50,7 +48,7 @@ class Preferences
         if (this._window && this._window.isDestroyed() === false) {
             this._window.show();
 
-            return;
+            return this;
         }
 
         // Create window instance
@@ -71,6 +69,8 @@ class Preferences
         // renderer process has done drawing for the first time, showing window
         // after this event will have no visual flash
         this._window.once('ready-to-show', () => this._window.show());
+
+        return this;
     }
 
     /**
@@ -96,6 +96,7 @@ class Preferences
      *
      * @param {string|object} key Key of preferences or all preferences.
      * @param {mixed} data Preference data.
+     * @return {Preferences}
      */
     set(key, data)
     {
@@ -104,10 +105,14 @@ class Preferences
         } else {
             this._data[key] = data;
         }
+
+        return this;
     }
 
     /**
      * Load preferences from disk.
+     *
+     * @return {Preferences}
      */
     loadFromDisk()
     {
@@ -129,10 +134,14 @@ class Preferences
 
         // Pass them to the app
         this.app.onPreferencesChanged(newPreferences);
+
+        return this;
     }
 
     /**
      * Save preferences to to disk.
+     *
+     * @return {Preferences}
      */
     saveToDisk()
     {
@@ -143,91 +152,8 @@ class Preferences
 
         // Pass new preferences to app
         this.app.onPreferencesChanged(data);
-    }
 
-    /**
-     * Provide static render function to execute logic in renderer process.
-     */
-    static render()
-    {
-        // Define logic for all fields
-        const fields = [
-            {
-                selector: '[data-format]',
-                event: 'keyup',
-                onLoad: (el) => el.value = Electron.ipcRenderer.sendSync(
-                    'preferences.get', 'clockFormat'
-                ),
-                onChange: (el) => Electron.ipcRenderer.send(
-                    'preferences.set', 'clockFormat', el.value
-                )
-            },
-            {
-                selector: '[data-startatlogin]',
-                event: 'change',
-                onLoad: (el) => el.checked = Electron.ipcRenderer.sendSync(
-                    'preferences.get', 'startAtLogin'
-                ),
-                onChange: (el) => Electron.ipcRenderer.send(
-                    'preferences.set', 'startAtLogin', el.checked
-                )
-            },
-            {
-                selector: '[data-opencalendaronclick]',
-                event: 'change',
-                onLoad: (el) => el.checked = Electron.ipcRenderer.sendSync(
-                    'preferences.get', 'clickingDateOpensCalendar'
-                ),
-                onChange: (el) => Electron.ipcRenderer.send(
-                    'preferences.set', 'clickingDateOpensCalendar', el.checked
-                )
-            }
-        ];
-
-        // Apply logic to all fields
-        fields.forEach((field) => {
-            let el = document.querySelector(field.selector);
-
-            // Add onChange listener
-            el.addEventListener(field.event, () => {
-
-                // Update custom field
-                field.onChange(el)
-
-                // Persist new data
-                Electron.ipcRenderer.send('preferences.save');
-            });
-
-            // Fire onLoad listener
-            field.onLoad(el);
-        });
-
-        // Open links externally by default
-        document.documentElement.addEventListener('click', (e) => {
-            if (e.target.matches('a[href^="http"]')) {
-                e.preventDefault();
-                Electron.shell.openExternal(e.target.href);
-            }
-        });
-
-        // Get all labels which should be translated
-        const labels = document.querySelectorAll('[data-locale-key]');
-
-        // Translate all of them
-        for (let label of labels) {
-            let data = label.getAttribute('data-locale-key');
-            let [key, target = 'textContent'] = data.split(':');
-            let translation = Electron.ipcRenderer.sendSync('translate', key);
-
-            label[target] = translation;
-        }
-
-        // Set window size
-        Electron.remote.getCurrentWindow().setContentSize(
-            document.body.offsetWidth,
-            document.body.offsetHeight,
-            false
-        );
+        return this;
     }
 }
 

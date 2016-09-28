@@ -1,33 +1,6 @@
-@import "./generic.css";
-@import "./native.css";
-
-:root.about {
-    background-color: var(--native-bg);
-    color: var(--native-text);
-}
-
-:root.about body {
-    display: inline-block;
-    font-size: var(--native-font-size);
-    padding: 1rem;
-}
-
-.about-container {
+about-view {
     display: flex;
-}
-
-.about-container > .column {
-    border-right: 1px solid var(--native-hr);
-    display: flex;
-    padding: 1.5rem 2rem;
-}
-.about-container > .column:first-child {
-    padding-left: 1rem;
-}
-
-.about-container > .column:last-child {
-    border: 0;
-    padding-right: 1rem;
+    position: relative;
 }
 
 .about-id {
@@ -36,7 +9,7 @@
 }
 
 .about-id > .logo {
-    background-image: url("../images/icon.svg");
+    background-image: url("../../images/logos/timestamp.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -70,6 +43,10 @@
 .about-details > .line {
     margin-bottom: 0;
     margin-top: 1.5rem;
+}
+
+.about-details > .line.-silent {
+    color: var(--silent-fg);
 }
 
 .about-details > .link + .link {

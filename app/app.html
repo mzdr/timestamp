@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="stylesheets/generic.css">
+    <link rel="stylesheet" href="stylesheets/icons.css">
+    <link rel="import" href="components/elements/index.html">
+    <link rel="import" href="components/translate/index.html">
+    <link rel="import" href="components/calendar/index.html">
+</head>
+<body>
+    <script>
+        const Moment = require('moment');
+        const Electron = require('electron');
+
+        Electron.ipcRenderer.send('app.darkmode');
+        Electron.ipcRenderer.send('app.locale');
+
+        // We are in dark mode
+        Electron.ipcRenderer.once('app.darkmode', (e, darkMode) => {
+            if (darkMode) {
+                document.documentElement.classList.add('dark-mode');
+            }
+        });
+
+        // Wait for the main process to tell the renderer about the currently
+        // active locale of this system
+        Electron.ipcRenderer.once('app.locale', (e, locale) => {
+
+            // Update Moment.js
+            Moment.locale(locale);
+
+            // Create calendar view
+            const calendar = new Calendar();
+        });
+    </script>
+</body>
+</html>

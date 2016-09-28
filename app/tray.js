@@ -21,39 +21,6 @@ class Tray
 
         // Fire click handler on a simple (left) click
         this._tray.on('click', () => (this._clickHandler || (() => {}))());
-
-        // Build right click menu
-        this.buildMenu(this.getMenuTemplate());
-
-        // Bring up the context menu on a right click
-        this._tray.on('right-click', () => this._tray.popUpContextMenu(
-            this.getMenu()
-        ));
-    }
-
-    /**
-     * Create the right click menu.
-     *
-     * @param {object} template The menu template.
-     * @return {Menu}
-     */
-    buildMenu(template)
-    {
-        this._contextMenu = new Electron.Menu();
-        this._menuItems = {};
-
-        template.forEach((item) => {
-            let menuItem = new Electron.MenuItem(item);
-
-            this._contextMenu.append(menuItem);
-
-            // Save menu item under given id for later access
-            if (item.id) {
-                this._menuItems[item.id] = menuItem;
-            }
-        });
-
-        return this._contextMenu;
     }
 
     /**
@@ -65,96 +32,6 @@ class Tray
     getBounds()
     {
         return this._tray.getBounds();
-    }
-
-    /**
-     * Returns the context menu for this tray.
-     *
-     * @return {Menu}
-     */
-    getMenu()
-    {
-        // Menu has not yet been built
-        if (this._contextMenu === undefined) {
-            return new Electron.Menu();
-        }
-
-        return this._contextMenu;
-    }
-
-    /**
-     * Returns a specific menu item from the current menu.
-     *
-     * @param {string} id Menu item id.
-     * @return {MenuItem}
-     */
-    getMenuItem(id)
-    {
-        return this._menuItems[id];
-    }
-
-    /**
-    * Returns the right click menu template.
-    *
-    * @return {object} Menu template.
-    */
-    getMenuTemplate()
-    {
-        return [
-            {
-                label: `${this.app.translator.getString('about')} ${Electron.app.getName()}`,
-                click: () => (this._aboutHandler || (() => {}))()
-            },
-            {
-                label: `${this.app.translator.getString('version')} ${Electron.app.getVersion()}`,
-                enabled: false
-            },
-            {
-                id: 'checkForUpdate',
-                label: this.app.translator.getString('checkForUpdate'),
-                click: () => (this._checkForUpdateHandler || (() => {}))()
-            },
-            {
-                id: 'youAreUpToDate',
-                label: this.app.translator.getString('youAreUpToDate'),
-                enabled: false,
-                visible: false
-            },
-            {
-                id: 'downloadingUpdate',
-                label: this.app.translator.getString('downloadingUpdate'),
-                enabled: false,
-                visible: false
-            },
-            {
-                id: 'downloadingUpdateFailed',
-                label: this.app.translator.getString('downloadingUpdateFailed'),
-                enabled: false,
-                visible: false
-            },
-            {
-                id: 'restartAndInstallUpdate',
-                label: this.app.translator.getString('restartAndInstallUpdate'),
-                visible: false,
-                click: () => (this._restartAndInstallUpdateHandler || (() => {}))()
-            },
-            {
-                type: 'separator'
-            },
-            {
-                label: `${this.app.translator.getString('preferences')}…`,
-                accelerator: 'Command+,',
-                click: () => (this._preferencesHandler || (() => {}))()
-            },
-            {
-                type: 'separator'
-            },
-            {
-                label: this.app.translator.getString('quit'),
-                accelerator: 'Command+Q',
-                click: () => (this._quitHandler || (() => {}))()
-            }
-        ];
     }
 
     /**
@@ -185,56 +62,6 @@ class Tray
     onClick(fn)
     {
         this._clickHandler = fn;
-    }
-
-    /**
-     * Sets the handler for the about menu item.
-     *
-     * @param {function} fn
-     */
-    onAboutClicked(fn)
-    {
-        this._aboutHandler = fn;
-    }
-
-    /**
-     * Sets the handler for the quit menu item.
-     *
-     * @param {function} fn
-     */
-    onQuitClicked(fn)
-    {
-        this._quitHandler = fn;
-    }
-
-    /**
-     * Sets the handler for the preferences menu item.
-     *
-     * @param {function} fn
-     */
-    onPreferencesClicked(fn)
-    {
-        this._preferencesHandler = fn;
-    }
-
-    /**
-     * Sets the handler for the check for update menu item.
-     *
-     * @param {function} fn
-     */
-    onCheckForUpdateClicked(fn)
-    {
-        this._checkForUpdateHandler = fn;
-    }
-
-    /**
-     * Sets the handler for the restart and install update menu item.
-     *
-     * @param {function} fn
-     */
-    onRestartAndInstallUpdate(fn)
-    {
-        this._restartAndInstallUpdateHandler = fn;
     }
 }
 
