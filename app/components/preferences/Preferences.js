@@ -38,6 +38,20 @@ class Preferences
                 document.body.offsetHeight
             )
         );
+
+        // Open links externally by default
+        document.documentElement.addEventListener('click', (e) => {
+            let target = e.target;
+
+            do {
+                if (target.matches('a[href^="http"]') === false) {
+                    continue;
+                }
+
+                Electron.shell.openExternal(target.href);
+                return e.preventDefault();
+            } while ((target = target.parentElement) !== null);
+        });
     }
 
     /**
