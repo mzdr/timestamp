@@ -191,7 +191,8 @@ class App
         return {
             clockFormat: 'HH:mm:ss',
             startAtLogin: false,
-            clickingDateOpensCalendar: true
+            clickingDateOpensCalendar: true,
+            showWeekOfYear: true
         };
     }
 
@@ -263,12 +264,12 @@ class App
     {
         const win = new Electron.BrowserWindow({
             frame: false,
-            resizable: true,
+            resizable: false,
             alwaysOnTop: true,
             show: false,
 
             // Keep in sync with generic.css
-            backgroundColor: darkMode ? '#333' : '#fafafa'
+            backgroundColor: darkMode ? '#333' : '#ffffff'
         });
 
         // Load the contents aka the view
