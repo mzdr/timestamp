@@ -1,6 +1,5 @@
 const Electron = require('electron');
 const Path = require('path');
-const AutoLaunch = require('auto-launch');
 const Tray = require('./tray');
 const Clock = require('./clock');
 const Preferences = require('./preferences');
@@ -27,24 +26,13 @@ class App
         // to stay active until the user quits explicitly with Cmd + Q
         Electron.app.on('window-all-closed', () => {});
 
-        // Weird workaround for current bug in auto-launch
-        // @see https://github.com/Teamwork/node-auto-launch/issues/28
-        const launchOptions = {
-            name: Electron.app.getName(),
-            path: `${Electron.app.getPath('exe').split('.app/Content')[0]}.app`
-        };
-
         // Create all necessary components
-        this.startAtLogin = new AutoLaunch(launchOptions);
         this.translator = new Translator(this.getLocale());
         this.tray = new Tray(this);
         this.clock = new Clock(this);
         this.preferences = new Preferences(this);
         this.calendar = new Calendar(this);
         this.updater = new Updater(this);
-
-        // Check for update on startup
-        // this.handleUpdateCheckingProcess();
 
         // Register listeners for clock, tray, system nofitications and so on…
         this.registerListeners();
@@ -99,74 +87,6 @@ class App
         Electron.ipcMain.on('app.darkmode', (e) =>
             e.sender.send('app.darkmode', this.isDarkMode())
         );
-    }
-
-    /**
-    * Handles the update checking process by showing and hiding relevant
-    * menu items.
-    */
-    handleUpdateCheckingProcess()
-    {
-        let checkForUpdateItem = this.tray.getMenuItem('checkForUpdate');
-        let restartAndInstallUpdateItem = this.tray.getMenuItem('restartAndInstallUpdate');
-        let youAreUpToDateItem = this.tray.getMenuItem('youAreUpToDate');
-        let downloadingUpdateItem = this.tray.getMenuItem('downloadingUpdate');
-        let downloadingUpdateFailedItem = this.tray.getMenuItem('downloadingUpdateFailed');
-
-        // Disable the check for update menu item to avoid running into
-        // multiple checks
-        checkForUpdateItem.enabled = false;
-
-        // Run the updater to see if there is an update
-        this.updater.checkForUpdate()
-
-            // We have an update!
-            .then(() => {
-
-                // Tell user we are downloading the update
-                downloadingUpdateItem.visible = true;
-                checkForUpdateItem.visible = false;
-                checkForUpdateItem.enabled = true;
-
-                // Wait for the download to finish
-                this.updater.onUpdateDownloaded()
-
-                    // Enable the restart and install update menu item
-                    .then(() => {
-                        downloadingUpdateItem.visible = false;
-                        restartAndInstallUpdateItem.visible = true;
-                    })
-
-                    // Failed to download update
-                    .catch(() => {
-                        downloadingUpdateFailedItem.visible = true;
-                        downloadingUpdateItem.visible = false;
-
-                        // Enable check for update after 1 min
-                        setTimeout(() => {
-                            checkForUpdateItem.visible = true;
-                            downloadingUpdateFailedItem.visible = false;
-                        }, 1000 * 60);
-                    });
-            })
-
-            // Nope, all up to date
-            .catch((error) => {
-
-                if (this.debug) {
-                    console.log(error);
-                }
-
-                youAreUpToDateItem.visible = true;
-                checkForUpdateItem.visible = false;
-                checkForUpdateItem.enabled = true;
-
-                // Enable check for update after 1 min
-                setTimeout(() => {
-                    checkForUpdateItem.visible = true;
-                    youAreUpToDateItem.visible = false;
-                }, 1000 * 60);
-            });
     }
 
     /**
@@ -233,23 +153,12 @@ class App
             this.clock.setFormat(preferences.clockFormat);
         }
 
-        // Check if start at login was changed and enable/disable accordingly
-        this.startAtLogin
-            .isEnabled()
-            .then((enabled) => {
-                if (preferences.startAtLogin === enabled) {
-                    return;
-                }
-
-                return this.startAtLogin[
-                    preferences.startAtLogin ? 'enable' : 'disable'
-                ]();
-            })
-            .catch((error) => {
-                if (this.debug) {
-                    console.log(error);
-                }
+        // Start at login has been changed
+        if (preferences.startAtLogin !== Electron.app.getLoginItemSettings().openAtLogin) {
+            Electron.app.setLoginItemSettings({
+                openAtLogin: preferences.startAtLogin
             });
+        }
     }
 
     /**
