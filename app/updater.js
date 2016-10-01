@@ -11,7 +11,10 @@ class Updater
     */
     constructor()
     {
-        this.updateUrl = 'https://mzdr.github.io/timestamp/update.json';
+        this.lastRequestAt = null;
+        this.lastResponse = null;
+        this.url = 'https://mzdr.github.io/timestamp/update.json';
+        this.cacheMaxTime = 1000 * 60 * 60; // 1 hour
     }
 
     /**
@@ -23,10 +26,18 @@ class Updater
     getJsonFromResponse(response)
     {
         if (response.statusCode !== 200) {
-            throw Error('Request failed.');
+            throw {
+                message: `Request failed. (${response.statusCode})`
+            }
         }
 
-        return JSON.parse(response.body);
+        try {
+            return JSON.parse(response.body);
+        } catch (error) {
+            throw {
+                message: 'Unable to parse JSON.'
+            }
+        }
     }
 
     /**
@@ -38,34 +49,57 @@ class Updater
      */
     isNewerThanCurrentVersion(release)
     {
-        let currentVersion = Electron.app.getVersion();
+        const currentVersion = Electron.app.getVersion();
 
         if (Semver.lt(currentVersion, release.version) === false) {
-            throw Error('We are up to date.');
+            throw {
+                code: 0,
+                message: 'No update available.'
+            }
         }
 
-        return this.updateUrl;
+        return {
+            url: this.url,
+            version: release.version
+        };
     }
 
     /**
-     * Checks the GitHub repository if there are any updates.
+     * Checks the given update url if there are any updates. Returns a promise
+     * which in turn resolves in an object containg a response code and message.
+     *
+     * A response code of -1 means there is an update available, 0 means we are
+     * up to date and 1 means there is no update available or an error occured.
      *
      * @see http://electron.atom.io/docs/api/auto-updater/#autoupdatercheckforupdates
      * @return {Promise}
      */
     checkForUpdate()
     {
-        return new Promise((updateAvailable, updateNotAvailable) => {
+        return new Promise((resolve, reject) => {
+            const now = Date.now();
+
+            // First time requesting
+            if (this.lastRequestAt === null) {
+                this.lastRequestAt = now;
+            }
+
+            // Resolve with cached response as request happened too short ago
+            if (now - this.lastRequestAt < this.cacheMaxTime && this.lastResponse) {
+                return resolve(this.lastResponse);
+            }
+
             Got
-                .get(this.updateUrl)
+                .get(this.url)
                 .then((response) => this.getJsonFromResponse(response))
                 .then((release) => this.isNewerThanCurrentVersion(release))
-                .then((url) => this.runAutoUpdater(
-                    url,
-                    updateAvailable,
-                    updateNotAvailable
-                ))
-                .catch(updateNotAvailable);
+                .then((release) => this.runAutoUpdater(release))
+                .then((status) => resolve(this.lastResponse = status))
+
+                // Resolve all errors with a default response code of 1
+                .catch(({ code = 1, message }) =>
+                    resolve(this.lastResponse = { code, message })
+                );
         });
     }
 
@@ -73,30 +107,21 @@ class Updater
      * Update checks have been successful and we are now firing up the auto
      * updating process.
      *
-     * @param {string} url URL to the update.json file
-     * @param {function} updateAvailable Function to approve available update
-     * @param {function} updateNotAvailable Function to deny avaiable update
+     * @param {string} url URL to the update.json file.
+     * @param {string} version Version number of the upcoming update.
      * @see https://github.com/Squirrel/Squirrel.Mac#server-support
      */
-    runAutoUpdater(url, updateAvailable, updateNotAvailable)
+    runAutoUpdater({ url, version })
     {
-        Electron.autoUpdater.setFeedURL(url);
-        Electron.autoUpdater.checkForUpdates();
-        Electron.autoUpdater.on('update-available', updateAvailable);
-        Electron.autoUpdater.on('update-not-available', updateNotAvailable);
-        Electron.autoUpdater.on('error', updateNotAvailable);
-    }
-
-    /**
-     * Checks if the update has been downloaded.
-     *
-     * @return {Promise}
-     */
-    onUpdateDownloaded()
-    {
-        return new Promise((updateDownloaded, updateNotDownloaded) => {
-            Electron.autoUpdater.on('error', updateNotDownloaded);
-            Electron.autoUpdater.on('update-downloaded', updateDownloaded);
+        return new Promise((success, fail) => {
+            Electron.autoUpdater.setFeedURL(url);
+            Electron.autoUpdater.checkForUpdates();
+            Electron.autoUpdater.on('error', ({ message }) => fail({ message }));
+            Electron.autoUpdater.on('update-downloaded', () => success({
+                code: -1,
+                message: 'Update downloaded.',
+                version
+            }));
         });
     }
 
