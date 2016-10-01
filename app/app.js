@@ -87,6 +87,23 @@ class App
         Electron.ipcMain.on('app.darkmode', (e) =>
             e.sender.send('app.darkmode', this.isDarkMode())
         );
+
+        // Provide update handling to renderer
+        Electron.ipcMain.on('app.update', (e, runUpdate) => {
+
+            // Received request to not check again for updates
+            // but rather update it. This means if there is an update available
+            // we will update it right now!
+            if (runUpdate === true && this.update && this.update.code < 0) {
+                return this.updater.quitAndInstall();
+            }
+
+            this.updater
+                .checkForUpdate()
+                .then((update) => {
+                    e.sender.send('app.update', this.update = update)
+                });
+        });
     }
 
     /**

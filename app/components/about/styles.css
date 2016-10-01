@@ -1,3 +1,11 @@
+@keyframes dots {
+    0%    { content: ""; }
+    20%   { content: "."; }
+    50%   { content: ".."; }
+    80%   { content: "..."; }
+    100%  { content: ""; }
+}
+
 about-view {
     --logo-size: 10rem;
 
@@ -21,35 +29,70 @@ about-view {
     width: calc(100% - var(--logo-size));
 }
 
-.about-details > .name {
+about-name {
     display: block;
     font-size: 1.5rem;
     font-weight: 500;
 }
 
-.about-details > .version {
+about-version {
     color: var(--shy-fg);
     display: block;
     font-size: 0.8125rem;
     text-indent: 2px;
 }
 
-.about-details > .version::before {
+about-version::before {
     content: "v";
 }
 
-.about-links {
+[is="about-update"] {
+    color: var(--brand-success);
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0 0.25rem;
+    transition-duration: var(--transition-duration);
+    transition-property: color;
+    width: 100%;
+}
+
+[is="about-update"] > .label {
+    display: none;
+}
+
+[is="about-update"][status="checking"] {
+    color: var(--silent-fg);
+}
+
+[is="about-update"][status="checking"]::after {
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-name: dots;
+    animation-timing-function: step-end;
+    content: "";
+    text-align: left;
+    width: 1em;
+}
+
+[is="about-update"][status="unknown"] > [key="checkForUpdate"],
+[is="about-update"][status="checking"] > [key="checking"],
+[is="about-update"][status="up-to-date"] > [key="youAreUpToDate"],
+[is="about-update"][status="update-available"] > [key="restartAndInstallUpdate"] {
     display: block;
 }
 
-.about-links > .link {
-    border: 1px solid currentColor;
+.about-links {
+    display: flex;
     color: var(--highlight-bg);
-    cursor: default;
-    display: inline-block;
-    margin-top: 2rem;
-    padding: 0.5rem 0.75rem;
-    text-decoration: none;
+}
+
+.about-links > .link {
+    text-align: center;
+    flex-grow: 1;
+}
+
+.about-links > .link + .link {
+    margin-left: 0.25rem;
 }
 
 .about-footer {

@@ -44,3 +44,14 @@ body {
     display: inline-block;
     margin: 0;
 }
+
+.button-primary {
+    background: transparent;
+    border: 1px solid currentColor;
+    cursor: default;
+    font-family: inherit;
+    font-size: inherit;
+    outline: 0;
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+}
