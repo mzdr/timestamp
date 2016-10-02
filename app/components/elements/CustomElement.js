@@ -35,13 +35,13 @@ class CustomElement extends HTMLElement
         el.textContent = text;
         el.classList.add(...classes);
 
-        for (let key in attributes) {
+        for (const key in attributes) {
             if (attributes.hasOwnProperty(key)) {
                 el.setAttribute(key, attributes[key]);
             }
         }
 
-        for (let key in data) {
+        for (const key in data) {
             if (data.hasOwnProperty(key)) {
                 el.dataset[key] = data[key];
             }

@@ -7,11 +7,8 @@ class Tray
     *
     * @return {Tray}
     */
-    constructor(app)
+    constructor()
     {
-        // Remember app instance
-        this.app = app;
-
         // HACK: empty image as of image is required
         // @see https://github.com/electron/electron/issues/1553
         const icon = Electron.nativeImage.createEmpty();
