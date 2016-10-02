@@ -1,3 +1,5 @@
+const AppleScript = require('applescript');
+
 class Calendar
 {
     constructor()
@@ -51,8 +53,7 @@ class Calendar
         // Set window size dynamically
         Electron.remote.getCurrentWindow().setSize(
             document.body.offsetWidth,
-            document.body.offsetHeight,
-            true
+            document.body.offsetHeight
         );
 
         return this;
@@ -111,9 +112,27 @@ class Calendar
      */
     dayClicked({ detail: { diff } })
     {
-        if (diff) {
-            Electron.ipcRenderer.send('calendar.open', diff);
-        }
+        Electron.ipcRenderer.on('preferences.get', (e, key, value) => {
+            if (key !== 'clickingDateOpensCalendar' || value === false) {
+                return;
+            }
+
+            const script = `
+                tell application "Calendar"
+                    set requestedDate to (current date) + (${diff} * days)
+                    switch view to day view
+                    view calendar at requestedDate
+                end tell
+            `;
+
+            AppleScript.execString(script, (error) => {
+                if (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        Electron.ipcRenderer.send('preferences.get', 'clickingDateOpensCalendar');
 
         return this;
     }

@@ -3,9 +3,7 @@ const Path = require('path');
 const Tray = require('./tray');
 const Clock = require('./clock');
 const Preferences = require('./preferences');
-const Calendar = require('./calendar');
 const Updater = require('./updater');
-const Translator = require('./translator');
 
 class App
 {
@@ -16,9 +14,6 @@ class App
     */
     constructor()
     {
-        // Check if we are in debug mode
-        this.debug = process && process.env && process.env.DEBUG;
-
         // Hide dock icon
         Electron.app.dock.hide();
 
@@ -27,20 +22,16 @@ class App
         Electron.app.on('window-all-closed', () => {});
 
         // Create all necessary components
-        this.translator = new Translator(this.getLocale());
         this.tray = new Tray(this);
         this.clock = new Clock(this);
         this.preferences = new Preferences(this);
-        this.calendar = new Calendar(this);
         this.updater = new Updater(this);
 
         // Register listeners for clock, tray, system nofitications and so on…
         this.registerListeners();
 
         // Finally create the app window
-        this._window = this.createWindow({
-            darkMode: this.isDarkMode()
-        });
+        this._window = this.createWindow();
     }
 
     /**
@@ -75,17 +66,7 @@ class App
         // Listen for dark mode changed notification
         Electron.systemPreferences.subscribeNotification(
             'AppleInterfaceThemeChangedNotification',
-            () => this.onDarkModeChanged(this.isDarkMode())
-        );
-
-        // Provide locale detection to renderer
-        Electron.ipcMain.on('app.locale', (e) =>
-            e.sender.send('app.locale', this.getLocale())
-        );
-
-        // Provide dark mode detection to renderer
-        Electron.ipcMain.on('app.darkmode', (e) =>
-            e.sender.send('app.darkmode', this.isDarkMode())
+            () => this.onDarkModeChanged()
         );
 
         // Provide update handling to renderer
@@ -104,18 +85,6 @@ class App
                     e.sender.send('app.update', this.update = update)
                 });
         });
-    }
-
-    /**
-    * Returns the current application locale.
-    *
-    * @see https://github.com/electron/electron/blob/master/docs/api/app.md#appgetlocale
-    * @see https://github.com/electron/electron/blob/master/docs/api/locales.md
-    * @return {string}
-    */
-    getLocale()
-    {
-        return Electron.app.getLocale() || 'en';
     }
 
     /**
@@ -147,18 +116,6 @@ class App
     }
 
     /**
-    * This method returns true if the system is in Dark Mode,
-    * and false otherwise.
-    *
-    * @see http://electron.atom.io/docs/api/system-preferences/#systempreferencesisdarkmode-macos
-    * @return {boolean}
-    */
-    isDarkMode()
-    {
-        return Electron.systemPreferences.isDarkMode();
-    }
-
-    /**
     * Handle change of preferences.
     *
     * @param {object} preferences New preferences.
@@ -181,21 +138,15 @@ class App
     /**
      * Creates the actual app window.
      *
-     * @param {boolean} darkMode Are we in dark mode?
      * @return {BrowserWindow}
      */
-    createWindow({
-        darkMode = false
-    } = {})
+    createWindow()
     {
         const win = new Electron.BrowserWindow({
             frame: false,
             resizable: false,
             alwaysOnTop: true,
-            show: false,
-
-            // Keep in sync with generic.css
-            backgroundColor: darkMode ? '#333' : '#ffffff'
+            show: false
         });
 
         // Load the contents aka the view
@@ -260,20 +211,17 @@ class App
 
     /**
      * When dark mode was changed we are going to recreate the application
-     * window with it's appropriate settings.
+     * window.
      *
      * @see http://electron.atom.io/docs/api/system-preferences/#systempreferencessubscribenotificationevent-callback-macos
-     * @param {bool} darkMode If dark mode is enabled or disabled.
      */
     onDarkModeChanged(darkMode)
     {
         // Close old window
         this._window.close();
 
-        // Recreate app window with dark mode settings
-        this._window = this.createWindow({
-            darkMode: darkMode
-        });
+        // Recreate app window
+        this._window = this.createWindow();
     }
 }
 

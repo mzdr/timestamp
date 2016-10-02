@@ -1,3 +1,4 @@
+const Electron = require('electron');
 const Moment = require('moment');
 
 class Clock
@@ -7,13 +8,10 @@ class Clock
     *
     * @return {Clock}
     */
-    constructor(app)
+    constructor()
     {
-        // Remember app instance
-        this.app = app;
-
         // Set locale for Moment.js
-        Moment.locale(this.app.getLocale());
+        Moment.locale(Electron.app.getLocale());
 
         // Default fallback format
         this.setFormat('HH:mm:ss');
