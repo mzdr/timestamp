@@ -8,48 +8,43 @@ class Preferences
         // Append preferences markup
         document.body.appendChild(clone);
 
-        // Register all UI related event listeners
+        // Register event listener for changes of all preferences items
         PreferencesEvent.on('change', (e) => this.onChange(e));
 
         // Since the preferences markup has been created, which means that all
         // tabs including their event listeners have also been created, we now
         // can add a final listener to the tab.switch event which will be run
         // after all tabs have been updated
-        TabEvent.on('switch', (e) => {
-            const requestedTab = e.target.getAttribute('tab');
+        TabEvent.on('switch', ({ detail: { tab }}) => {
+            const currentWindow = Electron.remote.getCurrentWindow();
 
             // If the quit tab was clicked, just quit the app
-            if (requestedTab === 'quit') {
+            if (tab === 'quit') {
                 return Electron.remote.app.quit();
             }
 
             // Update the window size
-            Electron.remote.getCurrentWindow().setContentSize(
+            currentWindow.setContentSize(
                 document.body.offsetWidth,
                 document.body.offsetHeight
             );
-        });
 
-        // Received request to deliver current content size
-        Electron.ipcRenderer.once('preferences.content.size',
-            () => Electron.ipcRenderer.send(
-                'preferences.content.size',
-                document.body.offsetWidth,
-                document.body.offsetHeight
-            )
-        );
+            // If the window is hidden, it's probably the first time we are
+            // going to show it. Tell main process we are ready.
+            if (currentWindow.isVisible() === false) {
+                Electron.ipcRenderer.send('preferences.ready');
+            }
+        });
 
         // Open links externally by default
         document.documentElement.addEventListener('click', (e) => {
             let target = e.target;
 
             do {
-                if (target.matches('a[href^="http"]') === false) {
-                    continue;
+                if (target.matches('a[href^="http"]')) {
+                    Electron.shell.openExternal(target.href);
+                    return e.preventDefault();
                 }
-
-                Electron.shell.openExternal(target.href);
-                return e.preventDefault();
             } while ((target = target.parentElement) !== null);
         });
     }

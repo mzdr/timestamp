@@ -17,17 +17,29 @@ class TabContent extends CustomElement
      * @param {TabEvent} e The original tab event.
      * @return {TabContent}
      */
-    onSwitch(e)
+    onSwitch({ detail: { tab }})
     {
-        const targetTab = e.target.getAttribute('tab');
-
-        if (targetTab === this.getAttribute('tab')) {
-            this.classList.add('-active');
-        } else {
-            this.classList.remove('-active');
-        }
+        this.classList[tab === this.tab ? 'add' : 'remove']('-active');
 
         return this;
+    }
+
+    /**
+     * Returns the tab target of this tab content.
+     *
+     * @return {string}
+     */
+    get tab()
+    {
+        return this.getAttribute('tab');
+    }
+
+    /**
+     * Sets the tab target of this tab content.
+     */
+    set tab(tab)
+    {
+        this.setAttribute('tab', tab);
     }
 }
 

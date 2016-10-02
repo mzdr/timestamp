@@ -19,13 +19,9 @@ class TabBarItem extends CustomButton
      * @param {TabEvent} e The original tab event.
      * @return {TabBarItem}
      */
-    onSwitch(e)
+    onSwitch({ detail: { tab }})
     {
-        if (e.target === this) {
-            this.classList.add('-active');
-        } else {
-            this.classList.remove('-active');
-        }
+        this.classList[tab === this.tab ? 'add' : 'remove']('-active');
 
         return this;
     }
@@ -37,9 +33,27 @@ class TabBarItem extends CustomButton
      */
     onclick()
     {
-        this.dispatchEvent(new TabEvent('switch'));
+        this.dispatchEvent(new TabEvent('switch', { detail: { tab: this.tab } }));
 
         return this;
+    }
+
+    /**
+     * Returns the tab target of this tab bar item.
+     *
+     * @return {string}
+     */
+    get tab()
+    {
+        return this.getAttribute('tab');
+    }
+
+    /**
+     * Sets the tab target of this tab bar item.
+     */
+    set tab(tab)
+    {
+        this.setAttribute('tab', tab);
     }
 }
 
