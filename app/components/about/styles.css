@@ -74,10 +74,15 @@ about-version::before {
     width: 1em;
 }
 
+[is="about-update"][status="update-available"] {
+    background-color: var(--brand-success);
+    color: var(--highlight-fg);
+}
+
 [is="about-update"][status="unknown"] > [key="checkForUpdate"],
 [is="about-update"][status="checking"] > [key="checking"],
 [is="about-update"][status="up-to-date"] > [key="youAreUpToDate"],
-[is="about-update"][status="update-available"] > [key="restartAndInstallUpdate"] {
+[is="about-update"][status="update-available"] > [key="updateAvailable"] {
     display: block;
 }
 

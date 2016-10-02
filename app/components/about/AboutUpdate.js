@@ -10,9 +10,12 @@ class AboutUpdate extends CustomButton
         this.addEventListener('click', () => this.onclick());
 
         // Received update response
-        Electron.ipcRenderer.once('app.update', (e, update) => {
-            if (update.code < 0) {
+        Electron.ipcRenderer.once('app.update', (e, { code, version }) => {
+            if (code < 0) {
+                const label = this.querySelector('[key="updateAvailable"]');
+
                 this.status = 'update-available';
+                label.innerHTML = label.innerHTML.replace(/%version%/, version);
             }
         });
 
