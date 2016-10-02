@@ -7,12 +7,8 @@ class TranslateString extends CustomElement
      */
     createdCallback()
     {
-        this.constructor
-            .getDataFromMainProcess('translator.get', this.textContent)
-            .then((string) => {
-                this.setAttribute('key', this.textContent);
-                this.innerHTML = string;
-            });
+        this.setAttribute('key', this.textContent);
+        this.innerHTML = translator.getString(this.textContent);
     }
 }
 

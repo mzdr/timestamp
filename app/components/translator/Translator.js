@@ -1,4 +1,3 @@
-const Electron = require('electron');
 const Marked = require('marked');
 
 class Translator
@@ -12,7 +11,7 @@ class Translator
     constructor(locale)
     {
         // Load default locale, which is english
-        this._strings = require('./locales/en.json');
+        this.translations = require('./locales/en.json');
 
         // Parse locale string
         const [language, country] = locale.toLowerCase().split('-');
@@ -21,17 +20,17 @@ class Translator
 
             // Try loading language specific locale, if it's not the default one
             if (language !== 'en') {
-                this._strings = Object.assign(
+                this.translations = Object.assign(
                     {},
-                    this._strings,
+                    this.translations,
                     require(`./locales/${language}.json`)
                 );
             }
 
             // Try loading country specific locale
-            this._strings = Object.assign(
+            this.translations = Object.assign(
                 {},
-                this._strings,
+                this.translations,
                 require(`./locales/${language}-${country}.json`)
             );
 
@@ -41,13 +40,7 @@ class Translator
 
         // Parse all strings for Markdown
         this.parseForMarkdown();
-
-        // Return translation strings to renderer
-        Electron.ipcMain.on('translator.get', (e, key) =>
-            e.sender.send('translator.get', key, this.getString(key))
-        );
     }
-
 
     /**
      * Parses all translations strings for Markdown markup and renders it.
@@ -66,9 +59,9 @@ class Translator
         Marked.setOptions({ renderer });
 
         // Parse all translations strings
-        for (let key in this._strings) {
-            if (this._strings.hasOwnProperty(key)) {
-                this._strings[key] = Marked(this._strings[key]);
+        for (const key in this.translations) {
+            if (this.translations.hasOwnProperty(key)) {
+                this.translations[key] = Marked(this.translations[key]);
             }
         }
 
@@ -83,8 +76,6 @@ class Translator
      */
     getString(key)
     {
-        return this._strings[key] || `#${key}#`;
+        return this.translations[key] || `#${key}#`;
     }
 }
-
-module.exports = Translator;

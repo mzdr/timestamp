@@ -57,28 +57,15 @@ class Preferences
             center: true,
             minimizable: false,
             maximizable: false,
-            title: this.app.translator.getString('preferences'),
             alwaysOnTop: true,
             show: false
         });
 
+        // Wait for the renderer to tell us that the window is ready to show
+        Electron.ipcMain.on('preferences.ready', () => this._window.show());
+
         // Load the contents
         this._window.loadURL(`file://${__dirname}/preferences.html`);
-
-        // While loading the page, the ready-to-show event will be emitted when
-        // renderer process has done drawing for the first time, showing window
-        // after this event will have no visual flash
-        this._window.once('ready-to-show', () => {
-
-            // Request content size from renderer
-            this._window.webContents.send('preferences.content.size');
-
-            // Update window size and show it afterwards
-            Electron.ipcMain.once('preferences.content.size', (e, x, y) => {
-                this._window.setContentSize(x, y);
-                this._window.show();
-            });
-        });
 
         return this;
     }
