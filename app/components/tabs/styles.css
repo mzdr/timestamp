@@ -24,6 +24,10 @@ tab-bar {
     box-shadow: none;
 }
 
+[is="tab-bar-item"] > .icon {
+    font-size: 1.5rem;    
+}
+
 [is="tab-bar-item"] > .label {
     display: block;
     margin-top: 0.25rem;

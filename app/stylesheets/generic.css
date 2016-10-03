@@ -7,7 +7,7 @@
     --primary-bg: #fff;
     --primary-link: var(--brand-primary);
     --primary-fg: #474647;
-    --silent-fg: #ccc;
+    --silent-fg: #aaa;
     --silent-bg: #f2f2f2;
     --shy-fg: #666;
     --highlight-fg: var(--primary-bg);
@@ -45,9 +45,14 @@ body {
     margin: 0;
 }
 
+strong {
+    font-weight: 500;
+}
+
 .button-primary {
     background: transparent;
-    border: 1px solid currentColor;
+    border: 0;
+    box-shadow: 0 0 0 1px currentColor;
     cursor: default;
     font-family: inherit;
     font-size: inherit;

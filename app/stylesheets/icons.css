@@ -1,11 +1,11 @@
 [class^="icon-"],
 [class*=" icon-"] {
     display: inline-block;
-    height: 24px;
+    height: 1em;
     line-height: 0;
     margin: 0;
     padding: 0;
-    width: 24px;
+    width: 1em;
 }
 
 [class^="icon-"]::before,
@@ -18,8 +18,10 @@
     height: 100%;
 }
 
-.icon-general::before { background-image: url("../images/icons/general.svg"); }
-.icon-clock::before { background-image: url("../images/icons/clock.svg"); }
-.icon-about::before { background-image: url("../images/icons/about.svg"); }
-.icon-quit::before { background-image: url("../images/icons/quit.svg"); }
-.icon-calendar::before { background-image: url("../images/icons/calendar.svg"); }
+.icon-general::before     { background-image: url("../images/icons/general.svg"); }
+.icon-clock::before       { background-image: url("../images/icons/clock.svg"); }
+.icon-about::before       { background-image: url("../images/icons/about.svg"); }
+.icon-quit::before        { background-image: url("../images/icons/quit.svg"); }
+.icon-calendar::before    { background-image: url("../images/icons/calendar.svg"); }
+.icon-preferences::before { background-image: url("../images/icons/preferences.svg"); }
+.icon-today::before       { background-image: url("../images/icons/today.svg"); }
