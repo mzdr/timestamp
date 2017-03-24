@@ -40,7 +40,7 @@ Built with [Electron] and [Moment.js].
 
 ## Thanks
 
-**Timestamp** © 2016, Sebastian Prein. Released under the [MIT License].
+**Timestamp** © 2017, Sebastian Prein. Released under the [MIT License].
 
 [Day-O]: http://shauninman.com/archive/2011/10/20/day_o_mac_menu_bar_clock
 [Electron]: http://electron.atom.io/
