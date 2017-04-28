@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="https://mzdr.github.io/timestamp/icon.svg" width="128" alt="Logo of Timestamp">
+  <img src="https://mzdr.github.io/assets/images/timestamp/icon.svg" width="128" alt="Logo of Timestamp">
   <p>Timestamp</p>
   <a href="https://github.com/mzdr/timestamp/releases/latest"><img src="https://img.shields.io/github/release/mzdr/timestamp.svg?maxAge=3600" alt="Latest Timestamp release"></a>
   <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BTED8SARNCBRG"><img src="https://img.shields.io/badge/donate-PayPal-green.svg" alt="Donate via PayPal"></a>
@@ -20,7 +20,6 @@ Built with [Electron] and [Moment.js].
 - Supports dark mode
 - Fully [customizable] date/time display
 - Starts automatically at login (if you wish)
-
 
 <sub>* Doesn't count for __all__ GUI related parts. Help translating by adding missing [locales]. See [support] for further details on how to contribute.</sub>
 
