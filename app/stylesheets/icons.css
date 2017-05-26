@@ -23,5 +23,3 @@
 .icon-about::before       { background-image: url("../images/icons/about.svg"); }
 .icon-quit::before        { background-image: url("../images/icons/quit.svg"); }
 .icon-calendar::before    { background-image: url("../images/icons/calendar.svg"); }
-.icon-preferences::before { background-image: url("../images/icons/preferences.svg"); }
-.icon-today::before       { background-image: url("../images/icons/today.svg"); }

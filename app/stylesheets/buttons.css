@@ -1,0 +1,21 @@
+.button-primary,
+.button-plain {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    cursor: default;
+    display: flex;
+    font-family: inherit;
+    font-size: inherit;
+    justify-content: center;
+    outline: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+.button-primary {
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px currentColor;
+    min-height: 35px;
+    padding: 0 16px;
+}

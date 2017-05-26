@@ -13,14 +13,12 @@
     --highlight-fg: var(--primary-bg);
     --highlight-bg: var(--brand-primary);
 
-    --transition-duration: 200ms;
+    --transition-duration: 333ms;
 
     background-color: var(--primary-bg);
-    box-sizing: border-box;
     color: var(--primary-fg);
     cursor: default;
-    font-family: system, -apple-system, BlinkMacSystemFont, Helvetica Neue, Lucida Grande;
-    font-size: 16px;
+    font-family: system, -apple-system, BlinkMacSystemFont;
 }
 
 /* macOS dark mode */
@@ -31,32 +29,7 @@
     --highlight-fg: var(--primary-fg);
 }
 
-*,
-*::before,
-*::after {
-    border-color: inherit;
-    box-sizing: inherit;
-    color: currentColor;
-    line-height: inherit;
-}
-
 body {
     display: inline-block;
     margin: 0;
-}
-
-strong {
-    font-weight: 500;
-}
-
-.button-primary {
-    background: transparent;
-    border: 0;
-    box-shadow: 0 0 0 1px currentColor;
-    cursor: default;
-    font-family: inherit;
-    font-size: inherit;
-    outline: 0;
-    padding: 0.5rem 0.75rem;
-    text-decoration: none;
 }
