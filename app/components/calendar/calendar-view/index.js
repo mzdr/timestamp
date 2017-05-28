@@ -39,7 +39,7 @@ class CalendarView extends BaseElement {
     /**
      * Calendar has been changed, time to update all the components.
      *
-     * @return {Calendar}
+     * @return {CalendarView}
      */
     update() {
         this.$today.draw();
@@ -62,7 +62,7 @@ class CalendarView extends BaseElement {
     /**
      * Jump to today.
      *
-     * @return {Calendar}
+     * @return {CalendarView}
      */
     goToToday() {
         const now = Moment();
@@ -80,7 +80,7 @@ class CalendarView extends BaseElement {
      * Jump to the given month.
      *
      * @param {number} month Given month.
-     * @return {Calendar}
+     * @return {CalendarView}
      */
     goToMonth({ detail: { month } }) {
         this.moment.month(month);
@@ -92,7 +92,7 @@ class CalendarView extends BaseElement {
      * Jump to the given year.
      *
      * @param {number} year Given year.
-     * @return {Calendar}
+     * @return {CalendarView}
      */
     goToYear({ detail: { year } }) {
         this.moment.year(year);
@@ -105,7 +105,7 @@ class CalendarView extends BaseElement {
      * macOS calendar app.
      *
      * @param {number} diff The difference in days to today.
-     * @return {Calendar}
+     * @return {CalendarView}
      */
     dayClicked({ detail: { diff } }) {
         Electron.ipcRenderer.on('preferences.get', (e, key, value) => {
