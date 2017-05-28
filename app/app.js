@@ -79,9 +79,7 @@ class App {
 
             this.updater
                 .checkForUpdate()
-                .then((update) => {
-                    e.sender.send('app.update', this.update = update);
-                });
+                .then(update => e.sender.send('app.update', (this.update = update)));
         });
     }
 

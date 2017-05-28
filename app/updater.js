@@ -90,12 +90,12 @@ class Updater {
                 .get(this.url)
                 .then(response => this.constructor.getJsonFromResponse(response))
                 .then(release => this.isNewerThanCurrentVersion(release))
-                .then(release => this.constructor.unAutoUpdater(release))
+                .then(release => this.constructor.runAutoUpdater(release))
                 .then(status => resolve(this.lastResponse = status))
 
                 // Resolve all errors with a default response code of 1
-                .catch(({ code = 1, message }) =>
-                    resolve(this.lastResponse = { code, message })
+                .catch(({ message }) =>
+                    resolve(this.lastResponse = { code: 1, message })
                 );
         });
     }
