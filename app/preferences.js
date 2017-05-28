@@ -55,7 +55,8 @@ class Preferences {
             minimizable: false,
             maximizable: false,
             alwaysOnTop: true,
-            show: false
+            show: false,
+            titleBarStyle: 'hidden-inset'
         });
 
         // Wait for the renderer to tell us that the window is ready to show
