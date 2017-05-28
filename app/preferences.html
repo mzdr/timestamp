@@ -2,22 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="stylesheets/generic.css">
-    <link rel="stylesheet" href="stylesheets/icons.css">
-    <link rel="import" href="components/elements/index.html">
-    <link rel="import" href="components/translator/index.html">
-    <link rel="import" href="components/tabs/index.html">
-    <link rel="import" href="components/preferences/index.html">
-    <link rel="import" href="components/about/index.html">
+    <link rel="stylesheet" href="./stylesheets/base.css">
+    <link rel="import" href="./components/base/index.html">
+    <link rel="import" href="./components/translator/index.html">
+    <link rel="import" href="./components/tabs/index.html">
+    <link rel="import" href="./components/preferences/index.html">
+    <link rel="import" href="./components/about/index.html">
 </head>
 <body>
-    <script>
-        const Electron = require('electron');
-
-        // Create views/sub components
-        const translator = new Translator(Electron.remote.app.getLocale());
-        const preferences = new Preferences();
-        const about = new About();
-    </script>
+    <preferences-view></preferences-view>
 </body>
 </html>

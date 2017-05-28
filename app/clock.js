@@ -1,15 +1,13 @@
-const Electron = require('electron');
+const Electron = require('electron'); // eslint-disable-line
 const Moment = require('moment');
 
-class Clock
-{
+class Clock {
     /**
     * Creates a Clock instance.
     *
     * @return {Clock}
     */
-    constructor()
-    {
+    constructor() {
         // Set locale for Moment.js
         Moment.locale(Electron.app.getLocale());
 
@@ -22,27 +20,33 @@ class Clock
 
     /**
      * Starts the clock.
+     *
+     * @return {Clock}
      */
-    start()
-    {
-        if (typeof this._onTick !== 'function') {
-            this._onTick = () => {};
+    start() {
+        if (typeof this.onTickHandler !== 'function') {
+            this.onTickHandler = () => {};
         }
 
         this.intervalId = setInterval(
-            () => this._onTick(this),
+            () => this.onTickHandler(this),
             1000
         );
+
+        return this;
     }
 
     /**
      * Stops the clock.
+     *
+     * @return {Clock}
      */
-    stop()
-    {
+    stop() {
         if (this.intervalId) {
             this.intervalId = clearInterval(this.intervalId);
         }
+
+        return this;
     }
 
     /**
@@ -50,9 +54,8 @@ class Clock
      *
      * @param {function} callback Tick function to call.
      */
-    onTick(callback)
-    {
-        this._onTick = callback;
+    onTick(callback) {
+        this.onTickHandler = callback;
     }
 
     /**
@@ -60,9 +63,8 @@ class Clock
      *
      * @return {string}
      */
-    getFormat()
-    {
-        return this._format;
+    getFormat() {
+        return this.format;
     }
 
     /**
@@ -70,15 +72,17 @@ class Clock
      *
      * @see http://momentjs.com/docs/#/displaying/format/
      * @param {string} format Clock format.
+     * @return {Clock}
      */
-    setFormat(format)
-    {
+    setFormat(format) {
         // Ignore jibberish
         if (typeof format !== 'string') {
-            return;
+            return this;
         }
 
-        this._format = format;
+        this.format = format;
+
+        return this;
     }
 
     /**
@@ -86,8 +90,7 @@ class Clock
      *
      * @return {string}
      */
-    toString()
-    {
+    toString() {
         return Moment().format(this.getFormat());
     }
 }

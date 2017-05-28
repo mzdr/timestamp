@@ -1,0 +1,10 @@
+:host {
+    contain: content;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+:host([hidden]) {
+    display: none;
+}

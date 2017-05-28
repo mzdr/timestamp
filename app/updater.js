@@ -1,16 +1,14 @@
 const Semver = require('semver');
 const Got = require('got');
-const Electron = require('electron');
+const Electron = require('electron'); // eslint-disable-line
 
-class Updater
-{
+class Updater {
     /**
     * Creates an Updater instance.
     *
     * @return {Updater}
     */
-    constructor()
-    {
+    constructor() {
         this.lastRequestAt = null;
         this.lastResponse = null;
         this.url = 'https://mzdr.github.io/timestamp/update.json';
@@ -23,20 +21,19 @@ class Updater
      * @param {Response} response The HTTP response.
      * @return {string}
      */
-    getJsonFromResponse(response)
-    {
+    static getJsonFromResponse(response) {
         if (response.statusCode !== 200) {
-            throw {
+            throw { // eslint-disable-line
                 message: `Request failed. (${response.statusCode})`
-            }
+            };
         }
 
         try {
             return JSON.parse(response.body);
         } catch (error) {
-            throw {
+            throw { // eslint-disable-line
                 message: 'Unable to parse JSON.'
-            }
+            };
         }
     }
 
@@ -47,15 +44,14 @@ class Updater
      * @param {object} release The latest release to compare against.
      * @return {string}
      */
-    isNewerThanCurrentVersion(release)
-    {
+    isNewerThanCurrentVersion(release) {
         const currentVersion = Electron.app.getVersion();
 
         if (Semver.lt(currentVersion, release.version) === false) {
-            throw {
+            throw { // eslint-disable-line
                 code: 0,
                 message: 'No update available.'
-            }
+            };
         }
 
         return {
@@ -74,9 +70,8 @@ class Updater
      * @see http://electron.atom.io/docs/api/auto-updater/#autoupdatercheckforupdates
      * @return {Promise}
      */
-    checkForUpdate()
-    {
-        return new Promise((resolve, reject) => {
+    checkForUpdate() {
+        return new Promise((resolve) => {
             const now = Date.now();
 
             // First time requesting
@@ -86,15 +81,17 @@ class Updater
 
             // Resolve with cached response as request happened too short ago
             if (now - this.lastRequestAt < this.cacheMaxTime && this.lastResponse) {
-                return resolve(this.lastResponse);
+                resolve(this.lastResponse);
+
+                return;
             }
 
             Got
                 .get(this.url)
-                .then((response) => this.getJsonFromResponse(response))
-                .then((release) => this.isNewerThanCurrentVersion(release))
-                .then((release) => this.runAutoUpdater(release))
-                .then((status) => resolve(this.lastResponse = status))
+                .then(response => this.constructor.getJsonFromResponse(response))
+                .then(release => this.isNewerThanCurrentVersion(release))
+                .then(release => this.constructor.unAutoUpdater(release))
+                .then(status => resolve(this.lastResponse = status))
 
                 // Resolve all errors with a default response code of 1
                 .catch(({ code = 1, message }) =>
@@ -111,8 +108,7 @@ class Updater
      * @param {string} version Version number of the upcoming update.
      * @see https://github.com/Squirrel/Squirrel.Mac#server-support
      */
-    runAutoUpdater({ url, version })
-    {
+    static runAutoUpdater({ url, version }) {
         return new Promise((success, fail) => {
             Electron.autoUpdater.setFeedURL(url);
             Electron.autoUpdater.checkForUpdates();
@@ -130,8 +126,7 @@ class Updater
      *
      * @see http://electron.atom.io/docs/api/auto-updater/#autoupdaterquitandinstall
      */
-    quitAndInstall()
-    {
+    static quitAndInstall() {
         Electron.autoUpdater.quitAndInstall();
     }
 }

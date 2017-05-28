@@ -1,19 +1,17 @@
-const Electron = require('electron');
+const Electron = require('electron'); // eslint-disable-line
 const Path = require('path');
 const Tray = require('./tray');
 const Clock = require('./clock');
 const Preferences = require('./preferences');
 const Updater = require('./updater');
 
-class App
-{
+class App {
     /**
     * Starts the Timestamp app.
     *
     * @return {App}
     */
-    constructor()
-    {
+    constructor() {
         // Hide dock icon
         Electron.app.dock.hide();
 
@@ -31,15 +29,14 @@ class App
         this.registerListeners();
 
         // Finally create the app window
-        this._window = this.createWindow();
+        this.window = this.createWindow();
     }
 
     /**
     * Registers listeners for system notification, messages from the
     * renderer process, clock events and tray events.
     */
-    registerListeners()
-    {
+    registerListeners() {
         // Hook clock tick with tray label
         this.clock.onTick((clock) => {
             this.tray.setLabel(clock.toString());
@@ -52,7 +49,7 @@ class App
             const currentDisplay = Electron.screen.getDisplayNearestPoint(currentMousePosition);
 
             this.setPosition(
-                bounds.x + bounds.width / 2,
+                bounds.x + (bounds.width / 2),
                 currentDisplay.workArea.y
             );
 
@@ -71,18 +68,19 @@ class App
 
         // Provide update handling to renderer
         Electron.ipcMain.on('app.update', (e, runUpdate) => {
-
             // Received request to not check again for updates
             // but rather update it. This means if there is an update available
             // we will update it right now!
             if (runUpdate === true && this.update && this.update.code < 0) {
-                return this.updater.quitAndInstall();
+                Updater.quitAndInstall();
+
+                return;
             }
 
             this.updater
                 .checkForUpdate()
                 .then((update) => {
-                    e.sender.send('app.update', this.update = update)
+                    e.sender.send('app.update', this.update = update);
                 });
         });
     }
@@ -92,8 +90,7 @@ class App
     *
     * @return {object}
     */
-    getDefaultPreferences()
-    {
+    static getDefaultPreferences() {
         return {
             clockFormat: 'HH:mm:ss',
             startAtLogin: false,
@@ -107,8 +104,7 @@ class App
     *
     * @return {string}
     */
-    getUserPreferencesPath()
-    {
+    static getUserPreferencesPath() {
         return Path.join(
             Electron.app.getPath('userData'),
             'UserPreferences.json'
@@ -120,8 +116,7 @@ class App
     *
     * @param {object} preferences New preferences.
     */
-    onPreferencesChanged(preferences)
-    {
+    onPreferencesChanged(preferences) {
         // We have a new clock format
         if (preferences.clockFormat !== this.clock.getFormat()) {
             this.clock.setFormat(preferences.clockFormat);
@@ -140,8 +135,7 @@ class App
      *
      * @return {BrowserWindow}
      */
-    createWindow()
-    {
+    createWindow() {
         const win = new Electron.BrowserWindow({
             frame: false,
             resizable: false,
@@ -161,17 +155,15 @@ class App
     /**
      * Shows the app window.
      */
-    show()
-    {
-        this._window.show();
+    show() {
+        this.window.show();
     }
 
     /**
      * Hides the app window.
      */
-    hide()
-    {
-        this._window.hide();
+    hide() {
+        this.window.hide();
     }
 
     /**
@@ -179,9 +171,8 @@ class App
      *
      * @return {boolean}
      */
-    isVisible()
-    {
-        return this._window.isVisible();
+    isVisible() {
+        return this.window.isVisible();
     }
 
     /**
@@ -191,21 +182,18 @@ class App
      * @param {number} y Position on y-axis.
      * @param {boolean} centerToX Center window to new x position or not.
      */
-    setPosition(x, y, centerToX = true)
-    {
-        if (centerToX) {
-            x = Math.round(x - this._window.getSize()[0] / 2);
-        }
-
-        this._window.setPosition(x, y);
+    setPosition(x, y, centerToX = true) {
+        this.window.setPosition(
+            centerToX ? Math.round(x - (this.window.getSize()[0] / 2)) : x,
+            y
+        );
     }
 
     /**
      * Called when the window loses focus. In our case once the user clicks
      * beside the app window, it will be hidden.
      */
-    onBlur()
-    {
+    onBlur() {
         this.hide();
     }
 
@@ -215,13 +203,12 @@ class App
      *
      * @see http://electron.atom.io/docs/api/system-preferences/#systempreferencessubscribenotificationevent-callback-macos
      */
-    onDarkModeChanged(darkMode)
-    {
+    onDarkModeChanged() {
         // Close old window
-        this._window.close();
+        this.window.close();
 
         // Recreate app window
-        this._window = this.createWindow();
+        this.window = this.createWindow();
     }
 }
 

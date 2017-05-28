@@ -1,0 +1,12 @@
+:host {
+    color: var(--silent-fg);
+    contain: content;
+    display: flex;
+    font-size: 12px;
+    line-height: 12px;
+    text-indent: 2px;
+}
+
+:host::before {
+    content: "v";
+}

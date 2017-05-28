@@ -1,0 +1,21 @@
+:host {
+    border: 1px solid var(--highlight-bg);
+    box-sizing: border-box;
+    contain: content;
+    display: block;
+    margin-top: 12px;
+    padding: 8px;
+    width: 100%;
+}
+
+::-webkit-input-placeholder {
+    color: var(--silent-fg);
+}
+
+input {
+    all: unset;
+    color: currentColor;
+    display: block;
+    height: 100%;
+    width: 100%;
+}

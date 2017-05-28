@@ -1,0 +1,4 @@
+:host {
+    contain: content;
+    display: flex;
+}

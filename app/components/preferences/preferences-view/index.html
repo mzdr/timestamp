@@ -1,0 +1,87 @@
+<template>
+    <link rel="stylesheet" href="./stylesheets/icons.css">
+    <link rel="stylesheet" href="./components/preferences/preferences-view/index.css">
+
+    <tab-bar>
+        <tab-bar-item tab="general">
+            <i class="icon-general icon"></i>
+            <translate-string>general</translate-string>
+        </tab-bar-item>
+        <tab-bar-item tab="clock">
+            <i class="icon-clock icon"></i>
+            <translate-string>clock</translate-string>
+        </tab-bar-item>
+        <tab-bar-item tab="calendar">
+            <i class="icon-calendar icon"></i>
+            <translate-string>calendar</translate-string>
+        </tab-bar-item>
+        <tab-bar-item tab="about">
+            <i class="icon-about icon"></i>
+            <translate-string>about</translate-string>
+        </tab-bar-item>
+        <tab-bar-item tab="quit">
+            <i class="icon-quit icon"></i>
+            <translate-string>quit</translate-string>
+        </tab-bar-item>
+    </tab-bar>
+
+    <tab-container>
+
+        <tab-content tab="general">
+            <preferences-item>
+                <preferences-item-data key="startAtLogin" type="toggle"></preferences-item-data>
+                <preferences-item-title>
+                    <translate-string>startAtLogin</translate-string>
+                </preferences-item-title>
+                <preferences-item-description>
+                    <translate-string>startAtLoginDescription</translate-string>
+                </preferences-item-description>
+            </preferences-item>
+        </tab-content>
+
+        <tab-content tab="clock">
+            <preferences-item>
+                <preferences-item-title>
+                    <translate-string>clockFormat</translate-string>
+                </preferences-item-title>
+                <preferences-item-description>
+                    <translate-string>clockFormatDescription</translate-string>
+                </preferences-item-description>
+                <preferences-item-data
+                    key="clockFormat"
+                    type="input"
+                    placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm"></preferences-item-data>
+            </preferences-item>
+        </tab-content>
+
+        <tab-content tab="calendar">
+
+            <preferences-item>
+                <preferences-item-data type="toggle" key="showWeekOfYear"></preferences-item-data>
+                <preferences-item-title>
+                    <translate-string>showWeekOfYear</translate-string>
+                </preferences-item-title>
+                <preferences-item-description>
+                    <translate-string>showWeekOfYearDescription</translate-string>
+                </preferences-item-description>
+            </preferences-item>
+
+            <preferences-item>
+                <preferences-item-data type="toggle" key="clickingDateOpensCalendar"></preferences-item-data>
+                <preferences-item-title>
+                    <translate-string>clickingDateOpensCalendar</translate-string>
+                </preferences-item-title>
+                <preferences-item-description>
+                    <translate-string>clickingDateOpensCalendarDescription</translate-string>
+                </preferences-item-description>
+            </preferences-item>
+        </tab-content>
+
+        <tab-content tab="about">
+            <about-view></about-view>
+        </tab-content>
+
+    </tab-container>
+</template>
+
+<script src="./index.js"></script>

@@ -1,28 +1,30 @@
-<link rel="stylesheet" href="styles.css">
-<script src="./CalendarContent.js"></script>
-<script src="./CalendarDay.js"></script>
-<script src="./CalendarEvent.js"></script>
-<script src="./CalendarGoToMonth.js"></script>
-<script src="./CalendarGoToToday.js"></script>
-<script src="./CalendarGoToYear.js"></script>
-<script src="./CalendarLegend.js"></script>
-<script src="./CalendarMonth.js"></script>
-<script src="./CalendarView.js"></script>
-<script src="./CalendarWeek.js"></script>
-<script src="./CalendarWeekday.js"></script>
-<script src="./CalendarWeekdays.js"></script>
-<script src="./CalendarYear.js"></script>
-<script src="./Calendar.js"></script>
+<script>
+    const Moment = require('moment');
+    const Electron = require('electron');
 
-<template>
-    <calendar-view>
-        <button is="calendar-goto-today">T</button>
-        <button class="calendar-show-preferences" data-show-preferences></button>
-        <calendar-legend>
-            <calendar-goto-month></calendar-goto-month>
-            <calendar-goto-year></calendar-goto-year>
-            <calendar-weekdays></calendar-weekdays>
-        </calendar-legend>
-        <calendar-content></calendar-content>
-    </calendar-view>
-</template>
+    // We are in dark mode
+    if (Electron.remote.systemPreferences.isDarkMode()) {
+        document.documentElement.classList.add('dark-mode');
+    }
+
+    // Update Moment.js
+    Moment.locale(Electron.remote.app.getLocale());
+</script>
+
+<link rel="import" href="./calendar-event/index.html">
+
+<link rel="import" href="./calendar-day/index.html">
+<link rel="import" href="./calendar-goto-month/index.html">
+<link rel="import" href="./calendar-goto-today/index.html">
+<link rel="import" href="./calendar-goto-year/index.html">
+<link rel="import" href="./calendar-illustration/index.html">
+<link rel="import" href="./calendar-month/index.html">
+<link rel="import" href="./calendar-navigation/index.html">
+<link rel="import" href="./calendar-legend/index.html">
+<link rel="import" href="./calendar-show-preferences/index.html">
+<link rel="import" href="./calendar-today/index.html">
+<link rel="import" href="./calendar-view/index.html">
+<link rel="import" href="./calendar-week/index.html">
+<link rel="import" href="./calendar-weekday/index.html">
+<link rel="import" href="./calendar-weekdays/index.html">
+<link rel="import" href="./calendar-weeks/index.html">

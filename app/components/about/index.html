@@ -1,29 +1,6 @@
-<link rel="stylesheet" href="styles.css">
-<script src="./AboutEvent.js"></script>
-<script src="./AboutName.js"></script>
-<script src="./AboutUpdate.js"></script>
-<script src="./AboutVersion.js"></script>
-<script src="./AboutView.js"></script>
-<script src="./About.js"></script>
+<link rel="import" href="./about-event/index.html">
 
-<template id="view">
-    <about-view>
-        <figure class="about-logo"></figure>
-        <section class="about-details">
-            <about-name>Timestamp</about-name>
-            <about-version>1.0.0</about-version>
-            <button is="about-update" status="unknown" class="button-primary">
-                <translate-string class="label">checking</translate-string>
-                <translate-string class="label">checkForUpdate</translate-string>
-                <translate-string class="label">updateAvailable</translate-string>
-                <translate-string class="label">youAreUpToDate</translate-string>
-            </button>
-
-            <nav class="about-links">
-                <a href="https://mzdr.github.io/timestamp" class="link button-primary"><translate-string>visitOfficialWebsite</translate-string></a>
-                <a href="https://github.com/mzdr/timestamp/issues" class="link button-primary"><translate-string>reportAnIssue</translate-string></a>
-            </nav>
-        </section>
-        <footer class="about-footer">&copy; 2017 Sebastian Prein. <translate-string>releasedUnderMIT</translate-string></footer>
-    </about-view>
-</template>
+<link rel="import" href="./about-name/index.html">
+<link rel="import" href="./about-update/index.html">
+<link rel="import" href="./about-version/index.html">
+<link rel="import" href="./about-view/index.html">

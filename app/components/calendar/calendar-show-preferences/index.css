@@ -1,0 +1,9 @@
+:host {
+    color: var(--highlight-fg);
+    contain: content;
+    display: block;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    line-height: 6px;
+    padding: 10px;
+}

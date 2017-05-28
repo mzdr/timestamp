@@ -1,0 +1,22 @@
+:host {
+    align-items: center;
+    contain: content;
+    display: flex;
+    flex: 1;
+    font-size: 20px;
+    height: 32px;
+    justify-content: center;
+    margin: 7px 20px;
+}
+
+calendar-goto-month:nth-of-type(3n+4) {
+    margin-left: 14px;
+}
+
+calendar-goto-year:first-child {
+    margin-right: 18px;
+}
+
+calendar-goto-year:last-child {
+    margin-left: 18px;
+}

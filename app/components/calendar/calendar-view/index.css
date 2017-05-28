@@ -1,0 +1,26 @@
+:host {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    user-select: none;
+    width: 320px;
+}
+
+calendar-show-preferences {
+    position: absolute;
+    right: 7px;
+    top: 10px;
+}
+
+calendar-goto-today {
+    left: 50%;
+    position: absolute;
+    text-align: center;
+    top: 40px;
+    transform: translateX(-50%);
+}
+
+calendar-day,
+calendar-weekday {
+    text-align: center;
+}

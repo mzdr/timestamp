@@ -1,23 +1,21 @@
-const Electron = require('electron');
+const Electron = require('electron'); // eslint-disable-line
 
-class Tray
-{
+class Tray {
     /**
     * Creates a Tray instance.
     *
     * @return {Tray}
     */
-    constructor()
-    {
+    constructor() {
         // HACK: empty image as of image is required
         // @see https://github.com/electron/electron/issues/1553
         const icon = Electron.nativeImage.createEmpty();
 
         // The tray instance of Electron
-        this._tray = new Electron.Tray(icon);
+        this.tray = new Electron.Tray(icon);
 
         // Fire click handler on a simple (left) click
-        this._tray.on('click', () => (this._clickHandler || (() => {}))());
+        this.tray.on('click', () => (this.clickHandler || (() => {}))());
     }
 
     /**
@@ -26,9 +24,8 @@ class Tray
      * @see http://electron.atom.io/docs/api/tray/#traygetbounds-macos-windows
      * @return {object}
      */
-    getBounds()
-    {
-        return this._tray.getBounds();
+    getBounds() {
+        return this.tray.getBounds();
     }
 
     /**
@@ -36,9 +33,8 @@ class Tray
      *
      * @return {string}
      */
-    getLabel()
-    {
-        return this._label;
+    getLabel() {
+        return this.label;
     }
 
     /**
@@ -46,9 +42,8 @@ class Tray
      *
      * @param {string} label
      */
-    setLabel(label)
-    {
-        this._tray.setTitle(this._label = label);
+    setLabel(label) {
+        this.tray.setTitle(this.label = label);
     }
 
     /**
@@ -56,9 +51,8 @@ class Tray
      *
      * @param {function} fn
      */
-    onClick(fn)
-    {
-        this._clickHandler = fn;
+    onClick(fn) {
+        this.clickHandler = fn;
     }
 }
 

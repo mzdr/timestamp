@@ -1,23 +1,21 @@
 const Fs = require('fs');
-const Electron = require('electron');
+const Electron = require('electron'); // eslint-disable-line
 
-class Preferences
-{
+class Preferences {
     /**
     * Creates a Preferences instance.
     *
     * @return {Preferences}
     */
-    constructor(app)
-    {
+    constructor(app) {
         // Remember app instance
         this.app = app;
 
         // Default preferences
-        this.set(this.app.getDefaultPreferences());
+        this.set(this.app.constructor.getDefaultPreferences());
 
         // Get storage file for persisting preferences
-        this.storageFile = this.app.getUserPreferencesPath();
+        this.storageFile = this.app.constructor.getUserPreferencesPath();
 
         // Load preferences from disk
         this.loadFromDisk();
@@ -42,17 +40,16 @@ class Preferences
      *
      * @return {Preferences}
      */
-    show()
-    {
+    show() {
         // Don't create multiple windows, focus on last created one instead
-        if (this._window && this._window.isDestroyed() === false) {
-            this._window.show();
+        if (this.window && this.window.isDestroyed() === false) {
+            this.window.show();
 
             return this;
         }
 
         // Create window instance
-        this._window = new Electron.BrowserWindow({
+        this.window = new Electron.BrowserWindow({
             resizable: false,
             center: true,
             minimizable: false,
@@ -62,10 +59,10 @@ class Preferences
         });
 
         // Wait for the renderer to tell us that the window is ready to show
-        Electron.ipcMain.on('preferences.ready', () => this._window.show());
+        Electron.ipcMain.on('preferences.ready', () => this.window.show());
 
         // Load the contents
-        this._window.loadURL(`file://${__dirname}/preferences.html`);
+        this.window.loadURL(`file://${__dirname}/preferences.html`);
 
         return this;
     }
@@ -77,13 +74,12 @@ class Preferences
      * @param {string} key Key of preference to return.
      * @return {mixed}
      */
-    get(key)
-    {
+    get(key) {
         if (typeof key === 'string') {
-            return this._data[key];
+            return this.data[key];
         }
 
-        return this._data;
+        return this.data;
     }
 
     /**
@@ -95,12 +91,11 @@ class Preferences
      * @param {mixed} data Preference data.
      * @return {Preferences}
      */
-    set(key, data)
-    {
+    set(key, data) {
         if (typeof key === 'object') {
-            this._data = key;
+            this.data = key;
         } else {
-            this._data[key] = data;
+            this.data[key] = data;
         }
 
         return this;
@@ -111,16 +106,15 @@ class Preferences
      *
      * @return {Preferences}
      */
-    loadFromDisk()
-    {
-        try {
-            var data = Fs.readFileSync(this.storageFile, 'utf8')
-        } catch (e) {
+    loadFromDisk() {
+        let data = {};
 
+        try {
+            data = Fs.readFileSync(this.storageFile, 'utf8');
+        } catch (e) {
             // It's probably the first time the app has been started,
             // just save default preferences and that's it for today
             return this.saveToDisk();
-
         }
 
         // Merge loaded preferences from disk with current ones
@@ -140,8 +134,7 @@ class Preferences
      *
      * @return {Preferences}
      */
-    saveToDisk()
-    {
+    saveToDisk() {
         const data = this.get();
 
         // Try writing data to disk

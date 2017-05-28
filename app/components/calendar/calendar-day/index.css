@@ -1,0 +1,19 @@
+:host {
+    align-items: center;
+    contain: content;
+    display: flex;
+    flex: 1;
+    font-size: 13px;
+    font-weight: 300;
+    height: 32px;
+    justify-content: center;
+}
+
+:host([muted]) {
+    color: var(--silent-fg);
+}
+
+:host([today]) {
+    background-image: radial-gradient(circle, var(--highlight-bg) 60%, transparent 62%);
+    color: var(--highlight-fg);
+}

@@ -1,0 +1,9 @@
+:host {
+    contain: content;
+    display: block;
+    padding: 24px;
+}
+
+:host(:not([active])) {
+    display: none;
+}

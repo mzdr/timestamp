@@ -1,0 +1,10 @@
+:host {
+    color: var(--silent-fg);
+    contain: content;
+    display: block;
+    padding: 0 1px;
+}
+
+:host([current]) {
+    color: var(--highlight-bg);
+}

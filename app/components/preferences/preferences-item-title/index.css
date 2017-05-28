@@ -1,0 +1,7 @@
+:host {
+    contain: content;
+    display: block;
+    font-weight: 500;
+    margin-bottom: 9px;
+    max-width: 68ch; /* ~ 68chars */
+}
