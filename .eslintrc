@@ -1,0 +1,15 @@
+{
+    "extends": "airbnb",
+    "rules": {
+        "indent": ["error", 4, {
+            "SwitchCase": 1,
+            "VariableDeclarator": 1
+        }],
+        "comma-dangle": ["error", "never"],
+        "no-console": 0,
+        "max-len": ["error", 160, 2, {
+            "ignoreUrls": true,
+            "ignoreComments": false
+        }]
+    }
+}
