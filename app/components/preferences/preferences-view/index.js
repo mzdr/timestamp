@@ -21,20 +21,12 @@ class PreferencesView extends BaseElement {
      * @return {PreferencesView}
      */
     update() {
-        const currentWindow = Electron.remote.getCurrentWindow();
-
+        // Set window size dynamically after repainting
         requestAnimationFrame(() => {
-            // Update the window size
-            currentWindow.setContentSize(
+            Electron.remote.getCurrentWindow().setContentSize(
                 document.body.offsetWidth,
                 document.body.offsetHeight
             );
-
-            // If the window is hidden, it’s probably the first time we are
-            // going to show it. Tell main process we are ready.
-            if (currentWindow.isVisible() === false) {
-                Electron.ipcRenderer.send('preferences.ready');
-            }
         });
 
         return this;

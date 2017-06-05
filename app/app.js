@@ -15,15 +15,13 @@ class App {
         // Hide dock icon
         Electron.app.dock.hide();
 
-        // On OS X it is common for applications and their menu bar
-        // to stay active until the user quits explicitly with Cmd + Q
-        Electron.app.on('window-all-closed', () => {});
-
         // Create all necessary components
         this.tray = new Tray(this);
         this.clock = new Clock(this);
         this.preferences = new Preferences(this);
         this.updater = new Updater(this);
+
+        this.willQuit = false;
 
         // Register listeners for clock, tray, system nofitications and so on…
         this.registerListeners();
@@ -81,6 +79,9 @@ class App {
                 .checkForUpdate()
                 .then(update => e.sender.send('app.update', (this.update = update)));
         });
+
+        // @see https://electron.atom.io/docs/api/app/#event-before-quit
+        Electron.app.on('before-quit', () => (this.willQuit = true));
     }
 
     /**

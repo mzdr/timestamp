@@ -11,6 +11,22 @@ class Preferences {
         // Remember app instance
         this.app = app;
 
+        // Create window instance
+        this.window = new Electron.BrowserWindow({
+            resizable: false,
+            center: true,
+            minimizable: false,
+            maximizable: false,
+            alwaysOnTop: true,
+            show: false,
+            titleBarStyle: 'hidden-inset'
+        });
+
+        this.window.on('close', e => this.onClose(e));
+
+        // Load the contents
+        this.window.loadURL(`file://${__dirname}/preferences.html`);
+
         // Default preferences
         this.set(this.app.constructor.getDefaultPreferences());
 
@@ -32,38 +48,27 @@ class Preferences {
         });
 
         // Received request to show preferences window
-        Electron.ipcMain.on('preferences.show', () => this.show());
+        Electron.ipcMain.on('preferences.show', () => this.window.show());
     }
 
     /**
-     * Shows the preferences window.
+     * Called when the window is going to be closed.
      *
+     * @param {Event} e Original emitted event.
      * @return {Preferences}
+     * @see https://electron.atom.io/docs/api/browser-window/#event-close
      */
-    show() {
-        // Don't create multiple windows, focus on last created one instead
-        if (this.window && this.window.isDestroyed() === false) {
-            this.window.show();
+    onClose(e) {
+        // The user tried to quit the app
+        if (this.app.willQuit) {
+            this.window = null;
 
-            return this;
+        // The user only tried to close the window
+        } else {
+            e.preventDefault();
+
+            this.window.hide();
         }
-
-        // Create window instance
-        this.window = new Electron.BrowserWindow({
-            resizable: false,
-            center: true,
-            minimizable: false,
-            maximizable: false,
-            alwaysOnTop: true,
-            show: false,
-            titleBarStyle: 'hidden-inset'
-        });
-
-        // Wait for the renderer to tell us that the window is ready to show
-        Electron.ipcMain.on('preferences.ready', () => this.window.show());
-
-        // Load the contents
-        this.window.loadURL(`file://${__dirname}/preferences.html`);
 
         return this;
     }
