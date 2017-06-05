@@ -17,10 +17,12 @@ class CalendarView extends BaseElement {
         this.moment = Moment().startOf('date');
 
         // Register all UI related event listeners
-        CalendarEvent.on('goto.today', e => this.goToToday(e));
-        CalendarEvent.on('goto.month', e => this.goToMonth(e));
-        CalendarEvent.on('goto.year', e => this.goToYear(e));
-        CalendarEvent.on('day.clicked', e => this.dayClicked(e));
+        CalendarEvent.on('goto.today', () => this.goToToday());
+        CalendarEvent.on('goto.month', e => this.goToMonth(e.detail.month));
+        CalendarEvent.on('goto.year', e => this.goToYear(e.detail.year));
+        CalendarEvent.on('day.clicked', e => this.dayClicked(e.detail.diff));
+
+        document.addEventListener('keydown', e => this.onKeyDown(e));
 
         // Redraw calendar every minute to avoid displaying old/wrong states
         setInterval(() => this.update(), 1000 * 60);
@@ -60,6 +62,45 @@ class CalendarView extends BaseElement {
     }
 
     /**
+     * A key has been pressed within the calendar view.
+     *
+     * @param {KeyboardEvent} e Original emitted event.
+     * @return {CalendarView}
+     */
+    onKeyDown(e) {
+        const currentMonth = this.moment.month();
+        const currentYear = this.moment.year();
+
+        // @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
+        switch (e.key) {
+            case 'ArrowRight':
+                this.goToMonth(currentMonth + 1);
+                break;
+
+            case 'ArrowLeft':
+                this.goToMonth(currentMonth - 1);
+                break;
+
+            case 'ArrowUp':
+                this.goToYear(currentYear + 1);
+                break;
+
+            case 'ArrowDown':
+                this.goToYear(currentYear - 1);
+                break;
+
+            case 'Escape':
+                this.goToToday();
+                break;
+
+            default:
+                return this;
+        }
+
+        return this;
+    }
+
+    /**
      * Jump to today.
      *
      * @return {CalendarView}
@@ -82,7 +123,7 @@ class CalendarView extends BaseElement {
      * @param {number} month Given month.
      * @return {CalendarView}
      */
-    goToMonth({ detail: { month } }) {
+    goToMonth(month) {
         this.moment.month(month);
 
         return this.update();
@@ -94,7 +135,7 @@ class CalendarView extends BaseElement {
      * @param {number} year Given year.
      * @return {CalendarView}
      */
-    goToYear({ detail: { year } }) {
+    goToYear(year) {
         this.moment.year(year);
 
         return this.update();
@@ -107,7 +148,7 @@ class CalendarView extends BaseElement {
      * @param {number} diff The difference in days to today.
      * @return {CalendarView}
      */
-    dayClicked({ detail: { diff } }) {
+    dayClicked(diff) {
         Electron.ipcRenderer.on('preferences.get', (e, key, value) => {
             if (key !== 'clickingDateOpensCalendar' || value === false) {
                 return;
