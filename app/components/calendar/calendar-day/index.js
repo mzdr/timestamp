@@ -4,7 +4,7 @@ class CalendarDay extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
-        this.addEventListener('click', () => this.onclick());
+        this.addEventListener('click', () => this.onClick());
     }
 
     /**
@@ -12,7 +12,7 @@ class CalendarDay extends BaseElement {
      *
      * @return {CalendarDay}
      */
-    onclick() {
+    onClick() {
         const detail = {};
         const diff = this.getAttribute('diff');
 

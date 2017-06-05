@@ -4,7 +4,7 @@ class CalendarGoToYear extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
-        this.addEventListener('click', () => this.onclick());
+        this.addEventListener('click', () => this.onClick());
     }
 
     /**
@@ -13,7 +13,7 @@ class CalendarGoToYear extends BaseElement {
      *
      * @return {CalendarGoToYear}
      */
-    onclick() {
+    onClick() {
         const year = this.getAttribute('number');
 
         // If there is not a number attribute it means it’s the currently

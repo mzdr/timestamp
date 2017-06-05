@@ -60,7 +60,7 @@ class PreferencesItemData extends BaseElement {
         this.importTemplate('input');
 
         this.$data = this.shadowRoot.querySelector('input');
-        this.$data.addEventListener('input', () => this.onchange());
+        this.$data.addEventListener('input', () => this.onChange());
 
         if (placeholder) {
             this.$data.setAttribute('placeholder', placeholder);
@@ -85,7 +85,7 @@ class PreferencesItemData extends BaseElement {
         this.importTemplate('toggle');
 
         this.$data = this.shadowRoot.querySelector('input');
-        this.$data.addEventListener('change', () => this.onchange());
+        this.$data.addEventListener('change', () => this.onChange());
 
         // Dynamically adding getter/setter for the value of this type
         Object.defineProperty(this, 'value', {
@@ -101,7 +101,7 @@ class PreferencesItemData extends BaseElement {
      *
      * @return {PreferencesItemData}
      */
-    onchange() {
+    onChange() {
         this.dispatchEvent(new PreferencesEvent('change', {
             detail: {
                 key: this.key,

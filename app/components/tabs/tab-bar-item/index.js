@@ -4,7 +4,7 @@ class TabBarItem extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
-        this.addEventListener('click', () => this.onclick());
+        this.addEventListener('click', () => this.onClick());
 
         TabEvent.on('switch', e => this.onSwitch(e));
     }
@@ -31,7 +31,7 @@ class TabBarItem extends BaseElement {
      *
      * @return {TabBarItem}
      */
-    onclick() {
+    onClick() {
         this.dispatchEvent(new TabEvent('switch', { detail: { tab: this.tab } }));
 
         return this;

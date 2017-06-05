@@ -4,7 +4,7 @@ class CalendarGoToMonth extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
-        this.addEventListener('click', () => this.onclick());
+        this.addEventListener('click', () => this.onClick());
     }
 
     /**
@@ -13,7 +13,7 @@ class CalendarGoToMonth extends BaseElement {
      *
      * @return {CalendarGoToMonth}
      */
-    onclick() {
+    onClick() {
         const month = this.getAttribute('number');
 
         this.dispatchEvent(

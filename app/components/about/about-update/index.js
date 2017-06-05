@@ -4,7 +4,7 @@ class AboutUpdate extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
-        this.addEventListener('click', () => this.onclick());
+        this.addEventListener('click', () => this.onClick());
 
         // Received update response
         Electron.ipcRenderer.once('app.update', (e, { code, version }) => {
@@ -28,7 +28,7 @@ class AboutUpdate extends BaseElement {
      *
      * @return {AboutUpdate}
      */
-    onclick() {
+    onClick() {
         // Checks are going on right now or we are up to date
         if (this.status === 'checking' || this.status === 'up-to-date') {
             return this;

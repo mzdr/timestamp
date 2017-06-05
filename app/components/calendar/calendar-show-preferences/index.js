@@ -4,7 +4,7 @@ class CalendarShowPreferences extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
-        this.addEventListener('click', () => this.onclick());
+        this.addEventListener('click', () => this.onClick());
     }
 
     /**
@@ -12,7 +12,7 @@ class CalendarShowPreferences extends BaseElement {
      *
      * @return {CalendarShowPreferences}
      */
-    onclick() {
+    onClick() {
         Electron.ipcRenderer.send('preferences.show');
 
         return this;

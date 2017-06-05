@@ -4,7 +4,7 @@ class CalendarGoToToday extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
-        this.addEventListener('click', () => this.onclick());
+        this.addEventListener('click', () => this.onClick());
     }
 
     /**
@@ -12,7 +12,7 @@ class CalendarGoToToday extends BaseElement {
      *
      * @return {CalendarGoToToday}
      */
-    onclick() {
+    onClick() {
         this.dispatchEvent(new CalendarEvent('goto.today'));
 
         return this;
