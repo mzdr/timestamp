@@ -23,7 +23,7 @@ class App {
 
         this.willQuit = false;
 
-        // Register listeners for clock, tray, system nofitications and so on…
+        // Register listeners for clock, tray, system notifications and so on…
         this.registerListeners();
 
         // Finally create the app window
