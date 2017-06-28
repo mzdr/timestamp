@@ -12,20 +12,7 @@ class Preferences {
         this.app = app;
 
         // Create window instance
-        this.window = new Electron.BrowserWindow({
-            resizable: false,
-            center: true,
-            minimizable: false,
-            maximizable: false,
-            alwaysOnTop: true,
-            show: false,
-            titleBarStyle: 'hidden-inset'
-        });
-
-        this.window.on('close', e => this.onClose(e));
-
-        // Load the contents
-        this.window.loadURL(`file://${__dirname}/preferences.html`);
+        this.window = this.createWindow();
 
         // Default preferences
         this.set(this.app.constructor.getDefaultPreferences());
@@ -49,6 +36,28 @@ class Preferences {
 
         // Received request to show preferences window
         Electron.ipcMain.on('preferences.show', () => this.window.show());
+    }
+
+    /**
+     * Creates the actual preferences window.
+     *
+     * @return {BrowserWindow}
+     */
+    createWindow() {
+        const win = new Electron.BrowserWindow({
+            resizable: false,
+            center: true,
+            minimizable: false,
+            maximizable: false,
+            alwaysOnTop: true,
+            show: false,
+            titleBarStyle: 'hidden-inset'
+        });
+
+        win.on('close', e => this.onClose(e))
+           .loadURL(`file://${__dirname}/preferences.html`);
+
+        return win;
     }
 
     /**
