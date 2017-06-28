@@ -101,6 +101,15 @@ class Updater {
     }
 
     /**
+     * Returns the response from the last update check.
+     *
+     * @return {object}
+     */
+    getLastResponse() {
+        return this.lastResponse;
+    }
+
+    /**
      * Update checks have been successful and we are now firing up the auto
      * updating process.
      *
