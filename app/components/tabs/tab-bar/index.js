@@ -4,17 +4,29 @@ class TabBar extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
-        // Depending on the update response we are going the show a different
-        // tab initially. If we have an update the about tab will be active,
-        // otherwise it’s the general tab
-        Electron.ipcRenderer.once('app.update', (e, update) => {
-            const tab = update.code < 0 ? 'about' : 'general';
+        // Received response from update checks
+        Electron.ipcRenderer.on('app.update.check',
+            (...args) => this.onUpdateChecked(...args)
+        );
+    }
 
-            this.dispatchEvent(new TabEvent('switch', { detail: { tab } }));
-        });
+    /**
+     * Received response from checking for updates. In this case we
+     * automatically switch to the “about” tab if update checks return that
+     * there is an update available.
+     *
+     * @param {Event} e Original emitted event.
+     * @param {object} update Update response.
+     * @return {AboutUpdate}
+     */
+    onUpdateChecked(e, update) {
+        if (update.code < 0) {
+            this.dispatchEvent(
+                new TabEvent('switch', { detail: { tab: 'about' } })
+            );
+        }
 
-        // Check if there is an update available
-        Electron.ipcRenderer.send('app.update');
+        return this;
     }
 }
 

@@ -5,6 +5,11 @@ class CalendarShowPreferences extends BaseElement {
         super().fetchTemplate();
 
         this.addEventListener('click', () => this.onClick());
+
+        // Received response from update checks
+        Electron.ipcRenderer.on('app.update.check',
+            (...args) => this.onUpdateChecked(...args)
+        );
     }
 
     /**
@@ -14,6 +19,19 @@ class CalendarShowPreferences extends BaseElement {
      */
     onClick() {
         Electron.ipcRenderer.send('preferences.show');
+
+        return this;
+    }
+
+    /**
+     * Received response from checking for updates.
+     *
+     * @param {Event} e Original emitted event.
+     * @param {object} update Update response.
+     * @return {AboutUpdate}
+     */
+    onUpdateChecked(e, update) {
+        this.classList[update.code < 0 ? 'add' : 'remove']('update-available');
 
         return this;
     }

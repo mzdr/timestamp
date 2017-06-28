@@ -19,12 +19,6 @@
     color: var(--silent-fg);
 }
 
-:host([status="update-available"]) {
-    background-color: var(--brand-success);
-    box-shadow: 0 0 0 1px var(--brand-success);
-    color: var(--highlight-fg);
-}
-
 :host([status="unknown"]) > [key="checkForUpdate"],
 :host([status="checking"]) > [key="checking"],
 :host([status="up-to-date"]) > [key="youAreUpToDate"],
