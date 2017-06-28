@@ -1,4 +1,4 @@
-/* global Electron, HTMLElement */
+/* global Electron, HTMLElement, customElements */
 
 class BaseElement extends HTMLElement { // eslint-disable-line
     /**
@@ -48,6 +48,26 @@ class BaseElement extends HTMLElement { // eslint-disable-line
         while (this.attributes.length > 0) {
             this.removeAttribute(this.attributes[0].name);
         }
+
+        return this;
+    }
+
+    /**
+     * Calls a given function when all custom elements within the Shadow DOM
+     * have been defined.
+     *
+     * @param {Function} fn Function to call.
+     * @return {BaseElement}
+     */
+    whenElementsAreDefined(fn) {
+        const undefinedElements = this.shadowRoot.querySelectorAll(':not(:defined)');
+        const whenDefined = [...undefinedElements].map(
+            el => customElements.whenDefined(el.localName)
+        );
+
+        Promise.all(whenDefined).then(fn);
+
+        return this;
     }
 
     /**

@@ -27,15 +27,8 @@ class CalendarView extends BaseElement {
         // Redraw calendar every minute to avoid displaying old/wrong states
         setInterval(() => this.update(), 1000 * 60);
 
-        const undefinedElements = this.shadowRoot.querySelectorAll(':not(:defined)');
-        const whenDefined = [...undefinedElements].map(
-            el => customElements.whenDefined(el.localName)
-        );
-
-        // Wait for all the elements to be upgraded.
-        Promise.all(whenDefined).then(() => {
-            this.update();
-        });
+        // When all (custom) elements are defined, update the view
+        this.whenElementsAreDefined(() => this.update());
     }
 
     /**

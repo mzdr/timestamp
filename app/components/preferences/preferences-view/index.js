@@ -12,6 +12,9 @@ class PreferencesView extends BaseElement {
 
         // Register event listener for clicks within the preferences view
         this.shadowRoot.addEventListener('click', e => this.onClick(e));
+
+        // When all (custom) elements are defined, update the view
+        this.whenElementsAreDefined(() => this.update());
     }
 
     /**
