@@ -4,8 +4,12 @@ class TranslateString extends BaseElement {
     constructor() {
         super().fetchTemplate();
 
+        const string = Translator.getString(this.textContent);
+
         this.setAttribute('key', this.textContent);
-        this.innerHTML = Translator.getString(this.textContent);
+
+        this.innerHTML = string;
+        this.originalString = string;
     }
 }
 
