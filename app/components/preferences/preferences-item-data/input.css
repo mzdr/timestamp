@@ -4,7 +4,6 @@
     contain: content;
     display: block;
     margin-top: 12px;
-    padding: 8px;
     width: 100%;
 }
 
@@ -15,7 +14,9 @@
 input {
     all: unset;
     color: currentColor;
+    cursor: text;
     display: block;
     height: 100%;
+    padding: 8px;
     width: 100%;
 }
