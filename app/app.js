@@ -85,6 +85,8 @@ class App {
             const lastReponse = this.updater.getLastResponse();
 
             if (lastReponse && lastReponse.code < 0) {
+                this.willQuit = true;
+
                 Updater.quitAndInstall();
             }
         });
