@@ -1,4 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-  <path d="M23.5 2H20V.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5V2H8V.5a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5V2H.5a.5.5 0 0 0-.5.5v21a.5.5 0 0 0 .5.5h23a.5.5 0 0 0 .5-.5v-21a.5.5 0 0 0-.5-.5zM17 1h2v3h-2V1zM5 1h2v3H5V1zM4 3v1.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5V3h8v1.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5V3h3v4H1V3h3zM1 23V8h22v15H1z"/>
-  <path d="M11.5 19H10v-7.5a.5.5 0 0 0-.854-.354l-2 2a.5.5 0 0 0 .707.707L9 12.707V19H7.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm5.5-8h-5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 1 0V12h3.778l-1.125 3H13.5a.5.5 0 0 0 0 1h1.278l-1.247 3.324a.501.501 0 0 0 .936.353L15.847 16h.653a.5.5 0 0 0 0-1h-.278l1.247-3.324A.501.501 0 0 0 17 11z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <path id="a" d="M0 0h2v2H0z"/>
+  </defs>
+  <g fill="#bde1ff">
+    <path d="M22 3v5H1v1h21v11.375H.5V23H24V3h-2z"/>
+    <path fill="#2195f2" d="M24 2h-5V.5c0-.276-.224-.5-.5-.5s-.5.224-.5.5V2H7V.5c0-.276-.224-.5-.5-.5S6 .224 6 .5V2H1c-.552 0-1 .448-1 1v20c0 .552.448 1 1 1h23c.552 0 1-.448 1-1V3c0-.552-.448-1-1-1zm0 21H1V8h23zM1 7V3h23v4z"/>
+    <use fill="#2195f2" transform="translate(13 11)" xlink:href="#a"/>
+    <use fill="#2195f2" transform="translate(18 11)" xlink:href="#a"/>
+    <use fill="#2195f2" transform="translate(5 16)" xlink:href="#a"/>
+    <use fill="#2195f2" transform="translate(10 16)" xlink:href="#a"/>
+  </g>
 </svg>
