@@ -2,22 +2,20 @@
     align-items: center;
     background: transparent;
     border: 0;
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px currentColor;
     cursor: default;
     display: flex;
     font-family: inherit;
     font-size: inherit;
     justify-content: center;
+    line-height: inherit;
+    min-height: 35px;
     outline: 0;
-    padding: 0;
+    padding: 0 16px;
+    text-align: center;
     text-decoration: none;
     user-select: none;
-}
-
-.button-primary {
-    border-radius: 1px;
-    box-shadow: 0 0 0 1px currentColor;
-    min-height: 35px;
-    padding: 0 16px;
 }
 
 .button-primary.-success {
