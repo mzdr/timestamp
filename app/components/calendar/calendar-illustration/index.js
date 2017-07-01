@@ -1,8 +1,22 @@
-/* global document, customElements, BaseElement */
+/* global document, customElements, BaseElement, Moment */
 
 class CalendarIllustration extends BaseElement {
     constructor() {
         super().fetchTemplate();
+    }
+
+    /**
+     * Draws the illustration.
+     *
+     * @return {CalendarIllustration}
+     */
+    draw() {
+        const moment = Moment();
+
+        this.dataset.time = moment.format('ha');
+        this.dataset.quarter = moment.format('Q');
+
+        return this;
     }
 }
 

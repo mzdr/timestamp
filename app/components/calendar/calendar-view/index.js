@@ -11,6 +11,7 @@ class CalendarView extends BaseElement {
         this.$weeks = this.shadowRoot.querySelector('calendar-weeks');
         this.$weekdays = this.shadowRoot.querySelector('calendar-weekdays');
         this.$navigation = this.shadowRoot.querySelector('calendar-navigation');
+        this.$illustration = this.shadowRoot.querySelector('calendar-illustration');
 
         // This Moment.js instance is used for all calcuations, when it’s being
         // created it represents 12am of today
@@ -42,6 +43,7 @@ class CalendarView extends BaseElement {
         this.$weeks.draw(this.moment);
         this.$navigation.draw(this.moment);
         this.$weekdays.draw(this.moment);
+        this.$illustration.draw();
 
         // Set window size dynamically after repainting
         requestAnimationFrame(() => {
