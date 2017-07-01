@@ -1,9 +1,10 @@
 :host {
-    --logo-size: 160px;
+    --logo-size: 140px;
 
     align-items: center;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     position: relative;
 }
 
@@ -18,7 +19,7 @@ figure {
 }
 
 section {
-    width: calc(100% - var(--logo-size));
+    width: calc(100% - var(--logo-size) - 14px);
 }
 
 nav {
