@@ -1,15 +1,3 @@
-<script>
-
-    // We are in dark mode
-    if (Electron.remote.systemPreferences.isDarkMode()) {
-        document.documentElement.classList.add('dark-mode');
-    }
-
-    // Update Moment.js
-    Moment.locale(Electron.remote.app.getLocale());
-
-</script>
-
 <link rel="import" href="./calendar-event/index.html">
 
 <link rel="import" href="./calendar-day/index.html">

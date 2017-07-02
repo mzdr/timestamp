@@ -7,6 +7,14 @@
         const Fs = require('fs');
         const Moment = require('moment');
         const Electron = require('electron');
+
+        // We are in dark mode
+        if (Electron.remote.systemPreferences.isDarkMode()) {
+            document.documentElement.classList.add('dark-mode');
+        }
+
+        // Update Moment.js
+        Moment.locale(Electron.remote.app.getLocale());
     </script>
 
     <link rel="stylesheet" href="./stylesheets/base.css">
