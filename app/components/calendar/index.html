@@ -1,6 +1,4 @@
 <script>
-    const Moment = require('moment');
-    const Electron = require('electron');
 
     // We are in dark mode
     if (Electron.remote.systemPreferences.isDarkMode()) {
@@ -9,6 +7,7 @@
 
     // Update Moment.js
     Moment.locale(Electron.remote.app.getLocale());
+
 </script>
 
 <link rel="import" href="./calendar-event/index.html">

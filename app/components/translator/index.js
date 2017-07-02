@@ -1,9 +1,10 @@
+/* global Fs, Electron */
+
 const Marked = require('marked');
 const YAML = require('js-yaml');
-const Fs = require('fs');
 const Dedent = require('dedent');
 
-class Translator { // eslint-disable-line
+class Translator {
     /**
      * Returns the currently set locale.
      *
@@ -141,3 +142,8 @@ class Translator { // eslint-disable-line
         return this;
     }
 }
+
+// Tell Translator where to find locales and use the system set locale
+Translator
+    .setLocalesPath(`${Electron.remote.app.getAppPath()}/locales`)
+    .setLocale(Electron.remote.app.getLocale());
