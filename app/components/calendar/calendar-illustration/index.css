@@ -1,4 +1,5 @@
 :host {
     contain: content;
     display: block;
+    flex: 1;
 }
