@@ -1,8 +1,13 @@
-/* global document, customElements, BaseElement, Moment */
+/* global document, customElements, BaseElement, Fs, Moment, Electron */
 
 class CalendarIllustration extends BaseElement {
     constructor() {
         super().fetchTemplate();
+
+        this.innerHTML = Fs.readFileSync(
+            `${Electron.remote.app.getAppPath()}/images/illustrations/mountains.svg`,
+            'utf8'
+        );
     }
 
     /**
