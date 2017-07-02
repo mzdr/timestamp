@@ -14,7 +14,7 @@ class CalendarIllustration extends BaseElement {
         const moment = Moment();
 
         this.dataset.time = moment.format('ha');
-        this.dataset.quarter = moment.format('Q');
+        this.dataset.month = moment.format('M');
 
         return this;
     }
