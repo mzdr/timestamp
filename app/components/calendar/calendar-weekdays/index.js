@@ -8,10 +8,11 @@ class CalendarWeekdays extends BaseElement {
     /**
      * Draws the actual weekdays legend.
      *
-     * @param {Moment} currentDate The current date that is being displayed.
      * @return {CalendarWeekdays}
      */
     draw() {
+        // Always use today for determing the current weekday, since it’s good
+        // to know which weekday is today even if you are viewing another month.
         const currentWeekday = Moment().weekday();
 
         // @see https://momentjs.com/docs/#/i18n/listing-months-weekdays/
@@ -19,7 +20,7 @@ class CalendarWeekdays extends BaseElement {
 
         [...this.shadowRoot.querySelectorAll('calendar-weekday')].forEach(
             (weekday, index) => {
-                weekday.textContent = weekdaysShort[index]; // eslint-disable-line
+                Object.assign(weekday, { textContent: weekdaysShort[index] });
 
                 if (index === currentWeekday) {
                     weekday.setAttribute('current', '');
