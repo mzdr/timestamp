@@ -16,10 +16,12 @@ class CalendarIllustration extends BaseElement {
      * @return {CalendarIllustration}
      */
     draw() {
-        const moment = Moment();
+        // Always use current current date/time for drawing since the
+        // illustration is supposed to represent the real world.
+        const now = Moment();
 
-        this.dataset.time = moment.format('ha');
-        this.dataset.month = moment.format('M');
+        this.dataset.time = now.format('ha');
+        this.dataset.month = now.format('M');
 
         return this;
     }

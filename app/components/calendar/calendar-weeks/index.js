@@ -9,11 +9,11 @@ class CalendarWeeks extends BaseElement {
      * Draws the actual content of the calendar which is the currently selected
      * month and all of it's weeks and days.
      *
-     * @param {Moment} currentDate The current date that is being displayed.
+     * @param {Moment} now The current date that is being displayed.
      * @return {CalendarMonth}
      */
-    draw(moment) {
-        const currentDate = Moment(moment);
+    draw(now) {
+        const currentDate = Moment(now);
         const lastDate = Moment(currentDate).endOf('month').weekday(6);
         const today = Moment().startOf('date');
 
@@ -59,7 +59,7 @@ class CalendarWeeks extends BaseElement {
                             day.removeAttribute('today');
                         }
 
-                        if (currentDate.month() !== moment.month()) {
+                        if (currentDate.month() !== now.month()) {
                             day.setAttribute('muted', '');
                         } else {
                             day.removeAttribute('muted');

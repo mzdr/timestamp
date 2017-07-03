@@ -11,10 +11,12 @@ class CalendarToday extends BaseElement {
      * @return {CalendarToday}
      */
     draw() {
-        const moment = Moment();
+        // Always use current date/time for the today label, since it’s
+        // independent from the calendar content.
+        const now = Moment();
 
         this.innerHTML =
-            `${moment.format('dddd')},<br><strong>${moment.format('Do')}</strong> ${moment.format('MMMM')}`;
+            `${now.format('dddd')},<br><strong>${now.format('Do')}</strong> ${now.format('MMMM')}`;
 
         return this;
     }

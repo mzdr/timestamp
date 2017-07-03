@@ -9,15 +9,15 @@ class CalendarNavigation extends BaseElement {
      * Draws the actual calendar navigation where you can jump between months
      * or years.
      *
-     * @param {Moment} currentDate The current date that is being displayed.
+     * @param {Moment} now The current date that is being displayed.
      * @return {CalendarNavigation}
      */
-    draw(currentDate) {
-        const selectedMonth = currentDate.month();
+    draw(now) {
+        const selectedMonth = now.month();
 
         // @see https://momentjs.com/docs/#/i18n/listing-months-weekdays/
         const months = Moment.months();
-        const years = [currentDate.year() - 1, currentDate.year() + 1];
+        const years = [now.year() - 1, now.year() + 1];
 
         [...this.shadowRoot.querySelectorAll('calendar-goto-month')].forEach(
             (gotoMonth, index) => {

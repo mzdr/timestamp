@@ -13,9 +13,12 @@ class CalendarView extends BaseElement {
         this.$navigation = this.shadowRoot.querySelector('calendar-navigation');
         this.$illustration = this.shadowRoot.querySelector('calendar-illustration');
 
-        // This Moment.js instance is used for all calcuations, when it’s being
-        // created it represents 12am of today
-        this.moment = Moment().startOf('date');
+        // This Moment.js instance is used for all calendar view related
+        // calcuations (displaying month, jumping between years and so on).
+        // When it’s being created it represents 12am of today…
+        //
+        // @see https://momentjs.com/docs/#/manipulating/start-of/
+        this.now = Moment().startOf('date');
 
         // Register all UI related event listeners
         CalendarEvent.on('goto.today', () => this.goToToday());
@@ -39,10 +42,10 @@ class CalendarView extends BaseElement {
      */
     update() {
         this.$today.draw();
-        this.$legend.draw(this.moment.format('MM'), this.moment.format('YYYY'));
-        this.$weeks.draw(this.moment);
-        this.$navigation.draw(this.moment);
-        this.$weekdays.draw(this.moment);
+        this.$legend.draw(this.now);
+        this.$weeks.draw(this.now);
+        this.$navigation.draw(this.now);
+        this.$weekdays.draw();
         this.$illustration.draw();
 
         // Set window size dynamically after repainting
@@ -63,8 +66,8 @@ class CalendarView extends BaseElement {
      * @return {CalendarView}
      */
     onKeyDown(e) {
-        const currentMonth = this.moment.month();
-        const currentYear = this.moment.year();
+        const currentMonth = this.now.month();
+        const currentYear = this.now.year();
 
         // @see https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key
         switch (e.key) {
@@ -103,7 +106,7 @@ class CalendarView extends BaseElement {
     goToToday() {
         const now = Moment();
 
-        this.moment.set({
+        this.now.set({
             year: now.year(),
             month: now.month(),
             day: now.day()
@@ -119,7 +122,7 @@ class CalendarView extends BaseElement {
      * @return {CalendarView}
      */
     goToMonth(month) {
-        this.moment.month(month);
+        this.now.month(month);
 
         return this.update();
     }
@@ -131,7 +134,7 @@ class CalendarView extends BaseElement {
      * @return {CalendarView}
      */
     goToYear(year) {
-        this.moment.year(year);
+        this.now.year(year);
 
         return this.update();
     }

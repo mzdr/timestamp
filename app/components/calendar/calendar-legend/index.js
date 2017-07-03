@@ -8,12 +8,14 @@ class CalendarLegend extends BaseElement {
     /**
      * Draws the currently selected month.
      *
-     * @param {number} selectedMonth Currently selected month.
-     * @param {number} selectedYear Currently selected year.
+     * @param {Moment} now The current date that is being displayed.
      * @return {CalendarLegend}
      */
-    draw(selectedMonth, selectedYear) {
-        this.textContent = `${selectedMonth} / ${selectedYear}`;
+    draw(now) {
+        const currentMonth = now.format('MM');
+        const currentYear = now.format('YYYY');
+
+        this.textContent = `${currentMonth} / ${currentYear}`;
 
         return this;
     }
