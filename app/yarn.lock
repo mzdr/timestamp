@@ -12,6 +12,10 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
+bindings@~1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.2.1.tgz#14ad6113812d2d37d72e67b4cacb4bb726505f11"
+
 decompress-response@^3.2.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/decompress-response/-/decompress-response-3.3.0.tgz#80a4dd323748384bfa248083622aedec982adff3"
@@ -108,6 +112,10 @@ moment@2.18.1:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
+nan@~2.3.3:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.3.5.tgz#822a0dc266290ce4cd3a12282ca3e7e364668a08"
+
 p-cancelable@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/p-cancelable/-/p-cancelable-0.2.0.tgz#3152f4f30be7606b60ebfe8bb93b3fdf69085e46"
@@ -119,6 +127,13 @@ p-timeout@^1.1.1:
 prepend-http@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-1.0.4.tgz#d4f4562b0ce3696e41ac52d0e002e57a635dc6dc"
+
+reset-date-cache@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/reset-date-cache/-/reset-date-cache-1.0.3.tgz#20ba0b5aeb42bc698f8eaf62ad8d108ff17b6c7c"
+  dependencies:
+    bindings "~1.2.1"
+    nan "~2.3.3"
 
 safe-buffer@^5.0.1:
   version "5.0.1"
