@@ -28,6 +28,9 @@ class CalendarView extends BaseElement {
 
         document.addEventListener('keydown', e => this.onKeyDown(e));
 
+        // When the system timezone was changed…
+        Electron.ipcRenderer.on('clock.timezone.changed', () => this.update());
+
         // Redraw calendar every minute to avoid displaying old/wrong states
         setInterval(() => this.update(), 1000 * 60);
 
