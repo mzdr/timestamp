@@ -1,10 +1,10 @@
 {
   "private": true,
   "scripts": {
-    "dist": "build",
+    "dist": "electron-builder",
     "lint": "eslint --ignore-pattern 'node_modules' app",
-    "pack": "build --dir",
-    "postinstall": "install-app-deps",
+    "pack": "electron-builder --dir",
+    "postinstall": "electron-builder install-app-deps",
     "predist": "npm run lint",
     "prepack": "npm run lint",
     "prestart": "npm run lint",
