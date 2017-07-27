@@ -14,6 +14,12 @@
 }
 
 :host([today]) {
-    background-image: radial-gradient(circle, var(--highlight-bg) 60%, transparent 62%);
+    background-image: radial-gradient(circle, var(--highlight-bg) 60%, transparent 64%);
     color: var(--highlight-fg);
+}
+
+@media (min-resolution: 2dppx) {
+    :host([today]) {
+        background-image: radial-gradient(circle, var(--highlight-bg) 60%, transparent 62%);
+    }
 }
