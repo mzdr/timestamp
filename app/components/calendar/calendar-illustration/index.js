@@ -20,6 +20,9 @@ class CalendarIllustration extends BaseElement {
         // illustration is supposed to represent the real world.
         const now = Moment();
 
+        // Make sure our “API” stays consistent on any system.
+        now.locale('en');
+
         this.dataset.time = now.format('ha');
         this.dataset.month = now.format('M');
 
