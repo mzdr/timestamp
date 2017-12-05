@@ -49,9 +49,67 @@ class App {
     registerListeners() {
         // Hook clock tick with tray label
         this.clock.onTick((clock) => {
-            this.tray.setLabel(clock.toString());
-        });
+            // TODO: Fix the font
+            // TODO: Cleanup comments
 
+            // NOTE: One thing that can be done is to make the canvas/text mode switchable
+            // NOTE: I need to investigate if document is accessible from webContents. In that case I can refactor to whole ugly executeJavaScript thing.
+
+            this.window.webContents.executeJavaScript(`
+            function createIcon () {
+
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d');
+
+              const text = '${clock.toString()}';
+
+              const scale = 3;
+
+              const margin = 10;
+              const cheight = 22;
+              const ssize = 11;
+
+              const backgroundcolor = 'rgba(0,0,0,0)'
+              const textcolor = 'rgba(50,50,50,1)'
+
+              const font = "BlinkMacSystemFont"
+
+              ctx.font=ssize*scale+"pt "+font;
+              ctx.textAlign = 'center';
+
+              canvas.width = ctx.measureText(text).width + margin*scale;
+              canvas.height = cheight*scale;
+
+              ctx.rect(0, 0, canvas.width, canvas.height);
+              ctx.fillStyle = backgroundcolor;
+              ctx.fill();
+
+              ctx.fillStyle = textcolor;
+              ctx.font=ssize*scale+"pt "+font;
+              ctx.fillText(text, (margin/2)*scale, (canvas.height/2)+ssize*scale/2);
+
+              return(canvas.toDataURL());
+            }
+
+            createIcon()
+
+            `, (result) => {
+              // console.log(result);
+
+                const icon = Electron.nativeImage.createFromDataURL(result).resize({ height: 22 });
+                this.tray.tray.setImage(icon);
+              // this.tray.setLabel(clock.toString());
+
+              // console.log(this.tray.tray.getBounds())
+            });
+            //
+            // //const pngData = nativeImage.createFromDataURL(canvas.toDataURL()).toPng();
+            // //const icon = Electron.nativeImage.createEmpty();
+            //
+            // const icon = Electron.nativeImage.createFromDataURL(test).toPng();
+            //
+            // this.tray.setImage(icon)
+        });
         // Show app when clicking on tray icon
         this.tray.onClick(() => {
             const bounds = this.tray.getBounds();
