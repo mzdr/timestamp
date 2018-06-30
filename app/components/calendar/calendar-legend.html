@@ -1,0 +1,67 @@
+<template>
+    <style>
+        :host {
+            align-items: center;
+            color: var(--silent-fg);
+            contain: content;
+            display: flex;
+            font-size: 13px;
+            font-weight: 300;
+            justify-content: flex-end;
+            margin: 14px 20px;
+            white-space: nowrap;
+            width: 100%;
+        }
+
+        :host::before,
+        :host::after {
+            content: "";
+            height: 1px;
+            width: 57.5%;
+        }
+
+        :host::before {
+            background-image: linear-gradient(to left, var(--silent-bg), transparent);
+            margin-right: 22px;
+        }
+
+        :host::after {
+            background-image: linear-gradient(to right, var(--silent-bg), transparent);
+            margin-left: 22px;
+        }
+    </style>
+
+    <slot></slot>
+</template>
+
+<script>
+    /* global document, customElements, BaseElement */
+
+    class CalendarLegend extends BaseElement {
+        constructor() {
+            super().fetchTemplate();
+        }
+
+        /**
+         * Draws the currently selected month.
+         *
+         * @param {Moment} now The current date that is being displayed.
+         * @return {CalendarLegend}
+         */
+        draw(now) {
+            const currentMonth = now.format('MM');
+            const currentYear = now.format('YYYY');
+
+            this.textContent = `${currentMonth} / ${currentYear}`;
+
+            return this;
+        }
+    }
+
+    // Remember document from import scope. Needed for accessing elements inside
+    // the imported html…
+    CalendarLegend.ownerDocument = document.currentScript.ownerDocument;
+
+    // @see https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/define
+    customElements.define('calendar-legend', CalendarLegend);
+</script>

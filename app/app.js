@@ -92,7 +92,9 @@ class App {
         });
 
         // @see https://electron.atom.io/docs/api/app/#event-before-quit
-        Electron.app.on('before-quit', () => (this.willQuit = true));
+        Electron.app.on('before-quit', () => {
+            this.willQuit = true;
+        });
 
         return this;
     }
@@ -165,7 +167,8 @@ class App {
             frame: false,
             resizable: false,
             alwaysOnTop: true,
-            show: false
+            show: false,
+            backgroundThrottling: false
         });
 
         win.on('blur', () => this.onBlur())

@@ -1,0 +1,290 @@
+<template id="input">
+    <style>
+        :host {
+            border: 1px solid var(--highlight-bg);
+            box-sizing: border-box;
+            contain: content;
+            display: block;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        ::-webkit-input-placeholder {
+            color: var(--silent-fg);
+        }
+
+        input {
+            all: unset;
+            color: currentColor;
+            cursor: text;
+            display: block;
+            height: 100%;
+            padding: 8px;
+            width: 100%;
+        }
+    </style>
+
+    <input type="text">
+</template>
+
+<template id="toggle">
+    <style>
+        :host {
+            contain: content;
+            display: inline-block;
+            height: 38px;
+            width: 76px;
+        }
+
+        input {
+            all: unset;
+            height: 100%;
+            left: 0;
+            opacity: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        input:not(:checked) + .switch-container .switch-track,
+        input:not(:checked) + .switch-container .switch-knob {
+            transform: translate3d(0, 0, 0);
+        }
+
+        .switch-container {
+            --padding: 6px;
+
+            box-sizing: border-box;
+            display: block;
+            height: 100%;
+            min-height: 38px;
+            min-width: 76px;
+            padding: calc(var(--padding) / 2) var(--padding);
+            position: relative;
+        }
+
+        .switch-container > .clip {
+            border-radius: 1.25em;
+            display: flex;
+            height: 100%;
+            overflow: hidden;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .switch-track,
+        .switch-knob {
+            align-items: center;
+            display: flex;
+            min-width: 150%;
+            transform: translate3d(calc(-100% * 1 / 3), 0, 0);
+            transition-duration: 333ms;
+            transition-property: transform;
+            transition-timing-function: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+            will-change: transform;
+        }
+
+        .switch-track {
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.25), transparent),
+            linear-gradient(to right, var(--brand-fail) 50%, var(--highlight-bg) 50%);
+            box-shadow: inset 0 2px 3px -3px rgba(0, 0, 0, 1);
+            justify-content: space-between;
+        }
+
+        .switch-track > .on,
+        .switch-track > .off {
+            height: 40%;
+        }
+
+        .switch-track > .on {
+            margin-right: 10%;
+            width: calc(244 / 184 * (40% * 1 / 3));
+        }
+
+        .switch-track > .off {
+            margin-left: 12.5%;
+            width: calc(185 / 185 * (40% * 1 / 3));
+        }
+
+        .switch-knob {
+            bottom: 100%;
+            height: 100%;
+            justify-content: center;
+            position: relative;
+        }
+
+        .switch-knob::before {
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.25);
+            height: 100%;
+            padding: 1px;
+            content: "";
+            width: calc(100% / 3);
+        }
+
+    </style>
+
+    <input type="checkbox">
+    <span class="switch-container">
+        <span class="clip">
+            <span class="switch-track">
+                <svg class="off" width="185" height="185" viewBox="0 0 185 185" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#fff" d="M92.21 113.424l-60.103 60.104L21.5 184.135.287 162.92l10.606-10.605L70.997 92.21 10.893 32.108.287 21.5 21.5.287l10.607 10.606L92.21 70.997l60.105-60.104L162.92.287 184.136 21.5l-10.607 10.607-60.104 60.104 60.104 60.105 10.607 10.606-21.214 21.215-10.605-10.607-60.104-60.104" fill-rule="evenodd"/>
+                </svg>
+                <svg class="on" width="244" height="184" viewBox="0 0 244 184" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#fff" d="M60.712 161.924L10.607 111.82 0 101.213 21.213 80 31.82 90.607l50.105 50.104L212.03 10.608 222.637 0l21.213 21.213-10.607 10.607-130.105 130.104-21.213 21.213" fill-rule="evenodd"/>
+                </svg>
+            </span>
+        </span>
+        <span class="switch-knob"></span>
+    </span>
+</template>
+
+<script>
+    /* global document, customElements, BaseElement, PreferencesEvent */
+
+    class PreferencesItemData extends BaseElement {
+        constructor() {
+            super();
+
+            this.constructor
+                .getDataFromMainProcess('preferences.get', this.key)
+                .then((value) => {
+                    this.value = value;
+                });
+        }
+
+        /**
+         * Called when the element is inserted into a document, including into a
+         * shadow tree.
+         *
+         * @return {PreferencesItemData}
+         * @see https://developer.mozilla.org/docs/Web/Web_Components/Custom_Elements
+         */
+        connectedCallback() {
+            if (this.type === 'input') {
+                this.createInput();
+            } else if (this.type === 'toggle') {
+                this.createToggle();
+            }
+
+            return this;
+        }
+
+        /**
+         * Imports the relevant template according to the given type.
+         *
+         * @param {string} type Type of the preferences item data.
+         * @return {PreferencesItemData}
+         */
+        importTemplate(type) {
+            const id = `#${type}`;
+            const $template = this.constructor.ownerDocument.querySelector(id);
+
+            if ($template === null) {
+                return this;
+            }
+
+            const $clone = $template.content.cloneNode(true);
+
+            this.attachShadow({ mode: 'open' });
+            this.shadowRoot.appendChild($clone);
+
+            return this;
+        }
+
+        /**
+         * Preferences item is of type input. So we are going to create everything
+         * necessary to have it behave like an input field.
+         *
+         * @return {PreferencesItemData}
+         */
+        createInput() {
+            const placeholder = this.getAttribute('placeholder');
+
+            this.importTemplate('input');
+
+            this.$data = this.shadowRoot.querySelector('input');
+            this.$data.addEventListener('input', () => this.onChange());
+
+            if (placeholder) {
+                this.$data.setAttribute('placeholder', placeholder);
+            }
+
+            // Dynamically adding getter/setter for the value of this type
+            Object.defineProperty(this, 'value', {
+                get: () => this.$data.value,
+                set: (value) => {
+                    this.$data.value = value;
+                }
+            });
+
+            return this;
+        }
+
+        /**
+         * Preferences item is of type toggle. So we are going to make it behave
+         * like a togglable element.
+         *
+         * @return {PreferencesItemData}
+         */
+        createToggle() {
+            this.importTemplate('toggle');
+
+            this.$data = this.shadowRoot.querySelector('input');
+            this.$data.addEventListener('change', () => this.onChange());
+
+            // Dynamically adding getter/setter for the value of this type
+            Object.defineProperty(this, 'value', {
+                get: () => this.$data.checked,
+                set: (value) => {
+                    this.$data.checked = value;
+                }
+            });
+
+            return this;
+        }
+
+        /**
+         * The preferences item data has been changed.
+         *
+         * @return {PreferencesItemData}
+         */
+        onChange() {
+            this.dispatchEvent(new PreferencesEvent('change', {
+                detail: {
+                    key: this.key,
+                    value: this.value
+                }
+            }));
+
+            return this;
+        }
+
+        /**
+         * Returns the key of this preferences item data.
+         *
+         * @return {string}
+         */
+        get key() {
+            return this.getAttribute('key');
+        }
+
+        /**
+         * Returns the type of this preferences item data.
+         *
+         * @return {string}
+         */
+        get type() {
+            return this.getAttribute('type');
+        }
+    }
+
+    // Remember document from import scope. Needed for accessing elements inside
+    // the imported html…
+    PreferencesItemData.ownerDocument = document.currentScript.ownerDocument;
+
+    // @see https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/define
+    customElements.define('preferences-item-data', PreferencesItemData);
+</script>

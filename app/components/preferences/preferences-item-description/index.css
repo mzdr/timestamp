@@ -1,7 +1,0 @@
-:host {
-    color: var(--shy-fg);
-    contain: content;
-    display: block;
-    font-size: 13px;
-    max-width: 68ch; /* ~ 68chars */
-}

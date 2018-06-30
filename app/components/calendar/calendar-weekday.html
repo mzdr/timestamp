@@ -1,0 +1,33 @@
+<template>
+    <style>
+        :host {
+            align-items: center;
+            contain: content;
+            display: flex;
+            flex: 1;
+            font-size: 13px;
+            font-weight: 500;
+            height: 24px;
+            justify-content: center;
+        }
+    </style>
+
+    <slot></slot>
+</template>
+
+<script>
+    /* global document, customElements, BaseElement */
+
+    class CalendarWeekday extends BaseElement {
+        constructor() {
+            super().fetchTemplate();
+        }
+    }
+
+    // Remember document from import scope. Needed for accessing elements inside
+    // the imported html…
+    CalendarWeekday.ownerDocument = document.currentScript.ownerDocument;
+
+    // @see https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/define
+    customElements.define('calendar-weekday', CalendarWeekday);
+</script>

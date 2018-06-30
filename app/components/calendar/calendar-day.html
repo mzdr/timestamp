@@ -1,0 +1,70 @@
+<template>
+    <style>
+        :host {
+            align-items: center;
+            contain: content;
+            display: flex;
+            flex: 1;
+            font-size: 13px;
+            font-weight: 300;
+            height: 32px;
+            justify-content: center;
+        }
+
+        :host([muted]) {
+            color: var(--silent-fg);
+        }
+
+        :host([today]) {
+            background-image: radial-gradient(circle, var(--highlight-bg) 60%, transparent 64%);
+            color: var(--highlight-fg);
+        }
+
+        @media (min-resolution: 2dppx) {
+            :host([today]) {
+                background-image: radial-gradient(circle, var(--highlight-bg) 60%, transparent 62%);
+            }
+        }
+    </style>
+
+    <slot></slot>
+</template>
+
+<script>
+    /* global document, customElements, BaseElement, CalendarEvent */
+
+    class CalendarDay extends BaseElement {
+        constructor() {
+            super().fetchTemplate();
+
+            this.addEventListener('click', () => this.onClick());
+        }
+
+        /**
+         * The day element has been clicked.
+         *
+         * @return {CalendarDay}
+         */
+        onClick() {
+            const detail = {};
+            const diff = this.getAttribute('diff');
+
+            if (diff) {
+                detail.diff = parseInt(diff, 10) || 0;
+            }
+
+            this.dispatchEvent(
+                new CalendarEvent('day.clicked', { detail })
+            );
+
+            return this;
+        }
+    }
+
+    // Remember document from import scope. Needed for accessing elements inside
+    // the imported html…
+    CalendarDay.ownerDocument = document.currentScript.ownerDocument;
+
+    // @see https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/define
+    customElements.define('calendar-day', CalendarDay);
+</script>

@@ -1,0 +1,86 @@
+<template>
+    <link rel="stylesheet" href="./stylesheets/buttons.css">
+    <style>
+        :host {
+            --logo-size: 140px;
+
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        figure {
+            background-image: url("./images/logos/timestamp.svg");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            height: var(--logo-size);
+            margin: 0;
+            width: var(--logo-size);
+        }
+
+        section {
+            width: calc(100% - var(--logo-size) - 14px);
+        }
+
+        nav {
+            display: flex;
+            color: var(--highlight-bg);
+        }
+
+        nav a {
+            flex-grow: 1;
+            color: currentColor;
+        }
+
+        nav a + a {
+            margin-left: 8px;
+        }
+
+        footer {
+            border-top: 1px solid var(--silent-bg);
+            color: var(--silent-fg);
+            font-size: 13px;
+            margin-top: 26px;
+            padding-top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+
+    <figure></figure>
+    <section>
+        <about-name>Timestamp</about-name>
+        <about-version>1.0.0</about-version>
+        <about-update status="unknown" class="button-primary"></about-update>
+
+        <nav>
+            <a href="https://mzdr.github.io/timestamp" class="button-primary">
+                <translate-string>visitOfficialWebsite</translate-string>
+            </a>
+            <a href="https://github.com/mzdr/timestamp/issues" class="button-primary">
+                <translate-string>reportAnIssue</translate-string>
+            </a>
+        </nav>
+    </section>
+    <footer>&copy; 2017 Sebastian Prein. <translate-string>releasedUnderMIT</translate-string></footer>
+</template>
+
+<script>
+    /* global document, customElements, BaseElement */
+
+    class AboutView extends BaseElement {
+        constructor() {
+            super().fetchTemplate();
+        }
+    }
+
+    // Remember document from import scope. Needed for accessing elements inside
+    // the imported html…
+    AboutView.ownerDocument = document.currentScript.ownerDocument;
+
+    // @see https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/define
+    customElements.define('about-view', AboutView);
+</script>

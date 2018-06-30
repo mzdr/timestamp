@@ -1,0 +1,38 @@
+<template>
+    <style>
+        :host {
+            color: var(--silent-fg);
+            contain: content;
+            display: flex;
+            font-size: 12px;
+            line-height: 12px;
+            margin-top: 2px;
+            text-indent: 2px;
+        }
+
+        :host::before {
+            content: "v";
+        }
+    </style>
+
+    <slot></slot>
+</template>
+
+<script>
+    /* global document, Electron, customElements, BaseElement */
+
+    class AboutVersion extends BaseElement {
+        constructor() {
+            super().fetchTemplate();
+
+            this.textContent = Electron.remote.app.getVersion();
+        }
+    }
+
+    // Remember document from import scope. Needed for accessing elements inside
+    // the imported html…
+    AboutVersion.ownerDocument = document.currentScript.ownerDocument;
+
+    // @see https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/define
+    customElements.define('about-version', AboutVersion);
+</script>

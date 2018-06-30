@@ -43,7 +43,13 @@ class Tray {
      * @param {string} label
      */
     setLabel(label) {
+        if (this.tray.isDestroyed()) {
+            return this;
+        }
+
         this.tray.setTitle(this.label = label);
+
+        return this;
     }
 
     /**

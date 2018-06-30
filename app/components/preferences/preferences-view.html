@@ -1,0 +1,213 @@
+<template>
+    <link rel="stylesheet" href="./stylesheets/icons.css">
+
+    <style>
+        :host {
+            display: block;
+            font-size: 14px;
+            line-height: 19px;
+            width: 520px;
+        }
+
+        preferences-item {
+            position: relative;
+        }
+
+        preferences-item + preferences-item {
+            margin-top: 28px;
+        }
+
+        preferences-item-data[type="toggle"] ~ preferences-item-title,
+        preferences-item-data[type="toggle"] ~ preferences-item-description {
+            width: 80%;
+        }
+
+        preferences-item-data[type="toggle"] {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+    </style>
+
+    <tab-bar>
+        <tab-bar-item tab="general" active>
+            <i class="icon-general icon"></i>
+            <translate-string>general</translate-string>
+        </tab-bar-item>
+        <tab-bar-item tab="clock">
+            <i class="icon-clock icon"></i>
+            <translate-string>clock</translate-string>
+        </tab-bar-item>
+        <tab-bar-item tab="calendar">
+            <i class="icon-calendar icon"></i>
+            <translate-string>calendar</translate-string>
+        </tab-bar-item>
+        <tab-bar-item tab="about">
+            <i class="icon-about icon"></i>
+            <translate-string>about</translate-string>
+        </tab-bar-item>
+        <tab-bar-item tab="quit">
+            <i class="icon-quit icon"></i>
+            <translate-string>quit</translate-string>
+        </tab-bar-item>
+    </tab-bar>
+
+    <tab-container>
+
+        <tab-content tab="general" active>
+            <preferences-item>
+                <preferences-item-data key="startAtLogin" type="toggle"></preferences-item-data>
+                <preferences-item-title>
+                    <translate-string>startAtLogin</translate-string>
+                </preferences-item-title>
+                <preferences-item-description>
+                    <translate-string>startAtLoginDescription</translate-string>
+                </preferences-item-description>
+            </preferences-item>
+        </tab-content>
+
+        <tab-content tab="clock">
+            <preferences-item>
+                <preferences-item-title>
+                    <translate-string>clockFormat</translate-string>
+                </preferences-item-title>
+                <preferences-item-description>
+                    <translate-string>clockFormatDescription</translate-string>
+                </preferences-item-description>
+                <preferences-item-data
+                    key="clockFormat"
+                    type="input"
+                    placeholder="w/Q  ddd, DD.MM.YYYY  HH:mm"></preferences-item-data>
+            </preferences-item>
+        </tab-content>
+
+        <tab-content tab="calendar">
+
+            <preferences-item>
+                <preferences-item-data type="toggle" key="showWeekOfYear"></preferences-item-data>
+                <preferences-item-title>
+                    <translate-string>showWeekOfYear</translate-string>
+                </preferences-item-title>
+                <preferences-item-description>
+                    <translate-string>showWeekOfYearDescription</translate-string>
+                </preferences-item-description>
+            </preferences-item>
+
+            <preferences-item>
+                <preferences-item-data type="toggle" key="clickingDateOpensCalendar"></preferences-item-data>
+                <preferences-item-title>
+                    <translate-string>clickingDateOpensCalendar</translate-string>
+                </preferences-item-title>
+                <preferences-item-description>
+                    <translate-string>clickingDateOpensCalendarDescription</translate-string>
+                </preferences-item-description>
+            </preferences-item>
+        </tab-content>
+
+        <tab-content tab="about">
+            <about-view></about-view>
+        </tab-content>
+
+    </tab-container>
+</template>
+
+<script>
+    /* global document, customElements, BaseElement, PreferencesEvent, TabEvent, Electron, requestAnimationFrame */
+
+    class PreferencesView extends BaseElement {
+        constructor() {
+            super().fetchTemplate();
+
+            // Register event listener for changes of all preferences items
+            PreferencesEvent.on('change', e => this.onChange(e));
+
+            // Register event listener for tab switches
+            TabEvent.on('switch', e => this.onSwitch(e));
+
+            // Register event listener for clicks within the preferences view
+            this.shadowRoot.addEventListener('click', e => this.onClick(e));
+
+            // When all (custom) elements are defined, update the view
+            this.whenElementsAreDefined(() => this.update());
+        }
+
+        /**
+         * Updates the preferences window by gathering the current content size and
+         * showing the window if it’s not visible.
+         *
+         * @return {PreferencesView}
+         */
+        update() {
+            // Set window size dynamically after repainting
+            requestAnimationFrame(() => {
+                Electron.remote.getCurrentWindow().setContentSize(
+                    document.body.offsetWidth,
+                    document.body.offsetHeight
+                );
+            });
+
+            return this;
+        }
+
+        /**
+         * A preferences item has been changed. We are going to send the new
+         * preferences item value to the main process where it's going to be
+         * further processed.
+         *
+         * @param {string} key Preferences item key.
+         * @param {string} value Preferences item value.
+         * @return {PreferencesView}
+         */
+        onChange({ detail: { key, value } }) {
+            Electron.ipcRenderer.send('preferences.set', key, value);
+
+            return this;
+        }
+
+        /**
+         * When a tab switched occured, make sure the preferences window is up to
+         * date regarding it’s size. Also specific clicked tabs cause specific
+         * actions.
+         *
+         * @param {TabEvent} e Original emitted tab event.
+         * @return {PreferencesView}
+         */
+        onSwitch({ detail: { tab } }) {
+            if (tab === 'quit') {
+                Electron.remote.app.quit();
+
+                return this;
+            }
+
+            return this.update();
+        }
+
+        /**
+         * A click occured within the preferences view.
+         *
+         * @param {Event} e Original emitted event.
+         * @return {PreferencesView}
+         */
+        onClick(e) {
+            const target = e.target;
+
+            // Make sure links will open externally
+            if (target && target.closest('a[href^="http"]')) {
+                Electron.shell.openExternal(target.href);
+
+                e.preventDefault();
+            }
+
+            return this;
+        }
+    }
+
+    // Remember document from import scope. Needed for accessing elements inside
+    // the imported html…
+    PreferencesView.ownerDocument = document.currentScript.ownerDocument;
+
+    // @see https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/define
+    customElements.define('preferences-view', PreferencesView);
+</script>

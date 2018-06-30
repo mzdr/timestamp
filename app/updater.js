@@ -91,12 +91,18 @@ class Updater {
                 .then(response => this.constructor.getJsonFromResponse(response))
                 .then(release => this.isNewerThanCurrentVersion(release))
                 .then(release => this.constructor.runAutoUpdater(release))
-                .then(status => resolve(this.lastResponse = status))
+                .then((status) => {
+                    this.lastResponse = status;
+
+                    return resolve(this.lastResponse);
+                })
 
                 // Resolve all errors with a default response code of 1
-                .catch(({ message }) =>
-                    resolve(this.lastResponse = { code: 1, message })
-                );
+                .catch(({ message }) => {
+                    this.lastResponse = { code: 1, message };
+
+                    return resolve(this.lastResponse);
+                });
         });
     }
 

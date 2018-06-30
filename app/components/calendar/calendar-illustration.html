@@ -1,0 +1,52 @@
+<template>
+    <style>
+        :host {
+            contain: content;
+            display: block;
+            flex: 1;
+        }
+    </style>
+
+    <slot></slot>
+</template>
+
+<script>
+    /* global document, customElements, BaseElement, Moment */
+
+    class CalendarIllustration extends BaseElement {
+        constructor() {
+            super().fetchTemplate();
+        }
+
+        /**
+         * Draws the illustration.
+         *
+         * @return {CalendarIllustration}
+         */
+        draw() {
+            // Always use current current date/time for drawing since the
+            // illustration is supposed to represent the real world.
+            const now = Moment();
+
+            // Make sure our “API” stays consistent on any system.
+            now.locale('en');
+
+            const $fallback = this.shadowRoot.querySelector('slot').assignedNodes({ flatten: true })[0];
+            const $slotted = this.firstElementChild;
+            const $illustration = $slotted || $fallback;
+
+            if ($illustration) {
+                $illustration.now = now;
+            }
+
+            return this;
+        }
+    }
+
+    // Remember document from import scope. Needed for accessing elements inside
+    // the imported html…
+    CalendarIllustration.ownerDocument = document.currentScript.ownerDocument;
+
+    // @see https://developer.mozilla.org/docs/Web/API/CustomElementRegistry/define
+    customElements.define('calendar-illustration', CalendarIllustration);
+</script>
