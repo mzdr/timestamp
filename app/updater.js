@@ -127,7 +127,7 @@ class Updater {
         return new Promise((success, fail) => {
             Electron.autoUpdater.setFeedURL(url);
             Electron.autoUpdater.checkForUpdates();
-            Electron.autoUpdater.on('error', ({ message }) => fail({ message }));
+            Electron.autoUpdater.on('error', ({ message }) => fail({ message })); // eslint-disable-line
             Electron.autoUpdater.on('update-downloaded', () => success({
                 code: -1,
                 message: 'Update downloaded.',

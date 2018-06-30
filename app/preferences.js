@@ -24,8 +24,9 @@ class Preferences {
         this.loadFromDisk();
 
         // Return preference values to renderer
-        Electron.ipcMain.on('preferences.get', (e, key, value) =>
-            e.sender.send('preferences.get', key, this.get(key, value))
+        Electron.ipcMain.on(
+            'preferences.get',
+            (e, key, value) => e.sender.send('preferences.get', key, this.get(key, value))
         );
 
         // Save new preference values from renderer
@@ -54,8 +55,7 @@ class Preferences {
             titleBarStyle: 'hidden-inset'
         });
 
-        win.on('close', e => this.onClose(e))
-           .loadURL(`file://${__dirname}/preferences.html`);
+        win.on('close', e => this.onClose(e)).loadURL(`file://${__dirname}/preferences.html`);
 
         return win;
     }

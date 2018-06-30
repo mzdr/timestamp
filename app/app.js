@@ -171,8 +171,7 @@ class App {
             backgroundThrottling: false
         });
 
-        win.on('blur', () => this.onBlur())
-           .loadURL(`file://${__dirname}/app.html`);
+        win.on('blur', () => this.onBlur()).loadURL(`file://${__dirname}/app.html`);
 
         return win;
     }
