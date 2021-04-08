@@ -4,18 +4,22 @@
   "description": "A better macOS menu bar clock with a customizable date/time display and a calendar.",
   "version": "1.1.0",
   "author": "Sebastian Prein <hi@sebastianprein.com>",
-  "copyright": "© 2017 Sebastian Prein",
+  "copyright": "© 2021 Sebastian Prein",
   "homepage": "https://github.com/mzdr/timestamp",
   "license": "MIT",
+  "scripts": {
+    "postinstall": "electron-rebuild"
+  },
   "dependencies": {
+    "@browserkids/dom": "^0.3.0",
     "applescript": "^1.0.0",
+    "dayjs": "^1.8.33",
     "dedent": "^0.7.0",
-    "got": "^8.3.1",
-    "js-yaml": "^3.12.0",
-    "marked": "^0.4.0",
-    "moment": "^2.22.2",
-    "reset-date-cache": "^1.0.4",
-    "semver": "^5.5.0"
+    "electron": "^9.2.1",
+    "got": "^11.5.2",
+    "js-yaml": "^3.14.0",
+    "marked": "^1.1.1",
+    "semver": "^7.3.2"
   },
   "keywords": [
     "calendar",
@@ -25,7 +29,6 @@
     "electron",
     "macos",
     "menubar",
-    "momentjs",
     "time",
     "timestamp"
   ]

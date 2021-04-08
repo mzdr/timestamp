@@ -2,23 +2,22 @@
   "private": true,
   "scripts": {
     "dist": "electron-builder",
-    "lint": "eslint --ignore-pattern 'node_modules' app",
+    "lint": "eslint ./app",
+    "lint:fix": "npm run lint -- --fix",
     "pack": "electron-builder --dir",
     "postinstall": "electron-builder install-app-deps",
     "predist": "npm run lint",
     "prepack": "npm run lint",
-    "prestart": "npm run lint",
     "start": "DEBUG=1 electron ./app --enable-logging"
   },
   "dependencies": {},
   "devDependencies": {
-    "electron": "^2.0.3",
-    "electron-builder": "^20.18.0",
-    "eslint": "^5.0.1",
-    "eslint-config-airbnb": "^17.0.0",
-    "eslint-plugin-import": "^2.13.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.10.0"
+    "electron": "^12.0.2",
+    "electron-builder": "^22.10.5",
+    "electron-rebuild": "^2.3.5",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
   },
   "build": {
     "appId": "com.mzdr.timestamp",
