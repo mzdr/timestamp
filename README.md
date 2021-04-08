@@ -43,7 +43,7 @@ Simply run `brew install --cask timestamp` in your terminal.
 
 ## Thanks
 
-**Timestamp** © 2019, Sebastian Prein. Released under the [MIT License].
+**Timestamp** © 2021, Sebastian Prein. Released under the [MIT License].
 
 [Day-O]: http://shauninman.com/archive/2011/10/20/day_o_mac_menu_bar_clock
 [Electron]: http://electron.atom.io/
