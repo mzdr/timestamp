@@ -12,8 +12,7 @@
   },
   "dependencies": {
     "@browserkids/dom": "^0.3.0",
-    "applescript": "^1.0.0",
-    "dayjs": "^1.8.33",
+    "date-fns": "^2.20.1",
     "dedent": "^0.7.0",
     "electron": "^9.2.1",
     "got": "^11.5.2",
