@@ -1,19 +1,14 @@
-const { app } = require('electron');
 const { format } = require('date-fns');
-const locales = require('date-fns/locale');
 
 class Clock {
   constructor(options = {}) {
-    const { onTick } = options;
-    const [locale, extension] = app.getLocale().split('-');
+    const { onTick, locale } = options;
 
-    this.locale = locales[`${locale}${extension}`] || locales[locale] || locales.en;
+    this.locale = locale.getObject();
 
     if (typeof onTick === 'function') {
       setInterval(() => onTick(this.toString()), 1000);
     }
-
-    return this;
   }
 
   getFormat() {
@@ -25,7 +20,7 @@ class Clock {
       throw new Error(`Clock.format is supposed to be a string, ${typeof value} given.`);
     }
 
-    // @see https://date-fns.org/v2.20.1/docs/format
+    // @see https://date-fns.org/docs/format
     this.format = value;
 
     return this;

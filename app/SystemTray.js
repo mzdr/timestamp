@@ -2,12 +2,14 @@ const { Tray, nativeImage } = require('electron');
 
 class SystemTray {
   constructor(options = {}) {
+    const { onClick } = options;
+
     this.tray = new Tray(
       nativeImage.createEmpty(),
     );
 
-    if (typeof options.onClick === 'function') {
-      this.tray.on('click', options.onClick);
+    if (typeof onClick === 'function') {
+      this.tray.on('click', onClick);
     }
   }
 
@@ -20,11 +22,13 @@ class SystemTray {
   }
 
   setLabel(label) {
-    if (this.tray.isDestroyed()) {
+    const { tray } = this;
+
+    if (tray.isDestroyed()) {
       return this;
     }
 
-    this.tray.setTitle(this.label = label, {
+    tray.setTitle(this.label = label, {
       fontType: 'monospacedDigit',
     });
 
