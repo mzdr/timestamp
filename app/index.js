@@ -25,20 +25,22 @@ const SystemTray = require('./SystemTray');
         locale: this.locale,
       });
 
-      this.calendar = new CalendarView({
+      this.calendarView = new CalendarView({
         locale: this.locale,
       });
     }
 
     onTrayClicked() {
-      const { calendar, tray } = this;
+      const { calendarView, tray } = this;
       const bounds = tray.getBounds();
       const currentMousePosition = screen.getCursorScreenPoint();
       const currentDisplay = screen.getDisplayNearestPoint(currentMousePosition);
       const yOffset = 6;
 
-      calendar.setPosition(bounds.x + (bounds.width / 2), currentDisplay.workArea.y + yOffset);
-      calendar.toggleVisibility();
+      calendarView
+        .window
+        .setPosition(bounds.x + (bounds.width / 2), currentDisplay.workArea.y + yOffset)
+        .toggleVisibility();
     }
   }();
 })();

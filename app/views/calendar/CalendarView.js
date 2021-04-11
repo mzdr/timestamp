@@ -14,7 +14,6 @@ class CalendarView {
     ipcMain.on('resizeWindow', this.onResizeWindow.bind(this));
 
     this.window = new Window({
-      useContentSize: true,
       sourceFile: getAbsolutePath('views', 'calendar', 'calendar.html'),
       webPreferences: {
         preload: getAbsolutePath('views', 'calendar', 'preload.js'),
@@ -105,22 +104,6 @@ class CalendarView {
 
   onResizeWindow(event, { width, height }) {
     this.window.setSize(width, height);
-  }
-
-  setPosition(x, y) {
-    this.window.setPosition(x, y);
-
-    return this;
-  }
-
-  toggleVisibility() {
-    if (this.window.isVisible()) {
-      this.window.hide();
-    } else {
-      this.window.show();
-    }
-
-    return this;
   }
 }
 

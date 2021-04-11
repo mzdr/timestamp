@@ -3,6 +3,7 @@
   grid-row-gap: 18px;
   grid-template-areas: "illustration" "legend" "month" "navigation";
   padding-bottom: 24px;
+  position: relative;
   user-select: none;
   width: 340px;
 
@@ -20,3 +21,9 @@ calendar-today { grid-area: illustration; }
 calendar-legend { grid-area: legend; }
 calendar-month { grid-area: month; }
 calendar-navigation { grid-area: navigation; }
+
+calendar-show-preferences {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+}
