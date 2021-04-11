@@ -1,4 +1,4 @@
-const { ipcMain } = require('electron');
+const { ipcMain, app } = require('electron');
 const datefns = require('date-fns');
 
 const { getAbsolutePath } = require('../../utils');
@@ -12,6 +12,7 @@ class CalendarView {
     ipcMain.handle('getCalendar', this.getCalendar.bind(this));
 
     ipcMain.on('resizeWindow', this.onResizeWindow.bind(this));
+    ipcMain.on('quit', () => app.exit());
 
     this.window = new Window({
       sourceFile: getAbsolutePath('views', 'calendar', 'calendar.html'),

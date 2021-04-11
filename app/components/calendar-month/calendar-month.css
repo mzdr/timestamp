@@ -2,12 +2,21 @@
   display: block;
 }
 
+:host(.show-weeks) > .calendar-month {
+  grid-template-areas: ". weekdays" "weeks days";
+  grid-template-columns: 32px 1fr;
+}
+
+:host(:not(.show-weeks)) > .calendar-month > .weeks {
+  display: none;
+}
+
 .calendar-month {
   display: grid;
   font-size: 13px;
   grid-row-gap: 10px;
-  grid-template-areas: ". weekdays" "weeks days";
-  grid-template-columns: 32px 1fr;
+  grid-template-areas: "weekdays" "days";
+  grid-template-columns: 1fr;
 }
 
 .calendar-month > .weekdays {

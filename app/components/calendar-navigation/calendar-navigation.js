@@ -55,7 +55,9 @@ export default class CalendarNavigation extends HTMLElement {
     this.$refs = findReferences(this.shadowRoot);
   }
 
-  onKeyDown({ key }) {
+  onKeyDown({ key, metaKey }) {
+    const { calendar } = window;
+
     if (key === 'ArrowRight') {
       this.goNextMonth();
     } else if (key === 'ArrowLeft') {
@@ -64,8 +66,14 @@ export default class CalendarNavigation extends HTMLElement {
       this.goNextYear();
     } else if (key === 'ArrowDown') {
       this.goPreviousYear();
-    } else if (key === 'Escape') {
+    } else if (key === ' ') {
       this.goToday();
+    } else if (key === 'w') {
+      dispatch(this, 'toggle', { weeks: true });
+    } else if (key === ',' && metaKey) {
+      calendar.showPreferences();
+    } else if (key === 'q' && metaKey) {
+      calendar.quit();
     }
   }
 
