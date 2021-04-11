@@ -5,6 +5,8 @@
   padding-bottom: 24px;
   user-select: none;
   width: 340px;
+
+  -webkit-app-region: drag;
 }
 
 calendar-legend,
