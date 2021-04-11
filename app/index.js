@@ -1,4 +1,6 @@
-const { app, screen } = require('electron');
+const {
+  app, screen, ipcMain, BrowserWindow,
+} = require('electron');
 
 const CalendarView = require('./views/calendar/CalendarView');
 const Clock = require('./Clock');
@@ -28,6 +30,20 @@ const SystemTray = require('./SystemTray');
       this.calendarView = new CalendarView({
         locale: this.locale,
       });
+
+      ipcMain.on('quit', () => app.exit());
+      ipcMain.on('resizeWindow', this.onResizeWindow.bind(this));
+      ipcMain.on('showPreferences', this.onShowPreferences.bind(this));
+    }
+
+    onResizeWindow({ sender }, { width, height }) {
+      const { calendarView } = this;
+      const window = BrowserWindow.fromWebContents(sender);
+
+      [calendarView]
+        .find((view) => view.window.isSame(window))
+        .window
+        .setSize(width, height);
     }
 
     onTrayClicked() {

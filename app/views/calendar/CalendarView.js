@@ -1,4 +1,4 @@
-const { ipcMain, app } = require('electron');
+const { ipcMain } = require('electron');
 const datefns = require('date-fns');
 
 const { getAbsolutePath } = require('../../utils');
@@ -10,9 +10,6 @@ class CalendarView {
 
     ipcMain.handle('getDate', this.getDate.bind(this));
     ipcMain.handle('getCalendar', this.getCalendar.bind(this));
-
-    ipcMain.on('resizeWindow', this.onResizeWindow.bind(this));
-    ipcMain.on('quit', () => app.exit());
 
     this.window = new Window({
       sourceFile: getAbsolutePath('views', 'calendar', 'calendar.html'),
@@ -101,10 +98,6 @@ class CalendarView {
       weeks,
       days,
     };
-  }
-
-  onResizeWindow(event, { width, height }) {
-    this.window.setSize(width, height);
   }
 }
 

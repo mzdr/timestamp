@@ -30,6 +30,10 @@ class Window {
       .loadFile(sourceFile);
   }
 
+  isSame(window) {
+    return window === this.window;
+  }
+
   show() {
     this.window.show();
 
