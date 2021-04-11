@@ -1,0 +1,20 @@
+:host {
+  display: grid;
+  grid-row-gap: 18px;
+  grid-template-areas: "illustration" "legend" "month" "navigation";
+  padding-bottom: 24px;
+  user-select: none;
+  width: 340px;
+}
+
+calendar-legend,
+calendar-month,
+calendar-navigation {
+  padding: 0 24px;
+}
+
+calendar-illustration { grid-area: illustration; }
+calendar-today { grid-area: illustration; }
+calendar-legend { grid-area: legend; }
+calendar-month { grid-area: month; }
+calendar-navigation { grid-area: navigation; }

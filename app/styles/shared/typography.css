@@ -1,0 +1,9 @@
+:root {
+  font-family: var(--type-copy);
+  line-height: var(--type-rhythm);
+}
+
+button,
+input {
+  font: inherit;
+}

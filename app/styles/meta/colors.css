@@ -1,0 +1,24 @@
+:root {
+  --palette-blue: #2195f2;
+  --palette-black: #0d0d0d;
+  --palette-gray-20: #333;
+  --palette-gray-40: #666;
+  --palette-gray-60: #999;
+  --palette-gray-80: #ccc;
+  --palette-white: #fff;
+
+  --color-brand: var(--palette-blue);
+  --color-background-primary: var(--palette-white);
+  --color-line: var(--palette-gray-80);
+  --color-text-primary: var(--palette-black);
+  --color-text-shy: var(--palette-gray-60);
+}
+
+/*@media (prefers-color-scheme: dark) {*/
+/*  :root {*/
+/*    --color-background-primary: var(--palette-black);*/
+/*    --color-text-primary: var(--palette-white);*/
+/*    --color-text-shy: var(--palette-gray-40);*/
+/*    --color-line: var(--palette-gray-20);*/
+/*  }*/
+/*}*/

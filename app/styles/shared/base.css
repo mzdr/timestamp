@@ -1,0 +1,16 @@
+:root {
+  background-color: var(--color-background-primary);
+  box-sizing: border-box;
+  color: var(--color-text-primary);
+  cursor: default;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+}

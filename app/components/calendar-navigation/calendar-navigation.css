@@ -1,0 +1,45 @@
+:host {
+  --circle-size: 7px;
+
+  display: block;
+  padding: var(--circle-size) 0;
+}
+
+.calendar-navigation {
+  display: grid;
+  grid-column-gap: calc(var(--circle-size) * 2);
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  font-size: 20px;
+  justify-content: center;
+}
+
+.calendar-navigation > .quarter {
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 5px;
+}
+
+.go-to {
+  border-radius: 50%;
+  border: 0;
+  display: block;
+  height: var(--circle-size);
+  outline: 0;
+  padding: 0;
+  width: var(--circle-size);
+}
+
+.go-to.-year {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+}
+
+.go-to.-month {
+  background-color: var(--color-line);
+  border: 0;
+}
+
+.go-to.-month.-current {
+  background-color: var(--color-brand);
+}

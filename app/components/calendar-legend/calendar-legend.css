@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.calendar-legend {
+  align-items: center;
+  color: var(--color-text-shy);
+  display: grid;
+  font-size: 13px;
+  font-weight: 300;
+  grid-column-gap: 20px;
+  grid-template-columns: 50px minmax(60px, max-content) 50px;
+  justify-content: center;
+  text-align: center;
+}
+
+.calendar-legend::before,
+.calendar-legend::after {
+  content: "";
+  height: 1px;
+}
+
+.calendar-legend::before {
+  background-image: linear-gradient(to left, var(--color-line), transparent);
+}
+
+.calendar-legend::after {
+  background-image: linear-gradient(to right, var(--color-line), transparent);
+}
