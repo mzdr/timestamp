@@ -56,6 +56,15 @@ class Window {
     return this;
   }
 
+  setSize(width, height) {
+    if (typeof width !== 'number' || typeof height !== 'number') {
+      console.warn('Window.setSize has been call with non-numeric arguments.');
+
+      return this;
+    }
+
+    this.window.setSize(width, height, true);
+
     return this;
   }
 
