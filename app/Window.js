@@ -50,7 +50,11 @@ class Window {
   }
 
   onBlur() {
-    this.window.hide();
+    // @todo Does this makes sense?
+    // this.window.hide();
+
+    return this;
+  }
 
     return this;
   }
