@@ -1,0 +1,123 @@
+*,
+*::before,
+*::after {
+  border-color: inherit;
+  box-sizing: inherit;
+  color: currentColor;
+  transition-duration: inherit;
+  transition-property: inherit;
+}
+
+::selection {
+  background-color: #2195f2;
+  color: #fff;
+}
+
+:root {
+  box-sizing: border-box;
+  color: #333;
+  display: flex;
+  font-family: system, -apple-system, BlinkMacSystemFont, Helvetica Neue, Lucida Grande;
+  font-size: 16px;
+  height: 100%;
+  text-align: center;
+  text-rendering: optimizeLegibility;
+  transition-duration: 200ms;
+  transition-property: none;
+}
+
+body {
+  line-height: 1.5rem;
+  margin: auto;
+  padding: 1.5rem;
+}
+
+.app-details {
+  display: inline-block;
+  max-width: 24rem;
+  vertical-align: middle;
+}
+
+.app-details > .headline {
+  font-size: 2.5rem;
+  font-weight: 500;
+  line-height: 3rem;
+  margin-bottom: 3rem;
+  margin-top: 0;
+}
+
+.app-details > .headline::before {
+  background-image: url("../icon.svg");
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: "";
+  display: block;
+  margin-bottom: 1.5rem;
+  padding-top: 50%;
+}
+
+.app-details > .description {
+  margin-bottom: 3rem;
+}
+
+.app-details > .download {
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #2195f2;
+  color: #2195f2;
+  display: block;
+  font-weight: 500;
+  margin: 1.5rem auto;
+  outline: 0;
+  padding: 0.75rem;
+  text-decoration: none;
+  transition-property: color, background-color;
+  width: 17rem;
+}
+
+.app-details > .download:hover,
+.app-details > .download:focus {
+  background-color: #2195f2;
+}
+
+.app-details > .download:hover,
+.app-details > .download:focus,
+.app-details > .download:hover::after,
+.app-details > .download:focus::after {
+  color: #fff;
+}
+
+.app-details > .download::after {
+  color: #333;
+  content: "(macOS 10.9+)";
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 0.75rem;
+  opacity: 0.5;
+  transition-property: color;
+}
+
+.app-details > .further {
+  border-bottom: 1px solid currentColor;
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+  opacity: 0.5;
+  outline: 0;
+  text-decoration: none;
+  transition-property: opacity;
+}
+
+.app-details > .further:hover,
+.app-details > .further:focus {
+  opacity: 1;
+}
+
+.app-details > .further + .further {
+  margin-left: 0.5rem;
+}
+
+.app-demo {
+  display: inline-block;
+  vertical-align: middle;
+}
