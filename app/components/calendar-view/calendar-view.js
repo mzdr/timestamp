@@ -8,7 +8,7 @@ export default class CalendarView extends HTMLElement {
       <template>
         <link rel="stylesheet" type="text/css" href="../../components/calendar-view/calendar-view.css" />
         <calendar-illustration></calendar-illustration>
-        <calendar-today @change="onChange"></calendar-today>
+        <calendar-today @click="onTodayClicked"></calendar-today>
         <calendar-legend @finish="onFinish"></calendar-legend>
         <calendar-month @finish="onFinish"></calendar-month>
         <calendar-navigation @change="onChange"></calendar-navigation>
@@ -17,7 +17,6 @@ export default class CalendarView extends HTMLElement {
 
     bindEventListeners(this.shadowRoot, this);
 
-    this.calendar = window.calendar;
     this.update();
   }
 
@@ -38,6 +37,10 @@ export default class CalendarView extends HTMLElement {
       width: this.offsetWidth,
       height: this.offsetHeight,
     });
+  }
+
+  onTodayClicked() {
+    return this.update();
   }
 
   async onChange({ detail }) {

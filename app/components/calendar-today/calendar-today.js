@@ -1,6 +1,4 @@
-import {
-  bindEventListeners, createShadowRoot, dispatch, findReferences,
-} from '../../node_modules/@browserkids/dom/index.js';
+import { bindEventListeners, createShadowRoot, findReferences } from '../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarToday extends HTMLElement {
   constructor() {
@@ -12,7 +10,6 @@ export default class CalendarToday extends HTMLElement {
         <span
           class="calendar-today"
           #$content
-          @click="onClick"
           @update.window="onUpdate"
         ></span>
       </template>
@@ -29,12 +26,6 @@ export default class CalendarToday extends HTMLElement {
     const [day, date, month] = (await calendar.getDate({ format: 'EEEE do MMMM' })).split(' ');
 
     $content.innerHTML = `${day},<br><strong class="day">${date}</strong> ${month}`;
-
-    return this;
-  }
-
-  onClick() {
-    dispatch(this, 'change');
 
     return this;
   }
