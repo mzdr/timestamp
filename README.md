@@ -29,7 +29,7 @@ Built with [Electron] and [Moment.js].
 **[Download]**, unzip, and move `Timestamp.app` to the `/Applications` directory.
 
 ### Homebrew
-Simply run `brew cask install timestamp` in your terminal.
+Simply run `brew install --cask timestamp` in your terminal.
 
 ## Support
 
