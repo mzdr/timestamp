@@ -14,7 +14,7 @@
     "@browserkids/dom": "^0.3.0",
     "date-fns": "^2.20.1",
     "dedent": "^0.7.0",
-    "electron": "^9.2.1",
+    "electron": "^12.0.2",
     "got": "^11.5.2",
     "js-yaml": "^3.14.0",
     "marked": "^1.1.1",
