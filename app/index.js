@@ -5,6 +5,7 @@ const {
 const CalendarView = require('./views/calendar/CalendarView');
 const Clock = require('./Clock');
 const Locale = require('./Locale');
+const PreferencesView = require('./views/preferences/PreferencesView');
 const SystemTray = require('./SystemTray');
 
 (async () => {
@@ -31,19 +32,27 @@ const SystemTray = require('./SystemTray');
         locale: this.locale,
       });
 
+      this.preferencesView = new PreferencesView({
+        locale: this.locale,
+      });
+
       ipcMain.on('quit', () => app.exit());
       ipcMain.on('resizeWindow', this.onResizeWindow.bind(this));
       ipcMain.on('showPreferences', this.onShowPreferences.bind(this));
     }
 
     onResizeWindow({ sender }, { width, height }) {
-      const { calendarView } = this;
+      const { calendarView, preferencesView } = this;
       const window = BrowserWindow.fromWebContents(sender);
 
-      [calendarView]
+      [calendarView, preferencesView]
         .find((view) => view.window.isSame(window))
         .window
         .setSize(width, height);
+    }
+
+    onShowPreferences() {
+      return this.preferencesView.window.show();
     }
 
     onTrayClicked() {

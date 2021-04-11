@@ -3,7 +3,7 @@ calendar: Calendar
 checkForUpdate: Check for Update
 checking: Checking
 clickingDateOpensCalendar: Clicking a date opens the calendar
-clickingDateOpensCalendarDescription: If you click on a day within the calendar, that date will automatically be opened in the macOS calendar app.
+clickingDateOpensCalendarDescription: If you click on a day within the calendar, that date will automatically be opened in the macOS calendar calendar.
 clock: Clock
 clockFormat: Clock format
 clockFormatDescription: The systray clock is based on Moment.js. Therefore you can customize it as much as you want. Check out the official [list of tokens](http://momentjs.com/docs/#/displaying/) for further assistance.
