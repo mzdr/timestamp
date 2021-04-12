@@ -39,6 +39,7 @@ const SystemTray = require('./SystemTray');
       ipcMain.on('quit', () => app.exit());
       ipcMain.on('resizeWindow', this.onResizeWindow.bind(this));
       ipcMain.on('showPreferences', this.onShowPreferences.bind(this));
+      ipcMain.handle('translate', this.onTranslate.bind(this));
     }
 
     onResizeWindow({ sender }, { width, height }) {
@@ -53,6 +54,10 @@ const SystemTray = require('./SystemTray');
 
     onShowPreferences() {
       return this.preferencesView.window.show();
+    }
+
+    onTranslate(event, key) {
+      return this.locale.translate(key);
     }
 
     onTrayClicked() {
