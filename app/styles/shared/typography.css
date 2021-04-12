@@ -1,6 +1,7 @@
 :root {
   font-family: var(--type-copy);
   line-height: var(--type-rhythm);
+  text-rendering: var(--type-rendering);
 }
 
 button,

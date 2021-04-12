@@ -1,8 +1,6 @@
 :root {
   --type-copy: system-ui;
-  --type-display: system-ui;
-  --type-display-rendering: optimizeLegibility;
-
+  --type-rendering: optimizeLegibility;
   --type-rhythm: 1.25;
   --type-sentence: 60ch;
 }

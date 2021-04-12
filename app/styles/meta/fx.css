@@ -1,5 +1,3 @@
-/* @todo Need to find a non-js way to enable this after DOM is ready. :hover is a way, but it doesn’t work on touch devices. */
-
 :root {
   --fx-duration: 300ms;
 }
