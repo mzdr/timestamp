@@ -1,10 +1,10 @@
 const { ipcMain } = require('electron');
 const datefns = require('date-fns');
 
-const { getAbsolutePath } = require('../../utils');
-const Window = require('../../Window');
+const { getAbsolutePath } = require('../utils');
+const Window = require('./Window');
 
-class CalendarView {
+class Calendar {
   constructor({ locale }) {
     this.locale = locale.getObject();
 
@@ -101,4 +101,4 @@ class CalendarView {
   }
 }
 
-module.exports = CalendarView;
+module.exports = Calendar;

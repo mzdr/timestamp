@@ -1,7 +1,7 @@
-const { getAbsolutePath } = require('../../utils');
-const Window = require('../../Window');
+const { getAbsolutePath } = require('../utils');
+const Window = require('./Window');
 
-class PreferencesView {
+class Preferences {
   constructor({ locale }) {
     this.locale = locale.getObject();
 
@@ -15,4 +15,4 @@ class PreferencesView {
   }
 }
 
-module.exports = PreferencesView;
+module.exports = Preferences;

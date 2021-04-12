@@ -3,7 +3,7 @@ import {
   createShadowRoot,
   dispatch,
   findReferences,
-} from '../../node_modules/@browserkids/dom/index.js';
+} from '../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarNavigation extends HTMLElement {
   constructor() {
@@ -11,7 +11,7 @@ export default class CalendarNavigation extends HTMLElement {
 
     createShadowRoot(this, `
       <template>
-        <link rel="stylesheet" href="../../components/calendar-navigation/calendar-navigation.css">
+        <link rel="stylesheet" href="calendar-navigation/calendar-navigation.css">
 
         <div
           class="calendar-navigation"

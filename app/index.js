@@ -2,11 +2,11 @@ const {
   app, screen, ipcMain, BrowserWindow,
 } = require('electron');
 
-const CalendarView = require('./views/calendar/CalendarView');
-const Clock = require('./Clock');
-const Locale = require('./Locale');
-const PreferencesView = require('./views/preferences/PreferencesView');
-const SystemTray = require('./SystemTray');
+const Calendar = require('./components/Calendar');
+const Clock = require('./components/Clock');
+const Locale = require('./components/Locale');
+const Preferences = require('./components/Preferences');
+const SystemTray = require('./components/SystemTray');
 
 (async () => {
   await app.whenReady();
@@ -28,11 +28,11 @@ const SystemTray = require('./SystemTray');
         locale: this.locale,
       });
 
-      this.calendarView = new CalendarView({
+      this.calendar = new Calendar({
         locale: this.locale,
       });
 
-      this.preferencesView = new PreferencesView({
+      this.preferences = new Preferences({
         locale: this.locale,
       });
 
@@ -43,17 +43,17 @@ const SystemTray = require('./SystemTray');
     }
 
     onResizeWindow({ sender }, { width, height }) {
-      const { calendarView, preferencesView } = this;
+      const { calendar, preferences } = this;
       const window = BrowserWindow.fromWebContents(sender);
 
-      [calendarView, preferencesView]
+      [calendar, preferences]
         .find((view) => view.window.isSame(window))
         .window
         .setSize(width, height);
     }
 
     onShowPreferences() {
-      return this.preferencesView.window.show();
+      return this.preferences.window.show();
     }
 
     onTranslate(event, key) {
@@ -61,13 +61,14 @@ const SystemTray = require('./SystemTray');
     }
 
     onTrayClicked() {
-      const { calendarView, tray } = this;
+      const { calendar, tray } = this;
       const bounds = tray.getBounds();
       const currentMousePosition = screen.getCursorScreenPoint();
       const currentDisplay = screen.getDisplayNearestPoint(currentMousePosition);
       const yOffset = 6;
 
-      calendarView
+      // Always center calendar window relative to tray icon
+      calendar
         .window
         .setPosition(bounds.x + (bounds.width / 2), currentDisplay.workArea.y + yOffset)
         .toggleVisibility();

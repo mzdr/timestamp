@@ -3,7 +3,7 @@ import {
   createShadowRoot,
   dispatch,
   findReferences,
-} from '../../node_modules/@browserkids/dom/index.js';
+} from '../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarMonth extends HTMLElement {
   constructor() {
@@ -11,7 +11,7 @@ export default class CalendarMonth extends HTMLElement {
 
     createShadowRoot(this, `
       <template>
-        <link rel="stylesheet" href="../../components/calendar-month/calendar-month.css">
+        <link rel="stylesheet" href="calendar-month/calendar-month.css">
         <div class="calendar-month" #$content @update.window="onUpdate"></div>
       </template>
     `);

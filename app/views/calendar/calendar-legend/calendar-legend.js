@@ -3,7 +3,7 @@ import {
   createShadowRoot,
   dispatch,
   findReferences,
-} from '../../node_modules/@browserkids/dom/index.js';
+} from '../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarLegend extends HTMLElement {
   constructor() {
@@ -11,7 +11,7 @@ export default class CalendarLegend extends HTMLElement {
 
     createShadowRoot(this, `
       <template>
-        <link rel="stylesheet" href="../../components/calendar-legend/calendar-legend.css">
+        <link rel="stylesheet" href="calendar-legend/calendar-legend.css">
         <span class="calendar-legend" #$content @update.window="onUpdate"></span>
       </template>
     `);

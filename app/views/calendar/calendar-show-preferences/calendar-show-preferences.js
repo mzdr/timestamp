@@ -1,4 +1,4 @@
-import { createShadowRoot } from '../../node_modules/@browserkids/dom/index.js';
+import { createShadowRoot } from '../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarShowPreferences extends HTMLElement {
   constructor() {
@@ -6,7 +6,7 @@ export default class CalendarShowPreferences extends HTMLElement {
 
     createShadowRoot(this, `
       <template>
-        <link rel="stylesheet" href="../../components/calendar-show-preferences/calendar-show-preferences.css">
+        <link rel="stylesheet" href="calendar-show-preferences/calendar-show-preferences.css">
         <svg class="icon-dots" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 6">
           <circle class="dot" cx="21" cy="3" r="3" />
           <circle class="dot" cx="12" cy="3" r="3" />

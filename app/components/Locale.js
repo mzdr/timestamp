@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 const locales = {
   date: require('date-fns/locale'),
-  app: require('./locales'),
+  app: require('../locales'),
 };
 
 class Locale {

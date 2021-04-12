@@ -1,4 +1,4 @@
-import { bindEventListeners, createShadowRoot, findReferences } from '../../node_modules/@browserkids/dom/index.js';
+import { bindEventListeners, createShadowRoot, findReferences } from '../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarToday extends HTMLElement {
   constructor() {
@@ -6,7 +6,7 @@ export default class CalendarToday extends HTMLElement {
 
     createShadowRoot(this, `
       <template>
-        <link rel="stylesheet" href="../../components/calendar-today/calendar-today.css">
+        <link rel="stylesheet" href="calendar-today/calendar-today.css">
         <span
           class="calendar-today"
           #$content
