@@ -59,9 +59,9 @@ export default class CalendarView extends HTMLElement {
   }
 
   onShowPreferences() {
-    const { calendar } = window;
+    const { app } = window;
 
-    calendar.showPreferences();
+    app.showPreferences();
 
     return this;
   }
