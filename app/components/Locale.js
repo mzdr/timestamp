@@ -32,7 +32,7 @@ class Locale {
   translate(key) {
     return key
       .split('.')
-      .reduce((o, i) => o[i], this.translations) || key;
+      .reduce((o, i) => (o || {})[i], this.translations) || key;
   }
 }
 
