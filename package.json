@@ -8,7 +8,8 @@
     "postinstall": "electron-builder install-app-deps",
     "predist": "npm run lint",
     "prepack": "npm run lint",
-    "start": "DEBUG=1 electron ./app --enable-logging"
+    "start": "DEBUG=1 electron ./app --enable-logging",
+    "test": "npm run lint"
   },
   "dependencies": {},
   "devDependencies": {
