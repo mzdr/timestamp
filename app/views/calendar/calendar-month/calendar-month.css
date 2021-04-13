@@ -3,10 +3,11 @@
 }
 
 :host(.show-weeks) > .calendar-month {
-  grid-template-areas: ". weekdays" "weeks days";
-  grid-template-columns: 32px 1fr;
+  grid-template-areas: "no weekdays" "weeks days";
+  grid-template-columns: 1fr 7fr;
 }
 
+:host(:not(.show-weeks)) > .calendar-month > .no,
 :host(:not(.show-weeks)) > .calendar-month > .weeks {
   display: none;
 }
@@ -22,6 +23,11 @@
   display: grid;
   grid-area: weekdays;
   grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.calendar-month > .no {
+  color: var(--color-line);
   text-align: center;
 }
 

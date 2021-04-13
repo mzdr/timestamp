@@ -47,6 +47,8 @@ export default class CalendarView extends HTMLElement {
     if (weeks) {
       $month.classList.toggle('show-weeks');
     }
+
+    this.onFinish();
   }
 
   onFinish() {

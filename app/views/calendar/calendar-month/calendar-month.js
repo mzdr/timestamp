@@ -46,6 +46,7 @@ export default class CalendarMonth extends HTMLElement {
     }).join('');
 
     $content.innerHTML = `
+      <div class="no">#</div>
       <div class="weekdays">${$weekdays}</div>
       <div class="weeks">${$weeks}</div>
       <div class="days">${$days}</div>
