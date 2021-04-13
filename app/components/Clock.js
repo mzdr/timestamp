@@ -28,7 +28,11 @@ class Clock {
   }
 
   toString() {
-    return datefns.format(new Date(), this.getFormat(), { locale: this.locale });
+    try {
+      return datefns.format(new Date(), this.getFormat(), { locale: this.locale });
+    } catch (e) {
+      return '#invalid format#';
+    }
   }
 }
 
