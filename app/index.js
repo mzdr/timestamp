@@ -62,7 +62,7 @@ const defaultPreferences = {
       [calendar, preferences]
         .find((view) => view.window.isSame(window))
         .window
-        .setSize(width, height);
+        .setContentSize(width, height);
     }
 
     onPreferencesChanged(key, value) {

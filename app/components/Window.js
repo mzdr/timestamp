@@ -66,18 +66,18 @@ class Window {
     event.preventDefault();
   }
 
-  getSize() {
-    return this.window.getSize();
+  getContentSize() {
+    return this.window.getContentSize();
   }
 
-  setSize(width, height) {
+  setContentSize(width, height) {
     if (typeof width !== 'number' || typeof height !== 'number') {
-      console.warn('Window.setSize has been call with non-numeric arguments.');
+      console.warn('Window.setContentSize has been call with non-numeric arguments.');
 
       return this;
     }
 
-    this.window.setSize(width, height, true);
+    this.window.setContentSize(width, height, true);
 
     return this;
   }
