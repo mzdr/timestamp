@@ -6,7 +6,7 @@
 .calendar-today {
   color: var(--color-text-primary);
   display: block;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: 100;
   padding: 32px 0;
 }

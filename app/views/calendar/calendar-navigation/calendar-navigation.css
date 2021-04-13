@@ -10,7 +10,6 @@
   grid-column-gap: calc(var(--circle-size) * 2);
   grid-auto-flow: column;
   grid-auto-columns: max-content;
-  font-size: 20px;
   justify-content: center;
 }
 

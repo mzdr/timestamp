@@ -1,6 +1,7 @@
 :root {
-  --type-copy: system-ui;
+  --type-family: system-ui;
   --type-rendering: optimizeLegibility;
-  --type-rhythm: 1.25;
+  --type-rhythm: 1.5;
   --type-sentence: 60ch;
+  --type-size: 14px;
 }

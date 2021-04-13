@@ -1,5 +1,6 @@
 :root {
-  font-family: var(--type-copy);
+  font-family: var(--type-family);
+  font-size: var(--type-size);
   line-height: var(--type-rhythm);
   text-rendering: var(--type-rendering);
 }
