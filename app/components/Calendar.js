@@ -10,6 +10,7 @@ class Calendar {
 
     ipcMain.handle('getDate', this.getDate.bind(this));
     ipcMain.handle('getCalendar', this.getCalendar.bind(this));
+    ipcMain.on('close', this.onClose.bind(this));
 
     this.window = new Window({
       sourceFile: getAbsolutePath('views', 'calendar', 'calendar.html'),
@@ -100,6 +101,10 @@ class Calendar {
       weeks,
       days,
     };
+  }
+
+  onClose() {
+    this.window.hide();
   }
 }
 

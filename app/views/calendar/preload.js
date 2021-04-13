@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld('calendar', {
   getCalendar: (payload) => ipcRenderer.invoke('getCalendar', payload),
   getDate: (payload) => ipcRenderer.invoke('getDate', payload),
   resizeWindow: (payload) => ipcRenderer.send('resizeWindow', payload),
+  close: () => ipcRenderer.send('close'),
 });
 
 contextBridge.exposeInMainWorld('app', {

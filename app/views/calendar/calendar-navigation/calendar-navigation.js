@@ -56,7 +56,7 @@ export default class CalendarNavigation extends HTMLElement {
   }
 
   onKeyDown({ key, metaKey }) {
-    const { app } = window;
+    const { app, calendar } = window;
 
     if (key === 'ArrowRight') {
       this.goNextMonth();
@@ -68,7 +68,9 @@ export default class CalendarNavigation extends HTMLElement {
       this.goPreviousYear();
     } else if (key === ' ') {
       this.goToday();
-    } else if (key === 'w') {
+    } else if (key === 'Escape') {
+      calendar.close();
+    } else if (key === 'w' && metaKey === false) {
       dispatch(this, 'toggle', { weeks: true });
     } else if (key === ',' && metaKey) {
       app.showPreferences();
