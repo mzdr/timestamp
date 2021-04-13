@@ -1,4 +1,5 @@
 module.exports = {
+  locale: 'en',
   preferences: {
     startAtLogin: {
       label: 'Start at Login',

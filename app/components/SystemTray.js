@@ -8,6 +8,8 @@ class SystemTray {
       nativeImage.createEmpty(),
     );
 
+    console.log('System tray created.');
+
     if (typeof onClick === 'function') {
       this.tray.on('click', onClick);
     }
@@ -18,13 +20,15 @@ class SystemTray {
   }
 
   getLabel() {
-    return this.label;
+    return this.tray.getTitle();
   }
 
   setLabel(label) {
     const { tray } = this;
 
     if (tray.isDestroyed()) {
+      console.log('Unable to set label since tray is destroyed.');
+
       return this;
     }
 

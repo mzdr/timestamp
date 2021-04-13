@@ -1,10 +1,11 @@
-const { format } = require('date-fns');
+const datefns = require('date-fns');
 
 class Clock {
   constructor(options = {}) {
-    const { onTick, locale } = options;
+    const { onTick, locale, format } = options;
 
     this.locale = locale.getObject();
+    this.setFormat(format);
 
     if (typeof onTick === 'function') {
       setInterval(() => onTick(this.toString()), 1000);
@@ -12,7 +13,7 @@ class Clock {
   }
 
   getFormat() {
-    return this.format || 'Pp';
+    return this.format;
   }
 
   setFormat(value) {
@@ -27,7 +28,7 @@ class Clock {
   }
 
   toString() {
-    return format(new Date(), this.getFormat(), { locale: this.locale });
+    return datefns.format(new Date(), this.getFormat(), { locale: this.locale });
   }
 }
 
