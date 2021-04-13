@@ -1,0 +1,14 @@
+.is-native {
+  --palette-black: #272727;
+  --palette-white: #f5f2f2;
+}
+
+@media (prefers-color-scheme: dark) {
+  .is-native {
+    --palette-black: #322d2c;
+    --palette-white: #e0e0df;
+
+    --color-background-primary: var(--palette-black);
+    --color-text-primary: var(--palette-white);
+  }
+}
