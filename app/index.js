@@ -44,7 +44,6 @@ const defaultPreferences = {
       });
 
       this.preferences = new Preferences({
-        locale: this.locale,
         onChange: this.onPreferencesChanged.bind(this),
         storagePath: join(app.getPath('userData'), 'UserPreferences.json'),
         defaults: defaultPreferences,

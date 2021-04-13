@@ -5,13 +5,9 @@ const Window = require('./Window');
 
 class Preferences {
   constructor(options = {}) {
-    const {
-      locale, onChange, storagePath, defaults,
-    } = options;
+    const { onChange, storagePath, defaults } = options;
 
-    this.locale = locale.getObject();
-
-    console.log(`Creating preferences module with those defaults: “${JSON.stringify(defaults)}”.`);
+    console.log(`Using those default values as preferences: “${JSON.stringify(defaults)}”.`);
 
     this.storagePath = storagePath;
     this.onChange = onChange || (() => {});
@@ -24,18 +20,22 @@ class Preferences {
         preload: getAbsolutePath('views', 'preferences', 'preload.js'),
       },
     });
+
+    console.log('Preferences module created.');
+
+    this.load();
   }
 
   async load() {
     try {
-      console.log(`Trying to load user settings from “${this.storagePath}”.`);
+      console.log(`Trying to load user preferences from “${this.storagePath}”.`);
 
       Object
         .entries(JSON.parse(await readFile(this.storagePath, 'utf8')))
-        .forEach((setting) => this.set(...setting, false));
+        .forEach((item) => this.set(...item, false));
     } catch ({ message }) {
       if (/enoent/i.test(message)) {
-        console.log('Looks like it’s the first time starting Timestamp. No user settings found.');
+        console.log('Looks like it’s the first time starting Timestamp. No user preferences found.');
       } else {
         console.log(`Unknown error: ${message}`);
       }

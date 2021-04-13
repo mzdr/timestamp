@@ -17,6 +17,8 @@ class Calendar {
         preload: getAbsolutePath('views', 'calendar', 'preload.js'),
       },
     });
+
+    console.log('Calendar module created.');
   }
 
   getDate(event, payload = {}) {
