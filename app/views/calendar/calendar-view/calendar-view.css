@@ -23,7 +23,8 @@ calendar-month { grid-area: month; }
 calendar-navigation { grid-area: navigation; }
 
 calendar-show-preferences {
+  padding: 18px 12px;
   position: absolute;
-  right: 24px;
-  top: 24px;
+  right: 12px;
+  top: 6px;
 }
