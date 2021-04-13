@@ -1,9 +1,66 @@
 :host {
   display: block;
-  font-size: 14px;
-  line-height: 19px;
   user-select: none;
-  width: 520px;
+  width: 640px;
 
   -webkit-app-region: drag;
+}
+
+input[type="text"] {
+  background-color: transparent;
+  border-radius: 5px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  color: currentColor;
+  font: inherit;
+  outline: 0;
+  padding: 4px 8px;
+}
+
+.preferences-view {
+  align-items: flex-start;
+  display: grid;
+  grid-gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 24px;
+}
+
+.preferences-category {
+  display: grid;
+  grid-row-gap: 12px;
+}
+
+.preferences-category > .title {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.preferences-category > .items {
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  padding: 24px;
+}
+
+.preferences-item {
+  display: grid;
+  grid-gap: 12px;
+  grid-template-areas: "action label" "description description";
+  grid-template-columns: min-content 1fr;
+}
+
+.preferences-item.-text {
+  grid-template-areas: "label" "action" "description";
+  grid-template-columns: 1fr;
+}
+
+.preferences-item > .action {
+  align-self: center;
+  grid-area: action;
+  margin: 0;
+}
+.preferences-item > .label { grid-area: label; }
+
+.preferences-item > .description {
+  grid-area: description;
+  opacity: 0.3;
 }

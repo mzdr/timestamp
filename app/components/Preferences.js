@@ -1,3 +1,4 @@
+const { ipcMain } = require('electron');
 const { readFile, writeFile } = require('fs').promises;
 
 const { getAbsolutePath } = require('../utils');
@@ -12,6 +13,9 @@ class Preferences {
     this.storagePath = storagePath;
     this.onChange = onChange || (() => {});
     this.data = new Map(Object.entries(defaults));
+
+    ipcMain.handle('get', (event, key) => this.get(key));
+    ipcMain.on('set', (event, key, value) => this.set(key, value));
 
     this.window = new Window({
       frame: true,
@@ -51,12 +55,16 @@ class Preferences {
   }
 
   get(key) {
+    console.log(`Getting value of preference with key ”${key}”.`);
+
     return this.data.get(key);
   }
 
-  set(key, data, persist = true) {
-    this.data.set(key, data);
-    this.onChange(key, data);
+  set(key, value, persist = true) {
+    console.log(`Setting value for preference with key ”${key}” to “${value}”.`);
+
+    this.data.set(key, value);
+    this.onChange(key, value);
 
     if (persist) {
       this.save();

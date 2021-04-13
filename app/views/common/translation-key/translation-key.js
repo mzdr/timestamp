@@ -1,22 +1,20 @@
-import { bindEventListeners, createShadowRoot } from '../../../node_modules/@browserkids/dom/index.js';
+import { dispatch } from '../../../node_modules/@browserkids/dom/index.js';
 
 export default class TranslationKey extends HTMLElement {
   constructor() {
     super();
 
-    createShadowRoot(this, `
-      <template>
-        <slot @slotchange="onChange"></slot>
-      </template>
-    `);
+    this.originalKey = this.textContent;
+    this.onUpdate();
 
-    bindEventListeners(this.shadowRoot, this);
+    window.addEventListener('update', this.onUpdate.bind(this));
   }
 
-  async onChange() {
+  async onUpdate() {
     const { app } = window;
-    const key = this.textContent;
 
-    this.textContent = await app.translate(key);
+    this.textContent = await app.translate(this.originalKey);
+
+    dispatch(this, 'finish');
   }
 }
