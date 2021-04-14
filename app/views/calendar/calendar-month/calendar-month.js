@@ -3,7 +3,7 @@ import {
   createShadowRoot,
   dispatch,
   findReferences,
-} from '../../../node_modules/@browserkids/dom/index.js';
+} from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarMonth extends HTMLElement {
   constructor() {

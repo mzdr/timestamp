@@ -1,4 +1,4 @@
-import { createShadowRoot } from '../../../node_modules/@browserkids/dom/index.js';
+import { createShadowRoot } from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarShowPreferences extends HTMLElement {
   constructor() {

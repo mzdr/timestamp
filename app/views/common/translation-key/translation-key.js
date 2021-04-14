@@ -1,4 +1,4 @@
-import { dispatch } from '../../../node_modules/@browserkids/dom/index.js';
+import { dispatch } from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class TranslationKey extends HTMLElement {
   constructor() {

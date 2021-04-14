@@ -14,5 +14,8 @@
   "rules": {
     "import/extensions": "off",
     "no-console": "off"
+  },
+  "settings": {
+    "import/core-modules": ["electron"]
   }
 }

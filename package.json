@@ -1,30 +1,61 @@
 {
-  "private": true,
-  "scripts": {
-    "dist": "electron-builder",
-    "lint": "eslint ./app",
-    "lint:fix": "npm run lint -- --fix",
-    "pack": "electron-builder --dir",
-    "postinstall": "electron-builder install-app-deps",
-    "predist": "npm run lint",
-    "prepack": "npm run lint",
-    "start": "electron ./app --enable-logging",
-    "test": "npm run lint"
-  },
-  "dependencies": {},
-  "devDependencies": {
-    "electron": "^12.0.2",
-    "electron-builder": "^22.10.5",
-    "electron-rebuild": "^2.3.5",
-    "eslint": "^7.23.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1"
-  },
+  "name": "timestamp",
+  "productName": "Timestamp",
+  "description": "A better macOS menu bar clock with a customizable date/time display and a calendar.",
+  "version": "1.1.0",
+  "author": "Sebastian Prein <hi@sebastianprein.com>",
+  "copyright": "© 2021 Sebastian Prein",
+  "homepage": "https://github.com/mzdr/timestamp",
+  "license": "MIT",
+  "main": "app/index.js",
+  "keywords": [
+    "calendar",
+    "clock",
+    "customizable",
+    "date",
+    "electron",
+    "macos",
+    "menubar",
+    "time",
+    "timestamp"
+  ],
   "build": {
     "appId": "com.mzdr.timestamp",
+    "files": [
+      "app/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "resources/osx/icon.icns"
     }
+  },
+  "private": true,
+  "scripts": {
+    "build": "electron-builder",
+    "build:pack": "electron-builder --dir",
+    "clean": "rimraf dist",
+    "lint": "eslint ./app",
+    "lint:fix": "npm run lint -- --fix",
+    "prebuild": "npm run lint && npm run clean",
+    "start": "electron ./app --enable-logging",
+    "test": "npm run lint"
+  },
+  "dependencies": {
+    "@browserkids/dom": "^0.3.0",
+    "date-fns": "^2.20.1",
+    "semver": "^7.3.5"
+  },
+  "devDependencies": {
+    "electron": "^12.0.2",
+    "electron-builder": "^22.10.5",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "rimraf": "^3.0.2"
   }
 }

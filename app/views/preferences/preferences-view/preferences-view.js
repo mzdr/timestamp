@@ -1,4 +1,4 @@
-import { bindEventListeners, createShadowRoot, findReferences } from '../../../node_modules/@browserkids/dom/index.js';
+import { bindEventListeners, createShadowRoot, findReferences } from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class PreferencesView extends HTMLElement {
   constructor() {
