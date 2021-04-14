@@ -42,13 +42,19 @@ class Updater {
   }
 
   async onTick() {
-    const { version } = await this.fetchJson();
+    const { warning, debug } = this.logger;
 
-    if (lt(this.currentVersion, version)) {
-      autoUpdater.setFeedURL(this.feedUrl);
-      autoUpdater.checkForUpdates();
+    try {
+      const { version } = await this.fetchJson();
 
-      this.logger.debug(`Update available. (${this.currentVersion} -> ${version})`);
+      if (lt(this.currentVersion, version)) {
+        autoUpdater.setFeedURL(this.feedUrl);
+        autoUpdater.checkForUpdates();
+
+        debug(`Update available. (${this.currentVersion} -> ${version})`);
+      }
+    } catch (e) {
+      warning(e.message);
     }
   }
 
