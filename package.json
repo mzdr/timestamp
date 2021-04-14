@@ -26,12 +26,8 @@
       "node_modules/**/*",
       "package.json"
     ],
-    "directories": {
-      "buildResources": "build/resources"
-    },
     "mac": {
       "category": "public.app-category.utilities",
-      "icon": "resources/osx/icon.icns",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
