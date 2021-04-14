@@ -8,6 +8,7 @@ const { arch, platform, release } = require('os');
 const Calendar = require('./components/Calendar');
 const Clock = require('./components/Clock');
 const Locale = require('./components/Locale');
+const Logger = require('./components/Logger');
 const Preferences = require('./components/Preferences');
 const SystemTray = require('./components/SystemTray');
 const Updater = require('./components/Updater');
@@ -26,23 +27,30 @@ const defaultPreferences = {
     constructor() {
       const currentVersion = app.getVersion();
 
-      console.log(`Starting Timestamp v${currentVersion} on “${platform()}-${arch()} v${release()}”.`);
-      console.log(`Running in ${app.isPackaged ? 'production' : 'development'} mode.`);
+      this.logger = new Logger({
+        filePath: join(app.getPath('userData'), 'Output.log'),
+      });
+
+      this.logger.debug(`Starting Timestamp v${currentVersion} on “${platform()}-${arch()} v${release()}”.`);
+      this.logger.debug(`Running in ${app.isPackaged ? 'production' : 'development'} mode.`);
 
       if (app.isPackaged) {
         this.updater = new Updater({
           feedUrl: 'https://mzdr.github.io/timestamp/update.json',
           checkEvery: 1000 * 10,
+          logger: this.logger,
           currentVersion,
         });
       }
 
       this.locale = new Locale({
         preferred: app.getLocale(),
+        logger: this.logger,
       });
 
       this.tray = new SystemTray({
         onClick: this.onTrayClicked.bind(this),
+        logger: this.logger,
       });
 
       this.clock = new Clock({
@@ -53,12 +61,14 @@ const defaultPreferences = {
 
       this.calendar = new Calendar({
         locale: this.locale,
+        logger: this.logger,
       });
 
       this.preferences = new Preferences({
         onChange: this.onPreferencesChanged.bind(this),
         storagePath: join(app.getPath('userData'), 'UserPreferences.json'),
         defaults: defaultPreferences,
+        logger: this.logger,
       });
 
       ipcMain.on('quit', () => app.exit());

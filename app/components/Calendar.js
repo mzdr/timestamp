@@ -5,7 +5,7 @@ const { getAbsolutePath } = require('../utils');
 const Window = require('./Window');
 
 class Calendar {
-  constructor({ locale }) {
+  constructor({ locale, logger }) {
     this.locale = locale.getObject();
 
     ipcMain.handle('getDate', this.getDate.bind(this));
@@ -19,7 +19,7 @@ class Calendar {
       },
     });
 
-    console.log('Calendar module created.');
+    logger.debug('Calendar module created.');
   }
 
   getDate(event, payload = {}) {

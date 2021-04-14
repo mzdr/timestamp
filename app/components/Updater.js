@@ -4,17 +4,23 @@ const { autoUpdater } = require('electron');
 
 class Updater {
   constructor(options = {}) {
-    const { feedUrl, checkEvery = 1000 * 60 * 60, currentVersion } = options;
+    const {
+      feedUrl,
+      checkEvery = 1000 * 60 * 60,
+      currentVersion,
+      logger,
+    } = options;
 
     this.feedUrl = feedUrl;
     this.currentVersion = currentVersion;
+    this.logger = logger;
 
     autoUpdater.on('error', this.onError.bind(this));
     autoUpdater.on('update-downloaded', this.onUpdateDownloaded.bind(this));
 
     setInterval(this.onTick.bind(this), checkEvery);
 
-    console.log('Updater module created.');
+    this.logger.debug('Updater module created.');
   }
 
   async fetchJson() {
@@ -42,7 +48,7 @@ class Updater {
       autoUpdater.setFeedURL(this.feedUrl);
       autoUpdater.checkForUpdates();
 
-      console.log(`Update available. (${this.currentVersion} -> ${version})`);
+      this.logger.debug(`Update available. (${this.currentVersion} -> ${version})`);
     }
   }
 
@@ -51,7 +57,7 @@ class Updater {
   }
 
   onUpdateDownloaded() {
-    console.log('Update downloaded and ready to install.');
+    this.logger.debug('Update downloaded and ready to install.');
     return this;
   }
 }

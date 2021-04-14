@@ -6,13 +6,19 @@ const Window = require('./Window');
 
 class Preferences {
   constructor(options = {}) {
-    const { onChange, storagePath, defaults } = options;
+    const {
+      onChange,
+      storagePath,
+      defaults,
+      logger,
+    } = options;
 
-    console.log(`Using those default values as preferences: “${JSON.stringify(defaults)}”.`);
-
+    this.logger = logger;
     this.storagePath = storagePath;
     this.onChange = onChange || (() => {});
     this.data = new Map(Object.entries(defaults));
+
+    this.logger.debug(`Using those default values as preferences: “${JSON.stringify(defaults)}”.`);
 
     ipcMain.handle('get', (event, key) => this.get(key));
     ipcMain.on('set', (event, key, value) => this.set(key, value));
@@ -25,23 +31,23 @@ class Preferences {
       },
     });
 
-    console.log('Preferences module created.');
+    this.logger.debug('Preferences module created.');
 
     this.load();
   }
 
   async load() {
     try {
-      console.log(`Trying to load user preferences from “${this.storagePath}”.`);
+      this.logger.debug(`Trying to load user preferences from “${this.storagePath}”.`);
 
       Object
         .entries(JSON.parse(await readFile(this.storagePath, 'utf8')))
         .forEach((item) => this.set(...item, false));
     } catch ({ message }) {
       if (/enoent/i.test(message)) {
-        console.log('Looks like it’s the first time starting Timestamp. No user preferences found.');
+        this.logger.debug('Looks like it’s the first time starting Timestamp. No user preferences found.');
       } else {
-        console.log(`Unknown error: ${message}`);
+        this.logger.debug(`Unknown error: ${message}`);
       }
     }
 
@@ -55,13 +61,13 @@ class Preferences {
   }
 
   get(key) {
-    console.log(`Getting value of preference with key ”${key}”.`);
+    this.logger.debug(`Getting value of preference with key ”${key}”.`);
 
     return this.data.get(key);
   }
 
   set(key, value, persist = true) {
-    console.log(`Setting value for preference with key ”${key}” to “${value}”.`);
+    this.logger.debug(`Setting value for preference with key ”${key}” to “${value}”.`);
 
     this.data.set(key, value);
     this.onChange(key, value);

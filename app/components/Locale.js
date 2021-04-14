@@ -5,10 +5,11 @@ const locales = {
 };
 
 class Locale {
-  constructor({ preferred } = {}) {
+  constructor(options = {}) {
+    const { preferred, logger } = options;
     const [language, extension] = String(preferred).split('-');
 
-    console.log(`Preferred locale is “${preferred}”.`);
+    logger.debug(`Preferred locale is “${preferred}”.`);
 
     const fullSupport = `${language}${extension}`;
     const partialSupport = language;
@@ -18,7 +19,7 @@ class Locale {
     this.localeObject = locales.date[this.locale];
     this.translations = locales.app[partialSupport] || locales.app.en;
 
-    console.log(`Using “${this.translations.locale}” as application locale and “${this.locale}” as clock/calendar locale.`);
+    logger.debug(`Using “${this.translations.locale}” as application locale and “${this.locale}” as clock/calendar locale.`);
   }
 
   get() {
