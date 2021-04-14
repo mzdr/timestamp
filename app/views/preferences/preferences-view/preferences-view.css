@@ -20,14 +20,14 @@ input[type="text"] {
 .preferences-view {
   align-items: flex-start;
   display: grid;
-  grid-gap: 24px;
+  grid-gap: var(--grid-gap);
   grid-template-columns: repeat(2, 1fr);
-  padding: 24px;
+  padding: var(--grid-gap);
 }
 
 .preferences-category {
   display: grid;
-  grid-row-gap: 12px;
+  grid-row-gap: calc(var(--grid-gap) / 2);
 }
 
 .preferences-category > .title {
@@ -38,12 +38,12 @@ input[type="text"] {
 .preferences-category > .items {
   border-radius: 12px;
   box-shadow: inset 0 0 0 1px var(--color-line);
-  padding: 24px;
+  padding: var(--grid-gap);
 }
 
 .preferences-item {
   display: grid;
-  grid-gap: 12px;
+  grid-gap: calc(var(--grid-gap) / 2);
   grid-template-areas: "action label" "description description";
   grid-template-columns: min-content 1fr;
 }
@@ -61,6 +61,7 @@ input[type="text"] {
 .preferences-item > .label { grid-area: label; }
 
 .preferences-item > .description {
+  color: var(--color-text-shy);
+  font-size: 12px;
   grid-area: description;
-  opacity: 0.3;
 }

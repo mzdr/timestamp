@@ -2,7 +2,7 @@
   display: grid;
   grid-row-gap: 18px;
   grid-template-areas: "illustration" "legend" "month" "navigation";
-  padding-bottom: 24px;
+  padding-bottom: var(--grid-gap);
   position: relative;
   user-select: none;
   width: 340px;
@@ -13,7 +13,7 @@
 calendar-legend,
 calendar-month,
 calendar-navigation {
-  padding: 0 24px;
+  padding: 0 var(--grid-gap);
 }
 
 calendar-illustration { grid-area: illustration; }
