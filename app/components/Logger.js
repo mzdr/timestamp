@@ -16,7 +16,7 @@ class Logger {
       debug: 7,
     };
 
-    this.cleanUp = writeFile(this.filePath, `${'-'.repeat(60)}\n`);
+    this.cleanUp = writeFile(this.filePath, '\n');
   }
 
   async log(level, message) {
