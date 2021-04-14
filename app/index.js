@@ -10,6 +10,7 @@ const Clock = require('./components/Clock');
 const Locale = require('./components/Locale');
 const Preferences = require('./components/Preferences');
 const SystemTray = require('./components/SystemTray');
+const Updater = require('./components/Updater');
 
 const defaultPreferences = {
   openAtLogin: false,
@@ -19,11 +20,22 @@ const defaultPreferences = {
 (async () => {
   await app.whenReady();
 
+  app.dock.hide();
+
   return new class {
     constructor() {
-      app.dock.hide();
+      const currentVersion = app.getVersion();
 
-      console.log(`Starting Timestamp v${app.getVersion()} on “${platform()}-${arch()} v${release()}”.`);
+      console.log(`Starting Timestamp v${currentVersion} on “${platform()}-${arch()} v${release()}”.`);
+      console.log(`Running in ${app.isPackaged ? 'production' : 'development'} mode.`);
+
+      if (app.isPackaged) {
+        this.updater = new Updater({
+          feedUrl: 'https://mzdr.github.io/timestamp/update.json',
+          checkEvery: 1000 * 10,
+          currentVersion,
+        });
+      }
 
       this.locale = new Locale({
         preferred: app.getLocale(),
