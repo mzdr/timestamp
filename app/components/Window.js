@@ -36,21 +36,23 @@ class Window {
 
   show() {
     this.window.show();
+    this.window.webContents.send('show');
 
     return this;
   }
 
   hide() {
     this.window.hide();
+    this.window.webContents.send('hide');
 
     return this;
   }
 
   toggleVisibility() {
     if (this.window.isVisible()) {
-      this.window.hide();
+      this.hide();
     } else {
-      this.window.show();
+      this.show();
     }
 
     return this;
@@ -61,9 +63,13 @@ class Window {
   }
 
   onClose(event) {
-    this.window.hide();
+    this.hide();
 
     event.preventDefault();
+  }
+
+  getWebContents() {
+    return this.window.webContents;
   }
 
   getContentSize() {

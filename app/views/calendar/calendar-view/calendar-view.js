@@ -24,10 +24,14 @@ export default class CalendarView extends HTMLElement {
       </template>
     `);
 
+    const { calendar } = window;
+
     bindEventListeners(this.shadowRoot, this);
 
     this.$refs = findReferences(this.shadowRoot);
     this.update();
+
+    calendar.on('hide', this.onTodayClicked.bind(this));
   }
 
   async update(now) {
