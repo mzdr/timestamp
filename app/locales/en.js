@@ -1,6 +1,10 @@
 module.exports = {
   name: 'English',
   locale: 'en',
+  app: {
+    restart: 'Restart',
+    updateDownloaded: 'A new version of Timestamp has been downloaded. Restart the app to update it.',
+  },
   preferences: {
     category: {
       general: 'General',
