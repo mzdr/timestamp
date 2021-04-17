@@ -1,0 +1,10 @@
+input[type="text"] {
+  background-color: transparent;
+  border-radius: 5px;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--color-line);
+  color: currentColor;
+  font: inherit;
+  outline: 0;
+  padding: 4px 8px;
+}

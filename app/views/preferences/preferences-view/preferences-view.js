@@ -6,14 +6,27 @@ export default class PreferencesView extends HTMLElement {
 
     createShadowRoot(this, `
       <template>
+        <link rel="stylesheet" href="../../styles/shared/links.css">
+        <link rel="stylesheet" href="../../styles/shared/form.css">
+        <link rel="stylesheet" href="../../styles/shared/typography.css">
+        <link rel="stylesheet" href="../../styles/components/container-alert.css">
         <link rel="stylesheet" href="preferences-view/preferences-view.css">
 
         <form
           class="preferences-view"
           @input="onInput"
           @finish="onFinish"
-          @update.window="onUpdate"
         >
+          <div #$alert class="alert container-alert">
+            <span class="icon">🎉</span>
+            <translation-key>app.updateDownloaded</translation-key>
+            <div class="actions">
+              <button class="onRestartClicked">
+                <translation-key>app.restart</translation-key>
+              </button>
+            </div>
+          </div>
+
           <div class="preferences-category">
             <translation-key class="title">preferences.category.general</translation-key>
             <div class="items">
@@ -44,14 +57,17 @@ export default class PreferencesView extends HTMLElement {
 
     this.$refs = findReferences(this.shadowRoot);
 
-    this.$refs.$preference.forEach(async ($el) => {
-      const { preferences } = window;
-      const { name } = $el;
+    const { preferences } = window;
+    const { $preference } = this.$refs;
 
+    $preference.forEach(async ($el) => {
+      const { name } = $el;
       const value = await preferences.get(name);
 
       $el.setAttribute(typeof value === 'boolean' ? 'checked' : 'value', value);
     });
+
+    preferences.on('update-downloaded', this.onUpdateDownloaded.bind(this));
   }
 
   onInput({ target }) {
@@ -71,7 +87,18 @@ export default class PreferencesView extends HTMLElement {
     return this;
   }
 
-  onUpdate() {
+  onRestartClicked() {
+    const { app } = window;
+
+    app.restart();
+
+    return this;
+  }
+
+  onUpdateDownloaded() {
+    this.$refs.$alert.classList.add('-show');
+    this.onFinish();
+
     return this;
   }
 

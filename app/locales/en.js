@@ -3,7 +3,7 @@ module.exports = {
   locale: 'en',
   app: {
     restart: 'Restart',
-    updateDownloaded: 'A new version of Timestamp has been downloaded. Restart the app to update it.',
+    updateDownloaded: 'A new version of Timestamp has been downloaded. Please restart the app in order to update it.',
   },
   preferences: {
     category: {

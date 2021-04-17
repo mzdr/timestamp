@@ -1,0 +1,24 @@
+.container-alert {
+  align-items: center;
+  border-radius: var(--fx-radius);
+  box-shadow: 0 0 0 1px var(--color-line);
+  display: grid;
+  grid-gap: var(--grid-gap);
+  grid-template-areas: "icon message actions";
+  overflow: hidden;
+  padding: var(--grid-gap);
+}
+
+.container-alert:not(.-show) {
+  display: none;
+}
+
+.container-alert > .icon {
+  align-items: center;
+  display: flex;
+  font-size: calc(var(--type-size) * 2);
+  grid-area: icon;
+  justify-content: center;
+}
+.container-alert > .message { grid-area: message; }
+.container-alert > .actions { grid-area: actions; }

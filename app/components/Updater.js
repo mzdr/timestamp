@@ -5,20 +5,20 @@ const { autoUpdater } = require('electron');
 class Updater {
   constructor(options = {}) {
     const {
-      feedUrl,
       checkEvery = 1000 * 60 * 60,
       currentVersion,
+      feedUrl,
       logger,
+      onUpdateDownloaded,
     } = options;
 
     this.feedUrl = feedUrl;
-    this.currentVersion = currentVersion;
     this.logger = logger;
 
     autoUpdater.on('error', this.onError.bind(this));
-    autoUpdater.on('update-downloaded', this.onUpdateDownloaded.bind(this));
+    autoUpdater.on('update-downloaded', onUpdateDownloaded);
 
-    setInterval(this.onTick.bind(this), checkEvery);
+    setInterval(this.onTick.bind(this, currentVersion), checkEvery);
 
     this.logger.debug('Updater module created.');
   }
@@ -41,29 +41,33 @@ class Updater {
     });
   }
 
-  async onTick() {
+  quitAndInstall() {
+    autoUpdater.quitAndInstall();
+
+    return this;
+  }
+
+  async onTick(currentVersion) {
     const { warning, debug } = this.logger;
 
     try {
       const { version } = await this.fetchJson();
 
-      if (lt(this.currentVersion, version)) {
-        autoUpdater.setFeedURL(this.feedUrl);
-        autoUpdater.checkForUpdates();
-
-        debug(`Update available. (${this.currentVersion} -> ${version})`);
+      if (lt(currentVersion, version) === false) {
+        return;
       }
-    } catch (e) {
-      warning(e.message);
+
+      autoUpdater.setFeedURL(this.feedUrl);
+      autoUpdater.checkForUpdates();
+
+      debug(`Update available. (${currentVersion} -> ${version})`);
+    } catch ({ message }) {
+      warning(message);
     }
   }
 
-  onError() {
-    return this;
-  }
-
-  onUpdateDownloaded() {
-    this.logger.debug('Update downloaded and ready to install.');
+  onError({ message }) {
+    this.logger.warning(message);
     return this;
   }
 }

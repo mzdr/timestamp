@@ -14,5 +14,12 @@ export default class CalendarShowPreferences extends HTMLElement {
         </svg>
       </template>
     `);
+
+    window.calendar.on('update-downloaded', this.onUpdateDownloaded.bind(this));
+  }
+
+  onUpdateDownloaded() {
+    this.classList.add('update-downloaded');
+    return this;
   }
 }

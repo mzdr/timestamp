@@ -1,4 +1,4 @@
 a {
-  color: currentColor;
+  color: var(--color-brand);
   text-decoration-skip-ink: auto;
 }

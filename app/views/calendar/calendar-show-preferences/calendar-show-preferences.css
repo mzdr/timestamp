@@ -43,6 +43,6 @@
   transform-origin: center bottom;
 }
 
-:host(.update-available) .icon-dots > .dot:nth-of-type(2) {
+:host(.update-downloaded) .icon-dots > .dot:nth-of-type(2) {
   animation-play-state: running;
 }

@@ -38,8 +38,8 @@ const defaultPreferences = {
       if (app.isPackaged) {
         this.updater = new Updater({
           feedUrl: 'https://mzdr.github.io/timestamp/update.json',
-          checkEvery: 1000 * 10,
           logger: this.logger,
+          onUpdateDownloaded: this.onUpdateDownloaded.bind(this),
           currentVersion,
         });
       }
@@ -73,6 +73,7 @@ const defaultPreferences = {
       });
 
       ipcMain.on('quit', () => app.exit());
+      ipcMain.on('restart', () => this.updater.quitAndInstall());
       ipcMain.on('resizeWindow', this.onResizeWindow.bind(this));
       ipcMain.on('showPreferences', this.onShowPreferences.bind(this));
       ipcMain.handle('translate', this.onTranslate.bind(this));
@@ -125,6 +126,12 @@ const defaultPreferences = {
         .window
         .setPosition(bounds.x + (bounds.width / 2), currentDisplay.workArea.y + yOffset)
         .toggleVisibility();
+    }
+
+    onUpdateDownloaded() {
+      this.tray.setPrefix('→ ');
+      this.preferences.send('update-downloaded');
+      this.calendar.send('update-downloaded');
     }
   }();
 })();
