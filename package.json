@@ -48,6 +48,7 @@
   "dependencies": {
     "@browserkids/dom": "^0.4.0",
     "date-fns": "^2.20.1",
+    "marked": "^2.0.3",
     "semver": "^7.3.5"
   },
   "devDependencies": {

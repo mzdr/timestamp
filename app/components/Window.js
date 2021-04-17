@@ -15,14 +15,16 @@ class Window {
     this.window = new BrowserWindow({ ...defaults, ...rest });
 
     // @see https://www.electronjs.org/docs/tutorial/security#12-disable-or-limit-navigation
-    this.window.webContents.on('will-navigate', (event) => event.preventDefault());
-
-    // @see https://www.electronjs.org/docs/tutorial/security#13-disable-or-limit-creation-of-new-windows
-    this.window.webContents.on('new-window', async (event, navigationUrl) => {
+    this.window.webContents.on('will-navigate', (event, navigationUrl) => {
       event.preventDefault();
 
-      await shell.openExternal(navigationUrl);
+      if (/^https?:\/\//.test(navigationUrl)) {
+        shell.openExternal(navigationUrl);
+      }
     });
+
+    // @see https://www.electronjs.org/docs/tutorial/security#13-disable-or-limit-creation-of-new-windows
+    this.window.webContents.on('new-window', (event) => event.preventDefault());
 
     this
       .window

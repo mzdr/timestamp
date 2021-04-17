@@ -4,6 +4,7 @@ const {
 
 const { join } = require('path');
 const { arch, platform, release } = require('os');
+const { parseInline } = require('marked');
 
 const Calendar = require('./components/Calendar');
 const Clock = require('./components/Clock');
@@ -101,8 +102,15 @@ const defaultPreferences = {
       return this.preferences.window.show();
     }
 
-    onTranslate(event, key) {
-      return this.locale.translate(key);
+    onTranslate(event, key, options = {}) {
+      const { markdown = false } = options;
+      const translation = this.locale.translate(key);
+
+      if (markdown) {
+        return parseInline(translation);
+      }
+
+      return translation;
     }
 
     onTrayClicked() {

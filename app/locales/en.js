@@ -12,7 +12,7 @@ module.exports = {
     },
     clockFormat: {
       label: 'Clock format',
-      description: 'The system tray clock is using the format function of date-fns. Use any pattern you may like.',
+      description: 'The system tray clock is using the format function of [date-fns](https://date-fns.org/docs/format). Use any pattern you may like.',
     },
   },
 };

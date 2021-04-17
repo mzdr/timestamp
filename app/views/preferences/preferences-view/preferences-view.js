@@ -32,7 +32,7 @@ export default class PreferencesView extends HTMLElement {
               <label class="preferences-item -text">
                 <input #$preference type="text" name="clockFormat" class="action">
                 <translation-key class="label">preferences.clockFormat.label</translation-key>
-                <translation-key class="description">preferences.clockFormat.description</translation-key>
+                <translation-key class="description" markdown>preferences.clockFormat.description</translation-key>
               </label>
             </div>
           </div>

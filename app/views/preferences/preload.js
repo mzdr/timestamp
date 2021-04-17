@@ -8,5 +8,5 @@ contextBridge.exposeInMainWorld('preferences', {
 
 contextBridge.exposeInMainWorld('app', {
   quit: () => ipcRenderer.send('quit'),
-  translate: (key) => ipcRenderer.invoke('translate', key),
+  translate: (key, options) => ipcRenderer.invoke('translate', key, options),
 });

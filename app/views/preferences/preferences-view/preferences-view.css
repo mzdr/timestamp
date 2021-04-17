@@ -6,6 +6,11 @@
   -webkit-app-region: drag;
 }
 
+a {
+  color: var(--color-brand);
+  text-decoration-skip-ink: auto;
+}
+
 input[type="text"] {
   background-color: transparent;
   border-radius: 5px;

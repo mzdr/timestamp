@@ -13,7 +13,11 @@ export default class TranslationKey extends HTMLElement {
   async onUpdate() {
     const { app } = window;
 
-    this.textContent = await app.translate(this.originalKey);
+    if (this.hasAttribute('markdown')) {
+      this.innerHTML = await app.translate(this.originalKey, { markdown: true });
+    } else {
+      this.textContent = await app.translate(this.originalKey);
+    }
 
     dispatch(this, 'finish');
   }
