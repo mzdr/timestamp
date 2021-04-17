@@ -51,13 +51,7 @@ class Window {
   }
 
   toggleVisibility() {
-    if (this.window.isVisible()) {
-      this.hide();
-    } else {
-      this.show();
-    }
-
-    return this;
+    return this.isVisible() ? this.hide() : this.show();
   }
 
   isVisible() {
@@ -67,6 +61,7 @@ class Window {
   onClose(event) {
     this.hide();
 
+    // By default all windows in Timestamp are hidden and not closed
     event.preventDefault();
   }
 
