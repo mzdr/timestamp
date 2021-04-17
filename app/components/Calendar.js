@@ -103,6 +103,10 @@ class Calendar {
     };
   }
 
+  send(channel, ...payload) {
+    this.window.getWebContents().send(channel, ...payload);
+  }
+
   onClose() {
     this.window.hide();
   }

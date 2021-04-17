@@ -78,6 +78,10 @@ class Preferences {
 
     return this;
   }
+
+  send(channel, ...payload) {
+    this.window.getWebContents().send(channel, ...payload);
+  }
 }
 
 module.exports = Preferences;
