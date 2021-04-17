@@ -5,6 +5,7 @@ class SystemTray {
     const { onClick, logger } = options;
 
     this.logger = logger;
+    this.prefix = '';
     this.tray = new Tray(
       nativeImage.createEmpty(),
     );
@@ -20,6 +21,16 @@ class SystemTray {
     return this.tray.getBounds();
   }
 
+  getPrefix() {
+    return this.prefix;
+  }
+
+  setPrefix(value) {
+    this.prefix = value;
+
+    return this;
+  }
+
   getLabel() {
     return this.tray.getTitle();
   }
@@ -28,12 +39,12 @@ class SystemTray {
     const { tray } = this;
 
     if (tray.isDestroyed()) {
-      this.logger.debug('Unable to set label since tray is destroyed.');
+      this.logger.error('Unable to set label since tray is destroyed.');
 
       return this;
     }
 
-    tray.setTitle(this.label = label, {
+    tray.setTitle(`${this.getPrefix()}${this.label = label}`, {
       fontType: 'monospacedDigit',
     });
 
