@@ -31,6 +31,6 @@ export default class CalendarLegend extends HTMLElement {
 
     $content.textContent = `${month} / ${year}`;
 
-    dispatch(this, 'finish');
+    dispatch(this, 'postrender');
   }
 }

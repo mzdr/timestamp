@@ -52,6 +52,6 @@ export default class CalendarMonth extends HTMLElement {
       <div class="days">${$days}</div>
     `;
 
-    dispatch(this, 'finish');
+    dispatch(this, 'postrender');
   }
 }

@@ -15,7 +15,7 @@ export default class PreferencesView extends HTMLElement {
         <form
           class="preferences-view"
           @input="onInput"
-          @finish="onFinish"
+          @postrender="onPostRender"
         >
           <div #$alert class="alert container-alert">
             <span class="icon">🎉</span>
@@ -97,12 +97,12 @@ export default class PreferencesView extends HTMLElement {
 
   onUpdateDownloaded() {
     this.$refs.$alert.classList.add('-show');
-    this.onFinish();
+    this.onPostRender();
 
     return this;
   }
 
-  onFinish() {
+  onPostRender() {
     const { preferences } = window;
 
     preferences.resizeWindow({

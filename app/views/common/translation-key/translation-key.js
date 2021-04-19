@@ -19,6 +19,6 @@ export default class TranslationKey extends HTMLElement {
       this.textContent = await app.translate(this.originalKey);
     }
 
-    dispatch(this, 'finish');
+    dispatch(this, 'postrender');
   }
 }

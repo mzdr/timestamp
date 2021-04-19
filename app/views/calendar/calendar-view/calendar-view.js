@@ -15,8 +15,8 @@ export default class CalendarView extends HTMLElement {
         <calendar-illustration></calendar-illustration>
         <calendar-show-preferences @click="onShowPreferences"></calendar-show-preferences>
         <calendar-today @click="onTodayClicked"></calendar-today>
-        <calendar-legend @finish="onFinish"></calendar-legend>
-        <calendar-month #$month @finish="onFinish"></calendar-month>
+        <calendar-legend @postrender="onPostRender"></calendar-legend>
+        <calendar-month #$month @postrender="onPostRender"></calendar-month>
         <calendar-navigation
           @change="onChange"
           @toggle="onToggle"
@@ -52,10 +52,10 @@ export default class CalendarView extends HTMLElement {
       $month.classList.toggle('show-weeks');
     }
 
-    this.onFinish();
+    this.onPostRender();
   }
 
-  onFinish() {
+  onPostRender() {
     const { calendar } = window;
 
     calendar.resizeWindow({
