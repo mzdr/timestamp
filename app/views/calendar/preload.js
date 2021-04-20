@@ -1,14 +1,9 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge } = require('electron');
 
-contextBridge.exposeInMainWorld('calendar', {
-  close: () => ipcRenderer.send('close'),
-  getCalendar: (payload) => ipcRenderer.invoke('getCalendar', payload),
-  getDate: (payload) => ipcRenderer.invoke('getDate', payload),
-  on: (channel, fn) => ipcRenderer.on(channel, fn),
-  resizeWindow: (payload) => ipcRenderer.send('resizeWindow', payload),
-});
+const { api: app } = require('../../ipc');
+const { api: preferences } = require('../preferences/ipc');
+const { api: calendar } = require('./ipc');
 
-contextBridge.exposeInMainWorld('app', {
-  quit: () => ipcRenderer.send('quit'),
-  showPreferences: () => ipcRenderer.send('showPreferences'),
-});
+contextBridge.exposeInMainWorld('app', app);
+contextBridge.exposeInMainWorld('calendar', calendar);
+contextBridge.exposeInMainWorld('preferences', preferences);

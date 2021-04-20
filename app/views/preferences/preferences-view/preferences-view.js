@@ -67,7 +67,7 @@ export default class PreferencesView extends HTMLElement {
       $el.setAttribute(typeof value === 'boolean' ? 'checked' : 'value', value);
     });
 
-    preferences.on('update-downloaded', this.onUpdateDownloaded.bind(this));
+    preferences.on('app.update-downloaded', this.onUpdateDownloaded.bind(this));
   }
 
   onInput({ target }) {
@@ -103,9 +103,9 @@ export default class PreferencesView extends HTMLElement {
   }
 
   onPostRender() {
-    const { preferences } = window;
+    const { app } = window;
 
-    preferences.resizeWindow({
+    app.resizeWindow({
       width: this.offsetWidth,
       height: this.offsetHeight,
     });

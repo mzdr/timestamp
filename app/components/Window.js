@@ -10,8 +10,9 @@ class Window {
       show: false,
     };
 
-    const { sourceFile, ...rest } = options;
+    const { sourceFile, name, ...rest } = options;
 
+    this.name = name;
     this.window = new BrowserWindow({ ...defaults, ...rest });
 
     // @see https://www.electronjs.org/docs/tutorial/security#12-disable-or-limit-navigation
@@ -37,15 +38,15 @@ class Window {
   }
 
   show() {
+    this.window.webContents.send(`${this.name}.show`);
     this.window.show();
-    this.window.webContents.send('show');
 
     return this;
   }
 
   hide() {
+    this.window.webContents.send(`${this.name}.hide`);
     this.window.hide();
-    this.window.webContents.send('hide');
 
     return this;
   }

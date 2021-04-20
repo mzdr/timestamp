@@ -1,14 +1,7 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge } = require('electron');
 
-contextBridge.exposeInMainWorld('preferences', {
-  get: (key) => ipcRenderer.invoke('get', key),
-  on: (channel, fn) => ipcRenderer.on(channel, fn),
-  resizeWindow: (payload) => ipcRenderer.send('resizeWindow', payload),
-  set: (key, value) => ipcRenderer.send('set', key, value),
-});
+const { api: app } = require('../../ipc');
+const { api: preferences } = require('./ipc');
 
-contextBridge.exposeInMainWorld('app', {
-  quit: () => ipcRenderer.send('quit'),
-  restart: () => ipcRenderer.send('restart'),
-  translate: (key, options) => ipcRenderer.invoke('translate', key, options),
-});
+contextBridge.exposeInMainWorld('app', app);
+contextBridge.exposeInMainWorld('preferences', preferences);

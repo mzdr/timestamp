@@ -14,6 +14,14 @@ const Preferences = require('./components/Preferences');
 const SystemTray = require('./components/SystemTray');
 const Updater = require('./components/Updater');
 
+const {
+  APP_QUIT,
+  APP_RESIZE_WINDOW,
+  APP_RESTART,
+  APP_TRANSLATE,
+  APP_UPDATE_DOWNLOADED,
+} = require('./ipc');
+
 const defaultPreferences = {
   openAtLogin: false,
   clockFormat: 'Pp',
@@ -72,11 +80,10 @@ const defaultPreferences = {
         logger: this.logger,
       });
 
-      ipcMain.on('quit', () => app.exit());
-      ipcMain.on('restart', () => this.updater.quitAndInstall());
-      ipcMain.on('resizeWindow', this.onResizeWindow.bind(this));
-      ipcMain.on('showPreferences', this.onShowPreferences.bind(this));
-      ipcMain.handle('translate', this.onTranslate.bind(this));
+      ipcMain.on(APP_QUIT, () => app.exit());
+      ipcMain.on(APP_RESTART, () => this.updater.quitAndInstall());
+      ipcMain.on(APP_RESIZE_WINDOW, this.onResizeWindow.bind(this));
+      ipcMain.handle(APP_TRANSLATE, this.onTranslate.bind(this));
     }
 
     onResizeWindow({ sender }, { width, height }) {
@@ -97,10 +104,6 @@ const defaultPreferences = {
       }
 
       return this;
-    }
-
-    onShowPreferences() {
-      return this.preferences.window.show();
     }
 
     onTranslate(event, key, options = {}) {
@@ -130,8 +133,8 @@ const defaultPreferences = {
 
     onUpdateDownloaded() {
       this.tray.setPrefix('→ ');
-      this.preferences.send('update-downloaded');
-      this.calendar.send('update-downloaded');
+      this.preferences.send(APP_UPDATE_DOWNLOADED);
+      this.calendar.send(APP_UPDATE_DOWNLOADED);
     }
   }();
 })();

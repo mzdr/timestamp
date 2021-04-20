@@ -15,7 +15,7 @@ export default class CalendarShowPreferences extends HTMLElement {
       </template>
     `);
 
-    window.calendar.on('update-downloaded', this.onUpdateDownloaded.bind(this));
+    window.calendar.on('app.update-downloaded', this.onUpdateDownloaded.bind(this));
   }
 
   onUpdateDownloaded() {

@@ -31,7 +31,7 @@ export default class CalendarView extends HTMLElement {
     this.$refs = findReferences(this.shadowRoot);
     this.update();
 
-    calendar.on('hide', this.onTodayClicked.bind(this));
+    calendar.on('calendar.hide', this.onTodayClicked.bind(this));
   }
 
   async update(now) {
@@ -56,18 +56,18 @@ export default class CalendarView extends HTMLElement {
   }
 
   onPostRender() {
-    const { calendar } = window;
+    const { app } = window;
 
-    calendar.resizeWindow({
+    app.resizeWindow({
       width: this.offsetWidth,
       height: this.offsetHeight,
     });
   }
 
   onShowPreferences() {
-    const { app } = window;
+    const { preferences } = window;
 
-    app.showPreferences();
+    preferences.show();
 
     return this;
   }

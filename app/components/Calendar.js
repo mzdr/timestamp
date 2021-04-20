@@ -1,21 +1,28 @@
 const { ipcMain } = require('electron');
+const { resolve } = require('path');
 const datefns = require('date-fns');
 
-const { getAbsolutePath } = require('../utils');
 const Window = require('./Window');
+
+const {
+  CALENDAR_GET_CALENDAR,
+  CALENDAR_GET_DATE,
+  CALENDAR_HIDE,
+} = require('../views/calendar/ipc');
 
 class Calendar {
   constructor({ locale, logger }) {
     this.locale = locale.getObject();
 
-    ipcMain.handle('getDate', this.getDate.bind(this));
-    ipcMain.handle('getCalendar', this.getCalendar.bind(this));
-    ipcMain.on('close', this.onClose.bind(this));
+    ipcMain.handle(CALENDAR_GET_CALENDAR, this.getCalendar.bind(this));
+    ipcMain.handle(CALENDAR_GET_DATE, this.getDate.bind(this));
+    ipcMain.on(CALENDAR_HIDE, this.onHide.bind(this));
 
     this.window = new Window({
-      sourceFile: getAbsolutePath('views', 'calendar', 'calendar.html'),
+      name: 'calendar',
+      sourceFile: resolve('app/views/calendar/calendar.html'),
       webPreferences: {
-        preload: getAbsolutePath('views', 'calendar', 'preload.js'),
+        preload: resolve('app/views/calendar/preload.js'),
       },
     });
 
@@ -103,11 +110,7 @@ class Calendar {
     };
   }
 
-  send(channel, ...payload) {
-    this.window.getWebContents().send(channel, ...payload);
-  }
-
-  onClose() {
+  onHide() {
     this.window.hide();
   }
 }

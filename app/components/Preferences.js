@@ -1,8 +1,14 @@
 const { ipcMain } = require('electron');
 const { readFile, writeFile } = require('fs').promises;
+const { resolve } = require('path');
 
-const { getAbsolutePath } = require('../utils');
 const Window = require('./Window');
+
+const {
+  PREFERENCES_GET,
+  PREFERENCES_SET,
+  PREFERENCES_SHOW,
+} = require('../views/preferences/ipc');
 
 class Preferences {
   constructor(options = {}) {
@@ -20,14 +26,16 @@ class Preferences {
 
     this.logger.debug(`Using those default values as preferences: “${JSON.stringify(defaults)}”.`);
 
-    ipcMain.handle('get', (event, key) => this.get(key));
-    ipcMain.on('set', (event, key, value) => this.set(key, value));
+    ipcMain.handle(PREFERENCES_GET, (event, key) => this.get(key));
+    ipcMain.on(PREFERENCES_SET, (event, key, value) => this.set(key, value));
+    ipcMain.on(PREFERENCES_SHOW, () => this.window.show());
 
     this.window = new Window({
+      name: 'preferences',
       frame: true,
-      sourceFile: getAbsolutePath('views', 'preferences', 'preferences.html'),
+      sourceFile: resolve('app/views/preferences/preferences.html'),
       webPreferences: {
-        preload: getAbsolutePath('views', 'preferences', 'preload.js'),
+        preload: resolve('app/views/preferences/preload.js'),
       },
     });
 
@@ -77,10 +85,6 @@ class Preferences {
     }
 
     return this;
-  }
-
-  send(channel, ...payload) {
-    this.window.getWebContents().send(channel, ...payload);
   }
 }
 
