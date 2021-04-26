@@ -33,9 +33,9 @@ class Preferences {
     this.window = new Window({
       name: 'preferences',
       frame: true,
-      sourceFile: resolve('app/views/preferences/preferences.html'),
+      sourceFile: resolve(__dirname, '../views/preferences/preferences.html'),
       webPreferences: {
-        preload: resolve('app/views/preferences/preload.js'),
+        preload: resolve(__dirname, '../views/preferences/preload.js'),
       },
     });
 

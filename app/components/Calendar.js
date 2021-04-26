@@ -20,9 +20,9 @@ class Calendar {
 
     this.window = new Window({
       name: 'calendar',
-      sourceFile: resolve('app/views/calendar/calendar.html'),
+      sourceFile: resolve(__dirname, '../views/calendar/calendar.html'),
       webPreferences: {
-        preload: resolve('app/views/calendar/preload.js'),
+        preload: resolve(__dirname, '../views/calendar/preload.js'),
       },
     });
 
