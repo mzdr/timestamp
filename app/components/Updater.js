@@ -21,6 +21,7 @@ class Updater {
     setInterval(this.onTick.bind(this, currentVersion), checkEvery);
 
     this.logger.debug('Updater module created.');
+    this.logger.debug(`Checking “${feedUrl}” every ${checkEvery / 1000} seconds for updates.`);
   }
 
   async fetchJson() {
