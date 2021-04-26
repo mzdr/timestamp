@@ -15,7 +15,7 @@ exports.default = async function notarizing(context) {
   const appBundleId = build.appId;
   const appPath = `${appOutDir}/${packager.appInfo.productFilename}.app`;
   const appleId = process.env.APPLE_ID;
-  const appleIdPassword = `@keychain:"Application Loader: ${appleId}"`;
+  const appleIdPassword = process.env.APPLE_ID_PASSWORD;
 
   await notarize({
     appBundleId,
