@@ -31,10 +31,16 @@ class Updater {
         const json = [];
 
         if (statusCode !== 200) {
-          reject(response);
+          reject(new Error(`Feed url is not reachable. Response status code is ${statusCode}.`));
         } else {
           response.on('data', json.push.bind(json));
-          response.on('end', () => resolve(JSON.parse(json.join())));
+          response.on('end', () => {
+            try {
+              resolve(JSON.parse(json.join()));
+            } catch (e) {
+              this.logger.error('Couldn’t parse feed response.');
+            }
+          });
         }
       });
 
@@ -49,8 +55,6 @@ class Updater {
   }
 
   async onTick(currentVersion) {
-    const { warning, debug } = this.logger;
-
     try {
       const { version } = await this.fetchJson();
 
@@ -61,14 +65,15 @@ class Updater {
       autoUpdater.setFeedURL(this.feedUrl);
       autoUpdater.checkForUpdates();
 
-      debug(`Update available. (${currentVersion} -> ${version})`);
+      this.logger.debug(`Update available. (${currentVersion} -> ${version})`);
     } catch ({ message }) {
-      warning(message);
+      this.logger.warning(message);
     }
   }
 
   onError({ message }) {
     this.logger.warning(message);
+
     return this;
   }
 }
