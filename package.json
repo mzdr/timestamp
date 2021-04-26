@@ -37,7 +37,6 @@
   "private": true,
   "scripts": {
     "build": "electron-builder",
-    "build:pack": "electron-builder --dir",
     "clean": "rimraf dist",
     "lint": "eslint ./app",
     "lint:fix": "npm run lint -- --fix",
