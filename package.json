@@ -32,7 +32,8 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
-    }
+    },
+    "afterSign": "scripts/notarize.js"
   },
   "private": true,
   "scripts": {
