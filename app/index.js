@@ -133,8 +133,8 @@ const defaultPreferences = {
 
     onUpdateDownloaded() {
       this.tray.setPrefix('→ ');
-      this.preferences.send(APP_UPDATE_DOWNLOADED);
-      this.calendar.send(APP_UPDATE_DOWNLOADED);
+      this.preferences.window.getWebContents().send(APP_UPDATE_DOWNLOADED);
+      this.calendar.window.getWebContents().send(APP_UPDATE_DOWNLOADED);
     }
   }();
 })();
