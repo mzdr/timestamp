@@ -68,10 +68,11 @@ class Calendar {
     const nextMonthDays = datefns.differenceInCalendarDays(lastWeek, lastDayOfMonth);
 
     for (let i = 0; i < previousMonthDays; i += 1) {
-      days.push({
-        day: datefns.addDays(firstWeek, i),
-        previousMonth: true,
-      });
+      const day = datefns.addDays(firstWeek, i);
+      const isToday = datefns.isToday(day);
+      const previousMonth = true;
+
+      days.push({ day, isToday, previousMonth });
     }
 
     for (let i = 0; i < totalDays; i += 1) {
@@ -82,10 +83,11 @@ class Calendar {
     }
 
     for (let i = 1; i <= nextMonthDays; i += 1) {
-      days.push({
-        day: datefns.addDays(lastDayOfMonth, i),
-        nextMonth: true,
-      });
+      const day = datefns.addDays(lastDayOfMonth, i);
+      const isToday = datefns.isToday(day);
+      const nextMonth = true;
+
+      days.push({ day, isToday, nextMonth });
     }
 
     for (let i = 0; i < 7; i += 1) {
