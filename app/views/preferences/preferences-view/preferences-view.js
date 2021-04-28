@@ -21,7 +21,7 @@ export default class PreferencesView extends HTMLElement {
             <span class="icon">🎉</span>
             <translation-key>app.updateDownloaded</translation-key>
             <div class="actions">
-              <button class="onRestartClicked">
+              <button @click="onRestartClicked">
                 <translation-key>app.restart</translation-key>
               </button>
             </div>

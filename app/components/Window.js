@@ -37,6 +37,12 @@ class Window {
     return window === this.window;
   }
 
+  destroy() {
+    this.window.destroy();
+
+    return this;
+  }
+
   show() {
     this.window.webContents.send(`${this.name}.show`);
     this.window.show();

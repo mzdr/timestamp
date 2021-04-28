@@ -81,9 +81,17 @@ const defaultPreferences = {
       });
 
       ipcMain.on(APP_QUIT, () => app.exit());
-      ipcMain.on(APP_RESTART, () => this.updater.quitAndInstall());
+      ipcMain.on(APP_RESTART, this.onRestart.bind(this));
       ipcMain.on(APP_RESIZE_WINDOW, this.onResizeWindow.bind(this));
       ipcMain.handle(APP_TRANSLATE, this.onTranslate.bind(this));
+    }
+
+    onRestart() {
+      this.calendar.window.destroy();
+      this.preferences.window.destroy();
+      this.updater.quitAndInstall();
+
+      return this;
     }
 
     onResizeWindow({ sender }, { width, height }) {
