@@ -7,8 +7,10 @@ const { build } = require('../package.json');
 
 exports.default = async function notarizing(context) {
   const { electronPlatformName, appOutDir, packager } = context;
+  const isUnpacked = process.argv.includes('--dir');
+  const isMacOs = electronPlatformName === 'darwin';
 
-  if (electronPlatformName !== 'darwin') {
+  if (isUnpacked || isMacOs === false) {
     return;
   }
 
