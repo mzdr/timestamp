@@ -23,6 +23,7 @@ class Calendar {
       sourceFile: resolve(__dirname, '../views/calendar/calendar.html'),
       webPreferences: {
         preload: resolve(__dirname, '../views/calendar/preload.js'),
+        backgroundThrottling: false,
       },
     });
 
