@@ -32,6 +32,7 @@ export default class CalendarView extends HTMLElement {
     this.update();
 
     calendar.on('calendar.hide', this.onTodayClicked.bind(this));
+    calendar.on('calendar.show', this.onTodayClicked.bind(this));
   }
 
   async update(now) {
