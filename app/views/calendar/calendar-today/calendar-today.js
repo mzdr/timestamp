@@ -10,7 +10,7 @@ export default class CalendarToday extends HTMLElement {
         <span
           class="calendar-today"
           #$content
-          @update.window="onUpdate"
+          @postupdate.window="onPostUpdate"
         ></span>
       </template>
     `);
@@ -20,7 +20,7 @@ export default class CalendarToday extends HTMLElement {
     this.$refs = findReferences(this.shadowRoot);
   }
 
-  async onUpdate() {
+  async onPostUpdate() {
     const { calendar } = window;
     const { $content } = this.$refs;
     const [day, date, month] = (await calendar.getDate({ format: 'EEEE do MMMM' })).split(' ');

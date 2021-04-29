@@ -12,7 +12,7 @@ export default class CalendarMonth extends HTMLElement {
     createShadowRoot(this, `
       <template>
         <link rel="stylesheet" href="calendar-month/calendar-month.css">
-        <div class="calendar-month" #$content @update.window="onUpdate"></div>
+        <div class="calendar-month" #$content @postupdate.window="onPostUpdate"></div>
       </template>
     `);
 
@@ -21,7 +21,7 @@ export default class CalendarMonth extends HTMLElement {
     this.$refs = findReferences(this.shadowRoot);
   }
 
-  async onUpdate({ detail }) {
+  async onPostUpdate({ detail }) {
     const { now } = detail;
     const { calendar } = window;
     const { $content } = this.$refs;

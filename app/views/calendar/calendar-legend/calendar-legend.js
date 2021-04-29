@@ -12,7 +12,7 @@ export default class CalendarLegend extends HTMLElement {
     createShadowRoot(this, `
       <template>
         <link rel="stylesheet" href="calendar-legend/calendar-legend.css">
-        <span class="calendar-legend" #$content @update.window="onUpdate"></span>
+        <span class="calendar-legend" #$content @postupdate.window="onPostUpdate"></span>
       </template>
     `);
 
@@ -21,7 +21,7 @@ export default class CalendarLegend extends HTMLElement {
     this.$refs = findReferences(this.shadowRoot);
   }
 
-  async onUpdate({ detail }) {
+  async onPostUpdate({ detail }) {
     const { now } = detail;
     const { calendar } = window;
     const { $content } = this.$refs;

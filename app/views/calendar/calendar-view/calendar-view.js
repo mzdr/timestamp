@@ -38,7 +38,7 @@ export default class CalendarView extends HTMLElement {
   async update(now) {
     const { calendar } = window;
 
-    dispatch(window, 'update', {
+    dispatch(window, 'postupdate', {
       now: this.now = (now || await calendar.getDate()),
     });
 

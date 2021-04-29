@@ -17,7 +17,7 @@ export default class CalendarNavigation extends HTMLElement {
           class="calendar-navigation"
           #$content
           @keydown.window="onKeyDown"
-          @update.window="onUpdate"
+          @postupdate.window="onPostUpdate"
         >
           <button class="go-to -year" @click="goPreviousYear"></button>
 
@@ -79,7 +79,7 @@ export default class CalendarNavigation extends HTMLElement {
     }
   }
 
-  onUpdate({ detail }) {
+  onPostUpdate({ detail }) {
     const { now } = detail;
     const { $content } = this.$refs;
     const $months = $content.querySelectorAll('.go-to.-month');
