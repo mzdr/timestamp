@@ -11,7 +11,7 @@ module.exports = {
 
   api: {
     get: (key) => ipcRenderer.invoke(PREFERENCES_GET, key),
-    on: (channel, fn) => ipcRenderer.on(channel, fn),
+    on: (channel, fn) => ipcRenderer.on(`preferences.${channel}`, fn),
     set: (key, value) => ipcRenderer.send(PREFERENCES_SET, key, value),
     show: () => ipcRenderer.send(PREFERENCES_SHOW),
   },

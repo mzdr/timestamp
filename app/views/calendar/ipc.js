@@ -13,6 +13,6 @@ module.exports = {
     getCalendar: (payload) => ipcRenderer.invoke(CALENDAR_GET_CALENDAR, payload),
     getDate: (payload) => ipcRenderer.invoke(CALENDAR_GET_DATE, payload),
     hide: () => ipcRenderer.send(CALENDAR_HIDE),
-    on: (channel, fn) => ipcRenderer.on(channel, fn),
+    on: (channel, fn) => ipcRenderer.on(`calendar.${channel}`, fn),
   },
 };

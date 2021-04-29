@@ -15,11 +15,14 @@ export default class CalendarShowPreferences extends HTMLElement {
       </template>
     `);
 
-    window.calendar.on('app.update-downloaded', this.onUpdateDownloaded.bind(this));
+    const { app } = window;
+
+    app.on('update-downloaded', this.onUpdateDownloaded.bind(this));
   }
 
   onUpdateDownloaded() {
     this.classList.add('update-downloaded');
+
     return this;
   }
 }

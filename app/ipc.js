@@ -19,6 +19,7 @@ module.exports = {
     version,
     copyright,
 
+    on: (channel, fn) => ipcRenderer.on(`app.${channel}`, fn),
     quit: () => ipcRenderer.send(APP_QUIT),
     resizeWindow: (payload) => ipcRenderer.send(APP_RESIZE_WINDOW, payload),
     restart: () => ipcRenderer.send(APP_RESTART),

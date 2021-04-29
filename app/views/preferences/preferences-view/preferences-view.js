@@ -73,7 +73,7 @@ export default class PreferencesView extends HTMLElement {
       $el.setAttribute(typeof value === 'boolean' ? 'checked' : 'value', value);
     });
 
-    preferences.on('app.update-downloaded', this.onUpdateDownloaded.bind(this));
+    app.on('update-downloaded', this.onUpdateDownloaded.bind(this));
   }
 
   onInput({ target }) {
