@@ -2,7 +2,7 @@ const { ipcRenderer } = require('electron');
 const { productName, version, copyright } = require('../package.json');
 
 const APP_QUIT = 'app.quit';
-const APP_RESIZE_WINDOW = 'app.resizeWindow';
+const APP_RESIZE_WINDOW = 'app.resize-window';
 const APP_RESTART = 'app.restart';
 const APP_TRANSLATE = 'app.translate';
 const APP_UPDATE_DOWNLOADED = 'app.update-downloaded';

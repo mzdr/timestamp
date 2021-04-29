@@ -1,7 +1,7 @@
 const { ipcRenderer } = require('electron');
 
-const CALENDAR_GET_CALENDAR = 'calendar.getCalendar';
-const CALENDAR_GET_DATE = 'calendar.getDate';
+const CALENDAR_GET_CALENDAR = 'calendar.get-calendar';
+const CALENDAR_GET_DATE = 'calendar.get-date';
 const CALENDAR_HIDE = 'calendar.hide';
 
 module.exports = {
