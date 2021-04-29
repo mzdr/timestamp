@@ -13,8 +13,20 @@
   padding: var(--grid-gap);
 }
 
-.preferences-view > .alert {
+.preferences-view > .alert,
+.preferences-view > .about {
   grid-column: 1 / -1;
+}
+
+.preferences-view > .about {
+  border-radius: var(--fx-radius);
+  box-shadow: inset 0 1px 0 var(--color-line);
+  color: var(--color-text-shy);
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: var(--grid-gap);
+  justify-content: center;
+  padding-top: var(--grid-gap);
 }
 
 .preferences-category {

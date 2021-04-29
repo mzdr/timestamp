@@ -4,6 +4,8 @@ export default class PreferencesView extends HTMLElement {
   constructor() {
     super();
 
+    const { app, preferences } = window;
+
     createShadowRoot(this, `
       <template>
         <link rel="stylesheet" href="../../styles/shared/links.css">
@@ -17,7 +19,7 @@ export default class PreferencesView extends HTMLElement {
           @input="onInput"
           @postrender="onPostRender"
         >
-          <div #$alert class="alert container-alert">
+          <section #$alert class="alert container-alert">
             <span class="icon">🎉</span>
             <translation-key>app.updateDownloaded</translation-key>
             <div class="actions">
@@ -25,9 +27,9 @@ export default class PreferencesView extends HTMLElement {
                 <translation-key>app.restart</translation-key>
               </button>
             </div>
-          </div>
+          </section>
 
-          <div class="preferences-category">
+          <section class="preferences-category">
             <translation-key class="title">preferences.category.general</translation-key>
             <div class="items">
               <label class="preferences-item">
@@ -36,9 +38,9 @@ export default class PreferencesView extends HTMLElement {
                 <translation-key class="description">preferences.openAtLogin.description</translation-key>
               </label>
             </div>
-          </div>
+          </section>
 
-          <div class="preferences-category">
+          <section class="preferences-category">
             <translation-key class="title">preferences.category.tray</translation-key>
 
             <div class="items">
@@ -48,7 +50,12 @@ export default class PreferencesView extends HTMLElement {
                 <translation-key class="description" markdown>preferences.clockFormat.description</translation-key>
               </label>
             </div>
-          </div>
+          </section>
+
+          <section class="about">
+            <span class="product">${app.productName} v${app.version}</span>
+            <span class="copyright">${app.copyright}</span>
+          </section>
         </form>
       </template>
     `);
@@ -57,7 +64,6 @@ export default class PreferencesView extends HTMLElement {
 
     this.$refs = findReferences(this.shadowRoot);
 
-    const { preferences } = window;
     const { $preference } = this.$refs;
 
     $preference.forEach(async ($el) => {

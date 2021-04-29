@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const { productName, version, copyright } = require('../package.json');
 
 const APP_QUIT = 'app.quit';
 const APP_RESIZE_WINDOW = 'app.resizeWindow';
@@ -14,6 +15,10 @@ module.exports = {
   APP_UPDATE_DOWNLOADED,
 
   api: {
+    productName,
+    version,
+    copyright,
+
     quit: () => ipcRenderer.send(APP_QUIT),
     resizeWindow: (payload) => ipcRenderer.send(APP_RESIZE_WINDOW, payload),
     restart: () => ipcRenderer.send(APP_RESTART),
