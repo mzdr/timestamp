@@ -14,7 +14,7 @@ export default class CalendarView extends HTMLElement {
         <link rel="stylesheet" href="calendar-view/calendar-view.css" />
         <calendar-illustration></calendar-illustration>
         <calendar-show-preferences @click="onShowPreferences"></calendar-show-preferences>
-        <calendar-today @click="onTodayClicked"></calendar-today>
+        <calendar-today @postrender="onPostRender" @click="onTodayClicked"></calendar-today>
         <calendar-legend @postrender="onPostRender"></calendar-legend>
         <calendar-month #$month @postrender="onPostRender"></calendar-month>
         <calendar-navigation
