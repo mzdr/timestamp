@@ -10,13 +10,22 @@ class Window {
       show: false,
     };
 
-    const { sourceFile, name, ...rest } = options;
+    const {
+      sourceFile,
+      name,
+      onReady,
+      ...rest
+    } = options;
 
     this.name = name;
-    this.window = new BrowserWindow({ ...defaults, ...rest });
+    this.browserWindow = new BrowserWindow({ ...defaults, ...rest });
+
+    if (typeof onReady === 'function') {
+      this.browserWindow.on('ready-to-show', onReady);
+    }
 
     // @see https://www.electronjs.org/docs/tutorial/security#12-disable-or-limit-navigation
-    this.window.webContents.on('will-navigate', (event, navigationUrl) => {
+    this.browserWindow.webContents.on('will-navigate', (event, navigationUrl) => {
       event.preventDefault();
 
       if (/^https?:\/\//.test(navigationUrl)) {
@@ -25,34 +34,34 @@ class Window {
     });
 
     // @see https://www.electronjs.org/docs/tutorial/security#13-disable-or-limit-creation-of-new-windows
-    this.window.webContents.on('new-window', (event) => event.preventDefault());
+    this.browserWindow.webContents.on('new-window', (event) => event.preventDefault());
 
     this
-      .window
+      .browserWindow
       .on('close', this.onClose.bind(this))
       .loadFile(sourceFile);
   }
 
   isSame(window) {
-    return window === this.window;
+    return window === this.browserWindow;
   }
 
   destroy() {
-    this.window.destroy();
+    this.browserWindow.destroy();
 
     return this;
   }
 
   show() {
-    this.window.webContents.send(`${this.name}.show`);
-    this.window.show();
+    this.browserWindow.webContents.send(`${this.name}.show`);
+    this.browserWindow.show();
 
     return this;
   }
 
   hide() {
-    this.window.webContents.send(`${this.name}.hide`);
-    this.window.hide();
+    this.browserWindow.webContents.send(`${this.name}.hide`);
+    this.browserWindow.hide();
 
     return this;
   }
@@ -62,7 +71,7 @@ class Window {
   }
 
   isVisible() {
-    return this.window.isVisible();
+    return this.browserWindow.isVisible();
   }
 
   onClose(event) {
@@ -72,12 +81,16 @@ class Window {
     event.preventDefault();
   }
 
+  getBrowserWindow() {
+    return this.browserWindow;
+  }
+
   getWebContents() {
-    return this.window.webContents;
+    return this.browserWindow.webContents;
   }
 
   getContentSize() {
-    return this.window.getContentSize();
+    return this.browserWindow.getContentSize();
   }
 
   setContentSize(width, height) {
@@ -87,18 +100,18 @@ class Window {
       return this;
     }
 
-    this.window.setContentSize(width, height, true);
+    this.browserWindow.setContentSize(width, height, true);
 
     return this;
   }
 
   getPosition() {
-    return this.window.getPosition();
+    return this.browserWindow.getPosition();
   }
 
   setPosition(x, y, centerToX = true) {
-    this.window.setPosition(
-      centerToX ? Math.round(x - (this.window.getSize()[0] / 2)) : x,
+    this.browserWindow.setPosition(
+      centerToX ? Math.round(x - (this.browserWindow.getSize()[0] / 2)) : x,
       y,
     );
 
