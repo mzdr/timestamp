@@ -45,27 +45,27 @@ const defaultPreferences = {
 
       if (app.isPackaged) {
         this.updater = new Updater({
+          currentVersion,
           feedUrl: 'https://mzdr.github.io/timestamp/update.json',
           logger: this.logger,
           onUpdateDownloaded: this.onUpdateDownloaded.bind(this),
-          currentVersion,
         });
       }
 
       this.locale = new Locale({
-        preferred: app.getLocale(),
         logger: this.logger,
+        preferred: app.getLocale(),
       });
 
       this.tray = new SystemTray({
-        onClick: this.onTrayClicked.bind(this),
         logger: this.logger,
+        onClick: this.onTrayClicked.bind(this),
       });
 
       this.clock = new Clock({
-        onTick: this.tray.setLabel.bind(this.tray),
-        locale: this.locale,
         format: defaultPreferences.clockFormat,
+        locale: this.locale,
+        onTick: this.tray.setLabel.bind(this.tray),
       });
 
       this.calendar = new Calendar({
@@ -74,10 +74,10 @@ const defaultPreferences = {
       });
 
       this.preferences = new Preferences({
-        onChange: this.onPreferencesChanged.bind(this),
-        storagePath,
         defaults: defaultPreferences,
         logger: this.logger,
+        onChange: this.onPreferencesChanged.bind(this),
+        storagePath,
       });
 
       ipcMain.on(APP_QUIT, () => app.exit());
