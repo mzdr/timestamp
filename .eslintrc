@@ -13,7 +13,8 @@
   },
   "rules": {
     "import/extensions": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "max-len": "off"
   },
   "settings": {
     "import/core-modules": ["electron"]
