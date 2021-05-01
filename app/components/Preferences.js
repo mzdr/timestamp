@@ -1,11 +1,12 @@
 const { ipcMain } = require('electron');
 const { readFile, writeFile } = require('fs').promises;
-const { resolve } = require('path');
+const { join, resolve } = require('path');
 
 const Window = require('./Window');
 
 const {
   PREFERENCES_GET,
+  PREFERENCES_GET_ALL,
   PREFERENCES_SET,
   PREFERENCES_SHOW,
 } = require('../views/preferences/ipc');
@@ -20,13 +21,14 @@ class Preferences {
     } = options;
 
     this.logger = logger;
-    this.storagePath = storagePath;
+    this.filePath = join(storagePath, 'UserPreferences.json');
     this.onChange = onChange || (() => {});
     this.data = new Map(Object.entries(defaults));
 
     this.logger.debug(`Using those default values as preferences: “${JSON.stringify(defaults)}”.`);
 
     ipcMain.handle(PREFERENCES_GET, (event, key) => this.get(key));
+    ipcMain.handle(PREFERENCES_GET_ALL, () => this.getAll());
     ipcMain.on(PREFERENCES_SET, (event, key, value) => this.set(key, value));
     ipcMain.on(PREFERENCES_SHOW, () => this.window.show());
 
@@ -46,16 +48,16 @@ class Preferences {
 
   async load() {
     try {
-      this.logger.debug(`Trying to load user preferences from “${this.storagePath}”.`);
+      this.logger.debug(`Trying to load user preferences from “${this.filePath}”.`);
 
       Object
-        .entries(JSON.parse(await readFile(this.storagePath, 'utf8')))
+        .entries(JSON.parse(await readFile(this.filePath, 'utf8')))
         .forEach((item) => this.set(...item, false));
     } catch ({ message }) {
       if (/enoent/i.test(message)) {
         this.logger.debug('Looks like it’s the first time starting Timestamp. No user preferences found.');
       } else {
-        this.logger.debug(`Unknown error: ${message}`);
+        this.logger.error(`Unknown error: ${message}`);
       }
     }
 
@@ -63,9 +65,13 @@ class Preferences {
   }
 
   async save() {
-    await writeFile(this.storagePath, JSON.stringify(Object.fromEntries(this.data)));
+    await writeFile(this.filePath, JSON.stringify(Object.fromEntries(this.data)));
 
     return this;
+  }
+
+  getAll() {
+    return new Map(this.data);
   }
 
   get(key) {

@@ -2,7 +2,6 @@ const {
   app, screen, ipcMain, BrowserWindow,
 } = require('electron');
 
-const { join } = require('path');
 const { arch, platform, release } = require('os');
 const { parseInline } = require('marked');
 
@@ -35,9 +34,10 @@ const defaultPreferences = {
   return new class {
     constructor() {
       const currentVersion = app.getVersion();
+      const storagePath = app.getPath('userData');
 
       this.logger = new Logger({
-        filePath: join(app.getPath('userData'), 'Output.log'),
+        storagePath,
       });
 
       this.logger.debug(`Starting Timestamp v${currentVersion} on “${platform()}-${arch()} v${release()}”.`);
@@ -75,7 +75,7 @@ const defaultPreferences = {
 
       this.preferences = new Preferences({
         onChange: this.onPreferencesChanged.bind(this),
-        storagePath: join(app.getPath('userData'), 'UserPreferences.json'),
+        storagePath,
         defaults: defaultPreferences,
         logger: this.logger,
       });

@@ -1,10 +1,11 @@
+const { join } = require('path');
 const { writeFile } = require('fs').promises;
 
 class Logger {
   constructor(options = {}) {
-    const { filePath } = options;
+    const { storagePath } = options;
 
-    this.filePath = filePath;
+    this.filePath = join(storagePath, 'Output.log');
     this.levels = {
       emergency: 0,
       alert: 1,
