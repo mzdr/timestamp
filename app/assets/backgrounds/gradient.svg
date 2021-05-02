@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 256 196">
+  <style>
+    /* @see https://codepen.io/bork/details/wJhEm */
+    .wave { fill: var(--color-background-primary, #fff); }
+
+    .start { stop-color: var(--start-color, #0075ff); }
+    .stop { stop-color: var(--stop-color, #a8d0ff); }
+
+    :host { color: #fff; }
+
+    :host([data-hour="0"]) { --start-color: #012459; --stop-color: #001322; }
+    :host([data-hour="1"]) { --start-color: #003972; --stop-color: #001322; }
+    :host([data-hour="2"]) { --start-color: #003972; --stop-color: #001322; }
+    :host([data-hour="3"]) { --start-color: #004372; --stop-color: #00182b; }
+    :host([data-hour="4"]) { --start-color: #004372; --stop-color: #011d34; }
+    :host([data-hour="5"]) { --start-color: #016792; --stop-color: #00182b; }
+    :host([data-hour="6"]) { --start-color: #07729f; --stop-color: #042c47; }
+    :host([data-hour="7"]) { --start-color: #12a1c0; --stop-color: #07506e; }
+    :host([data-hour="8"]) { --start-color: #74d4cc; --stop-color: #1386a6; }
+    :host([data-hour="9"]) { --start-color: #efeebc; --stop-color: #61d0cf; }
+    :host([data-hour="10"]) { --start-color: #fee154; --stop-color: #a3dec6; }
+    :host([data-hour="11"]) { --start-color: #fdc352; --stop-color: #e8ed92; }
+    :host([data-hour="12"]) { --start-color: #ffac6f; --stop-color: #ffe467; }
+    :host([data-hour="13"]) { --start-color: #fda65a; --stop-color: #ffe467; }
+    :host([data-hour="14"]) { --start-color: #fd9e58; --stop-color: #ffe467; }
+    :host([data-hour="15"]) { --start-color: #f18448; --stop-color: #ffd364; }
+    :host([data-hour="16"]) { --start-color: #f06b7e; --stop-color: #f9a856; }
+    :host([data-hour="17"]) { --start-color: #ca5a92; --stop-color: #f4896b; }
+    :host([data-hour="18"]) { --start-color: #5b2c83; --stop-color: #d1628b; }
+    :host([data-hour="19"]) { --start-color: #371a79; --stop-color: #713684; }
+    :host([data-hour="20"]) { --start-color: #28166b; --stop-color: #45217c; }
+    :host([data-hour="21"]) { --start-color: #192861; --stop-color: #372074; }
+    :host([data-hour="22"]) { --start-color: #040b3c; --stop-color: #233072; }
+    :host([data-hour="23"]) { --start-color: #040b3c; --stop-color: #012459; }
+  </style>
+  <path fill="url(#gradient)" d="M0 0h256v196H0z" />
+  <path class="wave" d="M0 183.5c67.5 18.5 153-43 256 8.5v4H0v-12.5z" />
+  <path class="wave" fill-opacity="0.7" d="M0 168.5c66.5-9 174.582 28.729 256 11.907V196H0v-27.5z" />
+  <defs>
+    <linearGradient id="gradient" x1="128" x2="128" y1="0" y2="196" gradientUnits="userSpaceOnUse">
+      <stop class="start" />
+      <stop class="stop" offset="1" />
+    </linearGradient>
+  </defs>
+</svg>
