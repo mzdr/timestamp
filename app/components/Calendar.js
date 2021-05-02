@@ -49,7 +49,7 @@ class Calendar {
       date, format, set, diff,
     } = payload;
 
-    let final = date || datefns.startOfToday();
+    let final = date || new Date();
 
     if (diff) {
       final = datefns.add(final, diff); // date-fns.add() supports negative numbers as well
