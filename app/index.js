@@ -3,6 +3,7 @@ const {
 } = require('electron');
 
 const { arch, platform, release } = require('os');
+const { resolve } = require('path');
 const { parseInline } = require('marked');
 
 const Calendar = require('./components/Calendar');
@@ -13,6 +14,8 @@ const Preferences = require('./components/Preferences');
 const SystemTray = require('./components/SystemTray');
 const Updater = require('./components/Updater');
 
+const { integratedBackgroundsDirectory } = require('./paths');
+
 const {
   APP_QUIT,
   APP_RESIZE_WINDOW,
@@ -22,8 +25,9 @@ const {
 } = require('./ipc');
 
 const defaultPreferences = {
-  openAtLogin: false,
+  calendarBackground: resolve(integratedBackgroundsDirectory, 'empty.svg'),
   clockFormat: 'Pp',
+  openAtLogin: false,
 };
 
 (async () => {
@@ -34,11 +38,8 @@ const defaultPreferences = {
   return new class {
     constructor() {
       const currentVersion = app.getVersion();
-      const storagePath = app.getPath('userData');
 
-      this.logger = new Logger({
-        storagePath,
-      });
+      this.logger = new Logger();
 
       this.logger.debug(`Starting Timestamp v${currentVersion} on “${platform()}-${arch()} v${release()}”.`);
       this.logger.debug(`Running in ${app.isPackaged ? 'production' : 'development'} mode.`);
@@ -77,7 +78,6 @@ const defaultPreferences = {
         defaults: defaultPreferences,
         logger: this.logger,
         onChange: this.onPreferencesChanged.bind(this),
-        storagePath,
       });
 
       ipcMain.on(APP_QUIT, () => app.exit());
@@ -109,6 +109,8 @@ const defaultPreferences = {
         app.setLoginItemSettings({ openAtLogin: value });
       } else if (key === 'clockFormat') {
         this.clock.setFormat(value);
+      } else if (key === 'calendarBackground') {
+        this.calendar.setBackground(value);
       }
 
       return this;

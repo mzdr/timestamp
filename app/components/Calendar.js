@@ -5,18 +5,23 @@ const datefns = require('date-fns');
 const Window = require('./Window');
 
 const {
+  CALENDAR_BACKGROUND_CHANGED,
   CALENDAR_GET_CALENDAR,
   CALENDAR_GET_DATE,
   CALENDAR_HIDE,
+  CALENDAR_SHOW,
 } = require('../views/calendar/ipc');
 
 class Calendar {
   constructor({ locale, logger }) {
+    this.logger = logger;
     this.locale = locale.getObject();
 
     ipcMain.handle(CALENDAR_GET_CALENDAR, this.getCalendar.bind(this));
     ipcMain.handle(CALENDAR_GET_DATE, this.getDate.bind(this));
-    ipcMain.on(CALENDAR_HIDE, this.onHide.bind(this));
+
+    ipcMain.on(CALENDAR_HIDE, () => this.window.hide());
+    ipcMain.on(CALENDAR_SHOW, () => this.window.show());
 
     this.window = new Window({
       name: 'calendar',
@@ -27,7 +32,14 @@ class Calendar {
       },
     });
 
-    logger.debug('Calendar module created.');
+    this.logger.debug('Calendar module created.');
+  }
+
+  setBackground(background) {
+    this
+      .window
+      .getWebContents()
+      .send(CALENDAR_BACKGROUND_CHANGED, background);
   }
 
   getDate(event, payload = {}) {
@@ -111,10 +123,6 @@ class Calendar {
       weeks,
       days,
     };
-  }
-
-  onHide() {
-    this.window.hide();
   }
 }
 

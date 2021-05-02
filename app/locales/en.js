@@ -9,6 +9,7 @@ module.exports = {
     category: {
       general: 'General',
       tray: 'System tray',
+      calendar: 'Calendar',
     },
     openAtLogin: {
       label: 'Open at login',
@@ -17,6 +18,10 @@ module.exports = {
     clockFormat: {
       label: 'Clock format',
       description: 'The system tray clock is using the format function of [date-fns](https://date-fns.org/docs/format). Use any pattern you may like.',
+    },
+    calendarBackground: {
+      label: 'Background',
+      description: 'Customize the calendar background to your personal liking.',
     },
   },
 };

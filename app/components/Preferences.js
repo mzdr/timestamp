@@ -1,35 +1,50 @@
 const { ipcMain } = require('electron');
-const { readFile, writeFile } = require('fs').promises;
-const { join, resolve } = require('path');
+const { resolve } = require('path');
+
+const {
+  readFile,
+  writeFile,
+  readdir,
+  mkdir,
+} = require('fs').promises;
+
+const {
+  preferencesFile,
+  customBackgroundsDirectory,
+  integratedBackgroundsDirectory,
+} = require('../paths');
 
 const Window = require('./Window');
 
 const {
   PREFERENCES_GET,
   PREFERENCES_GET_ALL,
+  PREFERENCES_GET_BACKGROUND_FILE_CONTENTS,
+  PREFERENCES_GET_BACKGROUNDS,
   PREFERENCES_HIDE,
   PREFERENCES_SET,
   PREFERENCES_SHOW,
+
 } = require('../views/preferences/ipc');
 
 class Preferences {
   constructor(options = {}) {
     const {
       onChange,
-      storagePath,
       defaults,
       logger,
     } = options;
 
     this.logger = logger;
-    this.filePath = join(storagePath, 'UserPreferences.json');
+    this.filePath = preferencesFile;
     this.onChange = onChange || (() => {});
     this.data = new Map(Object.entries(defaults));
 
-    this.logger.debug(`Using those default values as preferences: “${JSON.stringify(defaults)}”.`);
-
     ipcMain.handle(PREFERENCES_GET, (event, key) => this.get(key));
     ipcMain.handle(PREFERENCES_GET_ALL, () => this.getAll());
+    ipcMain.handle(PREFERENCES_GET_BACKGROUND_FILE_CONTENTS, this.getBackgroundFileContents.bind(this));
+    ipcMain.handle(PREFERENCES_GET_BACKGROUNDS, this.getBackgrounds.bind(this));
+
     ipcMain.on(PREFERENCES_SET, (event, key, value) => this.set(key, value));
     ipcMain.on(PREFERENCES_HIDE, () => this.window.hide());
     ipcMain.on(PREFERENCES_SHOW, () => this.window.show());
@@ -44,7 +59,6 @@ class Preferences {
     });
 
     this.logger.debug('Preferences module created.');
-
     this.load();
   }
 
@@ -55,9 +69,13 @@ class Preferences {
       Object
         .entries(JSON.parse(await readFile(this.filePath, 'utf8')))
         .forEach((item) => this.set(...item, false));
+
+      await mkdir(customBackgroundsDirectory);
     } catch ({ message }) {
       if (/enoent/i.test(message)) {
         this.logger.debug('Looks like it’s the first time starting Timestamp. No user preferences found.');
+      } else if (/eexist/i.test(message)) {
+        this.logger.debug('Directory for custom backgrounds has already been created.');
       } else {
         this.logger.error(message);
       }
@@ -74,6 +92,39 @@ class Preferences {
 
   getAll() {
     return new Map(this.data);
+  }
+
+  async getBackgroundFileContents(event, filePath) {
+    try {
+      return await readFile(filePath, { encoding: 'utf-8' });
+    } catch ({ message }) {
+      if (/enoent/i.test(message)) {
+        this.logger.warning(`Couldn’t find background file “${filePath}”.`);
+      } else {
+        this.logger.error(message);
+      }
+    }
+
+    return '';
+  }
+
+  async getBackgrounds() {
+    const backgrounds = [];
+    const directories = [integratedBackgroundsDirectory, customBackgroundsDirectory];
+
+    await Promise.all(
+      directories.map(async (directory) => {
+        try {
+          (await readdir(directory)).forEach(
+            (background) => backgrounds.push(resolve(directory, background)),
+          );
+        } catch ({ message }) {
+          this.logger.warn(message);
+        }
+      }),
+    );
+
+    return backgrounds;
   }
 
   get(key) {

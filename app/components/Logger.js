@@ -1,11 +1,9 @@
-const { join } = require('path');
 const { writeFile } = require('fs').promises;
+const { logFile } = require('../paths');
 
 class Logger {
-  constructor(options = {}) {
-    const { storagePath } = options;
-
-    this.filePath = join(storagePath, 'Output.log');
+  constructor() {
+    this.filePath = logFile;
     this.levels = {
       emergency: 0,
       alert: 1,

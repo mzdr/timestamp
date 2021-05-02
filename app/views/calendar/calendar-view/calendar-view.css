@@ -1,7 +1,7 @@
 :host {
   display: grid;
   grid-row-gap: 18px;
-  grid-template-areas: "illustration" "legend" "month" "navigation";
+  grid-template-areas: "background" "legend" "month" "navigation";
   padding-bottom: var(--grid-gap);
   position: relative;
   user-select: none;
@@ -16,8 +16,8 @@ calendar-navigation {
   padding: 0 var(--grid-gap);
 }
 
-calendar-illustration { grid-area: illustration; }
-calendar-today { grid-area: illustration; }
+calendar-background { grid-area: background; }
+calendar-today { grid-area: background; }
 calendar-legend { grid-area: legend; }
 calendar-month { grid-area: month; }
 calendar-navigation { grid-area: navigation; }

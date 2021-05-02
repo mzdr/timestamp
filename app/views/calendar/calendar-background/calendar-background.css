@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+}
+
+svg {
+  width: 100%;
+}
+
+.calendar-background {
+  display: flex;
+  width: 100%;
+}
