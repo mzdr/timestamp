@@ -12,7 +12,7 @@ export default class CalendarView extends HTMLElement {
     createShadowRoot(this, `
       <template>
         <link rel="stylesheet" href="calendar-view/calendar-view.css" />
-        <calendar-background></calendar-background>
+        <calendar-background @postrender="onPostRender"></calendar-background>
         <calendar-show-preferences @click="onShowPreferences"></calendar-show-preferences>
         <calendar-today @postrender="onPostRender" @click="onTodayClicked"></calendar-today>
         <calendar-legend @postrender="onPostRender"></calendar-legend>

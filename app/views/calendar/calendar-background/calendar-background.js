@@ -1,5 +1,6 @@
 import {
   createShadowRoot,
+  dispatch,
   findReferences,
 } from '../../../../node_modules/@browserkids/dom/index.js';
 
@@ -48,6 +49,8 @@ export default class CalendarBackground extends HTMLElement {
     const { $content } = this.$refs;
 
     $content.innerHTML = await preferences.getBackgroundFileContents(content);
+
+    dispatch(this, 'postrender');
 
     return this;
   }
