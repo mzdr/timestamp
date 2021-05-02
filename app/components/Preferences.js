@@ -7,6 +7,7 @@ const Window = require('./Window');
 const {
   PREFERENCES_GET,
   PREFERENCES_GET_ALL,
+  PREFERENCES_HIDE,
   PREFERENCES_SET,
   PREFERENCES_SHOW,
 } = require('../views/preferences/ipc');
@@ -30,6 +31,7 @@ class Preferences {
     ipcMain.handle(PREFERENCES_GET, (event, key) => this.get(key));
     ipcMain.handle(PREFERENCES_GET_ALL, () => this.getAll());
     ipcMain.on(PREFERENCES_SET, (event, key, value) => this.set(key, value));
+    ipcMain.on(PREFERENCES_HIDE, () => this.window.hide());
     ipcMain.on(PREFERENCES_SHOW, () => this.window.show());
 
     this.window = new Window({
@@ -57,7 +59,7 @@ class Preferences {
       if (/enoent/i.test(message)) {
         this.logger.debug('Looks like it’s the first time starting Timestamp. No user preferences found.');
       } else {
-        this.logger.error(`Unknown error: ${message}`);
+        this.logger.error(message);
       }
     }
 
