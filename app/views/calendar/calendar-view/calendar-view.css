@@ -17,7 +17,6 @@ calendar-navigation {
 }
 
 calendar-background { grid-area: background; }
-calendar-today { grid-area: background; }
 calendar-legend { grid-area: legend; }
 calendar-month { grid-area: month; }
 calendar-navigation { grid-area: navigation; }

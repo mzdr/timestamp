@@ -1,12 +1,21 @@
 :host {
-  display: flex;
-}
-
-svg {
-  width: 100%;
+  display: block;
 }
 
 .calendar-background {
-  display: flex;
-  width: 100%;
+  display: grid;
+  grid-template-areas: "main";
+}
+
+.calendar-background > .image,
+.calendar-background > .slot {
+ grid-area: main;
+}
+
+.calendar-background > .image {
+  margin: 0;
+}
+
+.calendar-background > .slot {
+  display: block;
 }

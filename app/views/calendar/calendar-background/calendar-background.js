@@ -11,7 +11,10 @@ export default class CalendarBackground extends HTMLElement {
     createShadowRoot(this, `
       <template>
         <link rel="stylesheet" href="calendar-background/calendar-background.css">
-        <div class="calendar-background" #$content></div>
+        <div class="calendar-background">
+          <figure class="image" #$content></figure>
+          <slot class="slot"></slot>
+        </div>
       </template>
     `);
 
@@ -27,10 +30,9 @@ export default class CalendarBackground extends HTMLElement {
 
   async render(firstRender) {
     const { calendar, preferences } = window;
-    const { $content } = this.$refs;
     const now = await calendar.getDate();
 
-    Object.assign($content.dataset, {
+    Object.assign(this.dataset, {
       hour: now.getHours(),
       month: now.getMonth(),
     });
