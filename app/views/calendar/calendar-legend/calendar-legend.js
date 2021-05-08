@@ -22,12 +22,12 @@ export default class CalendarLegend extends HTMLElement {
   }
 
   async onPostUpdate({ detail }) {
-    const { now } = detail;
+    const { selected } = detail;
     const { calendar } = window;
     const { $content } = this.$refs;
 
-    const month = await calendar.getDate({ date: now, format: 'MM' });
-    const year = await calendar.getDate({ date: now, format: 'y' });
+    const month = await calendar.getDate({ date: selected, format: 'MM' });
+    const year = await calendar.getDate({ date: selected, format: 'y' });
 
     $content.textContent = `${month} / ${year}`;
 

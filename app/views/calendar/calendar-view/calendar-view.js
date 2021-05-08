@@ -32,11 +32,11 @@ export default class CalendarView extends HTMLElement {
     calendar.on('hide', this.onTodayClicked.bind(this));
   }
 
-  async update(now) {
+  async update(selected) {
     const { calendar } = window;
 
     dispatch(window, 'postupdate', {
-      now: this.now = (now || await calendar.getDate()),
+      selected: this.selected = (selected || await calendar.getDate()),
     });
 
     return this;
@@ -75,11 +75,11 @@ export default class CalendarView extends HTMLElement {
   }
 
   async onChange({ detail }) {
-    const { now } = this;
+    const { selected } = this;
     const { calendar } = window;
 
     return this.update(
-      await calendar.getDate(detail ? { date: now, ...detail } : {}),
+      await calendar.getDate(detail ? { date: selected, ...detail } : {}),
     );
   }
 }

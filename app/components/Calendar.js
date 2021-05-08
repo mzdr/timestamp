@@ -66,15 +66,15 @@ class Calendar {
     return final;
   }
 
-  getCalendar(event, { now }) {
+  getCalendar(event, { date }) {
     const { locale } = this;
     const weekdays = [];
     const weeks = [];
     const days = [];
 
-    const totalDays = datefns.getDaysInMonth(now);
-    const lastDayOfMonth = datefns.lastDayOfMonth(now);
-    const startOfMonth = datefns.startOfMonth(now);
+    const totalDays = datefns.getDaysInMonth(date);
+    const lastDayOfMonth = datefns.lastDayOfMonth(date);
+    const startOfMonth = datefns.startOfMonth(date);
     const firstWeek = datefns.startOfWeek(startOfMonth, { locale });
     const lastWeek = datefns.endOfWeek(lastDayOfMonth, { locale });
     const previousMonthDays = datefns.differenceInCalendarDays(startOfMonth, firstWeek);

@@ -80,13 +80,13 @@ export default class CalendarNavigation extends HTMLElement {
   }
 
   onPostUpdate({ detail }) {
-    const { now } = detail;
+    const { selected } = detail;
     const { $content } = this.$refs;
     const $months = $content.querySelectorAll('.go-to.-month');
 
     $months.forEach(($el) => $el.classList.toggle(
       '-current',
-      parseInt($el.dataset.month, 10) === now.getMonth(),
+      parseInt($el.dataset.month, 10) === selected.getMonth(),
     ));
 
     return this;

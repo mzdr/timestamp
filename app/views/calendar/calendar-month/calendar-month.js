@@ -22,10 +22,10 @@ export default class CalendarMonth extends HTMLElement {
   }
 
   async onPostUpdate({ detail }) {
-    const { now } = detail;
+    const { selected } = detail;
     const { calendar } = window;
     const { $content } = this.$refs;
-    const { weekdays, weeks, days } = await calendar.getCalendar({ now });
+    const { weekdays, weeks, days } = await calendar.getCalendar({ date: selected });
 
     const $weekdays = weekdays.map((weekday) => `<span class="weekday">${weekday}</span>`).join('');
     const $weeks = weeks.map((week) => `<span class="week">${week}</span>`).join('');
