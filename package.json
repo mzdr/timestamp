@@ -47,17 +47,17 @@
     "test": "npm run lint"
   },
   "dependencies": {
-    "@browserkids/dom": "^0.4.0",
-    "date-fns": "^2.21.2",
+    "@browserkids/dom": "^0.5.0",
+    "date-fns": "^2.21.3",
     "marked": "^2.0.3",
     "semver": "^7.3.5"
   },
   "devDependencies": {
-    "dotenv": "^9.0.0",
+    "dotenv": "^9.0.1",
     "electron": "^12.0.7",
     "electron-builder": "^22.11.1",
     "electron-notarize": "^1.0.0",
-    "eslint": "^7.25.0",
+    "eslint": "^7.26.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "rimraf": "^3.0.2"
