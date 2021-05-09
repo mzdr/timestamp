@@ -1,23 +1,18 @@
-import { createShadowRoot, dispatch, findReferences } from '../../../../node_modules/@browserkids/dom/index.js';
+import { dispatch, upgrade } from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarToday extends HTMLElement {
   constructor() {
     super();
 
-    createShadowRoot(this, `
+    upgrade(this, `
       <template>
         <link rel="stylesheet" href="calendar-today/calendar-today.css">
-        <span class="calendar-today" #$content></span>
+        <span class="calendar-today" @postupdate.window="onPostUpdate" #$content></span>
       </template>
     `);
-
-    this.$refs = findReferences(this.shadowRoot);
-    this.render();
-
-    setInterval(this.render.bind(this), 1000);
   }
 
-  async render() {
+  async onPostUpdate() {
     const { calendar } = window;
     const { $content } = this.$refs;
     const [day, date, month] = (await calendar.getDate({ format: 'EEEE do MMMM' })).split(' ');

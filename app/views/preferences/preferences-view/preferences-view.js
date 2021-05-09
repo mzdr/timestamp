@@ -1,8 +1,4 @@
-import {
-  bindEventListeners,
-  createShadowRoot,
-  findReferences,
-} from '../../../../node_modules/@browserkids/dom/index.js';
+import { upgrade } from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class PreferencesView extends HTMLElement {
   constructor() {
@@ -10,7 +6,7 @@ export default class PreferencesView extends HTMLElement {
 
     const { app } = window;
 
-    createShadowRoot(this, `
+    upgrade(this, `
       <template>
         <link rel="stylesheet" href="../../styles/shared/links.css">
         <link rel="stylesheet" href="../../styles/shared/form.css">
@@ -78,9 +74,6 @@ export default class PreferencesView extends HTMLElement {
       </template>
     `);
 
-    bindEventListeners(this.shadowRoot, this);
-
-    this.$refs = findReferences(this.shadowRoot);
     this.render();
 
     app.on('update-downloaded', this.onUpdateDownloaded.bind(this));

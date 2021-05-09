@@ -1,24 +1,15 @@
-import {
-  bindEventListeners,
-  createShadowRoot,
-  dispatch,
-  findReferences,
-} from '../../../../node_modules/@browserkids/dom/index.js';
+import { dispatch, upgrade } from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarMonth extends HTMLElement {
   constructor() {
     super();
 
-    createShadowRoot(this, `
+    upgrade(this, `
       <template>
         <link rel="stylesheet" href="calendar-month/calendar-month.css">
         <div class="calendar-month" #$content @postupdate.window="onPostUpdate"></div>
       </template>
     `);
-
-    bindEventListeners(this.shadowRoot, this);
-
-    this.$refs = findReferences(this.shadowRoot);
   }
 
   async onPostUpdate({ detail }) {

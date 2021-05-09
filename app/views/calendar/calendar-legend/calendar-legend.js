@@ -1,24 +1,15 @@
-import {
-  bindEventListeners,
-  createShadowRoot,
-  dispatch,
-  findReferences,
-} from '../../../../node_modules/@browserkids/dom/index.js';
+import { dispatch, upgrade } from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarLegend extends HTMLElement {
   constructor() {
     super();
 
-    createShadowRoot(this, `
+    upgrade(this, `
       <template>
         <link rel="stylesheet" href="calendar-legend/calendar-legend.css">
         <span class="calendar-legend" #$content @postupdate.window="onPostUpdate"></span>
       </template>
     `);
-
-    bindEventListeners(this.shadowRoot, this);
-
-    this.$refs = findReferences(this.shadowRoot);
   }
 
   async onPostUpdate({ detail }) {
