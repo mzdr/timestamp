@@ -1,123 +1,101 @@
 :host {
   display: block;
   user-select: none;
-  width: 640px;
+  width: 720px;
 
   -webkit-app-region: drag;
 }
 
+translation-key a {
+  color: var(--color-brand);
+}
+
 .preferences-view {
   display: grid;
-  grid-gap: var(--grid-gap);
-  grid-template-columns: repeat(2, 1fr);
-  padding: var(--grid-gap);
-}
-
-.preferences-view > .full {
-  grid-column: 1 / -1;
-}
-
-.preferences-category {
-  display: grid;
-  grid-row-gap: calc(var(--grid-gap) / 2);
+  grid-template-areas: "side alert" "side contents";
+  grid-template-columns: 192px 1fr;
   grid-template-rows: min-content 1fr;
 }
 
-.preferences-category > .title {
-  font-size: 18px;
-  font-weight: 400;
+.preferences-view > .side { grid-area: side; }
+.preferences-view > .alert { grid-area: alert; }
+.preferences-view > .contents { grid-area: contents; }
+
+.preferences-view > .alert,
+.preferences-view > .contents {
+  background-color: var(--color-background-primary);
 }
 
-.preferences-category > .items {
-  border-radius: var(--fx-radius);
-  box-shadow: inset 0 0 0 1px var(--color-line);
+.preferences-view > .alert {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.preferences-view > .alert.-hidden {
+  display: none;
+}
+
+.preferences-side {
+  box-shadow: inset -1px 0 0 var(--color-line);
+  display: grid;
   padding: var(--grid-gap);
 }
 
-.preferences-item {
+.preferences-side > .logo {
+  margin: calc(var(--grid-gap) * 2) auto var(--grid-gap);
+  width: 128px;
+}
+
+.preferences-side > .name {
+  font-size: calc(var(--type-size) * 1.5);
+  font-weight: 300;
+  margin: 0;
+  text-align: center;
+}
+
+.preferences-side > .navigation {
+  margin: calc(var(--grid-gap) * 2) 0;
+}
+
+.preferences-side > .about {
+  color: var(--color-text-shy);
+  font-size: var(--shy-size);
+}
+
+.preferences-navigation {
   display: grid;
-  grid-gap: calc(var(--grid-gap) / 2);
-  grid-template-areas: "action label" "description description";
+  grid-row-gap: calc(var(--grid-gap) / 2);
+}
+
+.preferences-navigation > .item {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: 0;
+  color: currentColor;
+  display: grid;
+  font: inherit;
+  grid-column-gap: calc(var(--grid-gap) / 2);
   grid-template-columns: min-content 1fr;
+  outline: 0;
+  padding: 4px 0;
+  text-align: left;
 }
 
-.preferences-item.-selection {
-  grid-template-areas: "label" "description" "choices" "action";
-  grid-template-columns: 1fr;
+.preferences-navigation > .item > .icon {
+  height: 18px;
+  stroke-width: 1.5;
+  width: 18px;
 }
 
-.preferences-item.-text {
-  grid-template-areas: "label" "action" "description";
-  grid-template-columns: 1fr;
-}
-
-.preferences-item > .action {
-  align-self: center;
-  grid-area: action;
-  margin: 0;
-}
-.preferences-item > .label {
-  grid-area: label;
-}
-
-.preferences-item > .description {
-  color: var(--color-text-shy);
-  font-size: 12px;
-  grid-area: description;
-}
-
-.preferences-item > .choices {
+.preferences-contents {
   display: grid;
-  grid-area: choices;
-  grid-auto-flow: column;
-  grid-gap: var(--grid-gap);
-  justify-content: flex-start;
-}
-.preferences-choice {
-  border-radius: var(--fx-radius);
-  display: flex;
-  height: 64px;
-  position: relative;
-  width: 64px;
 }
 
-.preferences-choice > .input,
-.preferences-choice > .preview,
-.preferences-choice > .status {
-  border-radius: inherit;
-  height: 100%;
-  left: 0;
-  margin: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
+.preferences-contents > .content {
+  grid-area: 1 / 1 / -1 / -1;
+  padding: calc(var(--grid-gap) * 2);
 }
 
-.preferences-choice > .input {
-  opacity: 0;
-}
-
-.preferences-choice > .preview {
-  object-fit: cover;
-  overflow: hidden;
-}
-
-.preferences-choice >.input:checked ~ .status {
-  box-shadow: 0 0 1px var(--palette-black), 0 0 0 3px var(--palette-green);
-}
-
-.preferences-choice > .status {
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
-}
-
-.preferences-about {
-  border-radius: var(--fx-radius);
-  box-shadow: inset 0 1px 0 var(--color-line);
-  color: var(--color-text-shy);
-  display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: var(--grid-gap);
-  justify-content: center;
-  padding-top: var(--grid-gap);
+.preferences-contents > .content.-hidden {
+  display: none;
 }

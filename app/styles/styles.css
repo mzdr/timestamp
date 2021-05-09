@@ -3,7 +3,5 @@
 @import "meta/grid.css";
 @import "meta/typography.css";
 @import "shared/base.css";
-@import "shared/form.css";
-@import "shared/links.css";
 @import "shared/typography.css";
 @import "components/is-native.css";

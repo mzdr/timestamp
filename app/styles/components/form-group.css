@@ -1,0 +1,42 @@
+.form-group {
+  display: grid;
+  grid-gap: calc(var(--grid-gap) / 3) calc(var(--grid-gap) * 2);
+  grid-template-areas: "label action" "description .";
+  grid-template-columns: 1fr min-content;
+  grid-template-rows: minmax(30px, min-content) min-content;
+}
+
+.form-group > .label {
+  align-self: center;
+  grid-area: label;
+}
+
+.form-group > .description {
+  color: var(--color-text-shy);
+  font-size: var(--shy-size);
+  grid-area: description;
+}
+
+.form-group > .action {
+  align-self: center;
+  grid-area: action;
+  margin: 0;
+  outline: 0;
+}
+
+.form-group > .action.-text {
+  color: var(--palette-black);
+  font: inherit;
+  outline: 0;
+  padding: 2px 4px;
+}
+
+.form-group > .action.-toggle {
+  height: 20px;
+  width: 20px;
+}
+
+.form-group > .action.-select {
+  padding: 2px 4px;
+  text-transform: capitalize;
+}

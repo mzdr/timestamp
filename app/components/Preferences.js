@@ -51,7 +51,10 @@ class Preferences {
 
     this.window = new Window({
       name: 'preferences',
-      frame: true,
+      titleBarStyle: 'hidden',
+      transparent: true,
+      vibrancy: 'sidebar',
+      trafficLightPosition: { x: 20, y: 36 },
       sourceFile: resolve(__dirname, '../views/preferences/preferences.html'),
       webPreferences: {
         preload: resolve(__dirname, '../views/preferences/preload.js'),

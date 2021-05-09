@@ -15,3 +15,7 @@
     --color-line: #434041;
   }
 }
+
+.is-native.-transparent {
+  background-color: transparent;
+}

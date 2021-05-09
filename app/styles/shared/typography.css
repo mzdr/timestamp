@@ -4,8 +4,3 @@
   line-height: var(--type-rhythm);
   text-rendering: var(--type-rendering);
 }
-
-button,
-input {
-  font: inherit;
-}

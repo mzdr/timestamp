@@ -1,0 +1,13 @@
+.button-primary {
+  background-blend-mode: color-burn;
+  background-color: var(--color-brand);
+  background-image: linear-gradient(180deg, #fff, #ccc);
+  border-radius: 3px;
+  border: 0;
+  color: var(--palette-white);
+  font-family: inherit;
+  font-size: inherit;
+  outline: 0;
+  padding: 6px 12px;
+  text-shadow: -1px 0 rgba(0, 0, 0, 0.1);
+}
