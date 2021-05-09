@@ -9,6 +9,7 @@ const {
   CALENDAR_GET_CALENDAR,
   CALENDAR_GET_DATE,
   CALENDAR_HIDE,
+  CALENDAR_IS_SAME_HOUR,
   CALENDAR_SHOW,
 } = require('../views/calendar/ipc');
 
@@ -19,6 +20,7 @@ class Calendar {
 
     ipcMain.handle(CALENDAR_GET_CALENDAR, this.getCalendar.bind(this));
     ipcMain.handle(CALENDAR_GET_DATE, this.getDate.bind(this));
+    ipcMain.handle(CALENDAR_IS_SAME_HOUR, (event, ...dates) => datefns.isSameHour(...dates));
 
     ipcMain.on(CALENDAR_HIDE, () => this.window.hide());
     ipcMain.on(CALENDAR_SHOW, () => this.window.show());

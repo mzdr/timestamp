@@ -1,15 +1,10 @@
-import {
-  bindEventListeners,
-  createShadowRoot,
-  dispatch,
-  findReferences,
-} from '../../../../node_modules/@browserkids/dom/index.js';
+import { dispatch, upgrade } from '../../../../node_modules/@browserkids/dom/index.js';
 
 export default class CalendarView extends HTMLElement {
   constructor() {
     super();
 
-    createShadowRoot(this, `
+    upgrade(this, `
       <template>
         <link rel="stylesheet" href="calendar-view/calendar-view.css" />
         <calendar-background @postrender="onPostRender">
@@ -24,22 +19,29 @@ export default class CalendarView extends HTMLElement {
 
     const { calendar } = window;
 
-    bindEventListeners(this.shadowRoot, this);
-
-    this.$refs = findReferences(this.shadowRoot);
-    this.update();
-
     calendar.on('hide', this.onTodayClicked.bind(this));
+
+    setInterval(this.update.bind(this), 1000);
+
+    this.selected = null;
+    this.lastUpdate = null;
+
+    this.onTodayClicked();
   }
 
   async update(selected) {
     const { calendar } = window;
+    const now = await calendar.getDate();
+    const isNewHour = this.lastUpdate === null || (await calendar.isSameHour(this.lastUpdate, now)) === false;
 
-    dispatch(window, 'postupdate', {
-      selected: this.selected = (selected || await calendar.getDate()),
-    });
+    if (selected === undefined && isNewHour === false) {
+      return;
+    }
 
-    return this;
+    this.selected = selected || this.selected;
+    this.lastUpdate = now;
+
+    dispatch(window, 'postupdate', { selected: this.selected });
   }
 
   onToggle({ detail }) {
@@ -71,15 +73,18 @@ export default class CalendarView extends HTMLElement {
   }
 
   onTodayClicked() {
-    return this.update();
+    return this.onChange();
   }
 
-  async onChange({ detail }) {
-    const { selected } = this;
+  async onChange({ detail } = {}) {
     const { calendar } = window;
 
-    return this.update(
-      await calendar.getDate(detail ? { date: selected, ...detail } : {}),
-    );
+    if (detail) {
+      return this.update(
+        await calendar.getDate({ date: this.selected, ...detail }),
+      );
+    }
+
+    return this.update(await calendar.getDate());
   }
 }
