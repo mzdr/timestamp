@@ -87,6 +87,10 @@ const defaultPreferences = {
     }
 
     onRestart() {
+      if (this.updater === undefined) {
+        return this;
+      }
+
       this.calendar.window.destroy();
       this.preferences.window.destroy();
       this.updater.quitAndInstall();
