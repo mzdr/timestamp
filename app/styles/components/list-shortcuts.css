@@ -1,0 +1,21 @@
+.list-shortcuts {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: calc(var(--grid-gap) / 2) var(--grid-gap);
+}
+
+.list-shortcuts > .keys {
+  align-items: center;
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: calc(var(--grid-gap) / 4);
+  justify-content: flex-start;
+  font-size: var(--shy-size);
+}
+
+.list-shortcuts > .keys > .key {
+  background-color: var(--palette-white);
+  border-radius: 3px;
+  color: var(--palette-black);
+  padding: 6px 12px;
+}

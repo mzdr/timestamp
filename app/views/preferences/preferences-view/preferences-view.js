@@ -11,6 +11,7 @@ export default class PreferencesView extends HTMLElement {
         <link rel="stylesheet" href="../../styles/components/button-primary.css">
         <link rel="stylesheet" href="../../styles/components/container-alert.css">
         <link rel="stylesheet" href="../../styles/components/form-group.css">
+        <link rel="stylesheet" href="../../styles/components/list-shortcuts.css">
         <link rel="stylesheet" href="preferences-view/preferences-view.css">
 
         <div class="preferences-view">
@@ -30,6 +31,10 @@ export default class PreferencesView extends HTMLElement {
               <button class="item" @click="onCategoryClicked">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                 <translation-key class="title">preferences.category.calendar</translation-key>
+              </button>
+              <button class="item" @click="onCategoryClicked">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg>
+                <translation-key class="title">preferences.category.shortcuts</translation-key>
               </button>
             </nav>
             <section class="about preferences-about">v${app.version}</section>
@@ -73,6 +78,10 @@ export default class PreferencesView extends HTMLElement {
                 <translation-key class="description">preferences.calendarBackground.description</translation-key>
               </label>
             </section>
+            <section class="content -hidden" #$content>
+              <translation-key class="description">preferences.shortcuts.description</translation-key>
+              <dl class="list-shortcuts" #$keys></dl>
+            </section>
           </form>
         </div>
       </template>
@@ -84,15 +93,21 @@ export default class PreferencesView extends HTMLElement {
   }
 
   async render() {
-    const { preferences } = window;
-    const { $form, $backgrounds } = this.$refs;
+    const { app, preferences } = window;
+    const { $form, $backgrounds, $keys } = this.$refs;
     const all = await preferences.getAll();
     const backgrounds = await preferences.getBackgrounds();
+    const shortcuts = await app.translate('preferences.shortcuts.keys');
 
     backgrounds
       .map((background) => ([background, background.split('/').pop().split('.').shift()]))
       .map(([value, name]) => `<option value="${value}">${name}</option>`)
       .forEach((background) => $backgrounds.insertAdjacentHTML('beforeend', background));
+
+    shortcuts
+      .map(([keys, label]) => ([keys.split('+').map((key) => `<span class="key">${key}</span>`).join('+'), label]))
+      .map(([keys, label]) => `<dt class="keys">${keys}</dt><dd class="label">${label}</dd>`)
+      .forEach((shortcut) => $keys.insertAdjacentHTML('beforeend', shortcut));
 
     Array
       .from(all)

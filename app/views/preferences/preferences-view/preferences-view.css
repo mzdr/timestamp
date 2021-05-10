@@ -99,3 +99,9 @@ translation-key a {
 .preferences-contents > .content.-hidden {
   display: none;
 }
+
+.preferences-contents > .content > .description {
+  color: var(--color-text-shy);
+  display: block;
+  margin-bottom: var(--grid-gap);
+}
