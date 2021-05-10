@@ -7,15 +7,17 @@
 .list-shortcuts > .keys {
   align-items: center;
   display: grid;
-  grid-auto-flow: column;
-  grid-column-gap: calc(var(--grid-gap) / 4);
-  justify-content: flex-start;
   font-size: var(--shy-size);
+  grid-auto-flow: column;
+  grid-column-gap: calc(var(--grid-gap) / 2);
+  justify-content: flex-start;
 }
 
 .list-shortcuts > .keys > .key {
   background-color: var(--palette-white);
+  background-image: linear-gradient(to top, #e6e6e6, transparent);
   border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
   color: var(--palette-black);
   padding: 6px 12px;
 }
