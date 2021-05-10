@@ -22,7 +22,5 @@ export default class CalendarShowPreferences extends HTMLElement {
 
   onUpdateDownloaded() {
     this.classList.add('update-downloaded');
-
-    return this;
   }
 }

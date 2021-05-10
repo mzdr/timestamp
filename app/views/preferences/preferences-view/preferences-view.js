@@ -163,8 +163,6 @@ export default class PreferencesView extends HTMLElement {
   onUpdateDownloaded() {
     this.$refs.$alert.classList.remove('-hidden');
     this.onPostRender();
-
-    return this;
   }
 
   onPostRender() {

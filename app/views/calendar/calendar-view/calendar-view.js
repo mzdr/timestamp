@@ -73,7 +73,7 @@ export default class CalendarView extends HTMLElement {
   }
 
   onTodayClicked() {
-    return this.onChange();
+    this.onChange();
   }
 
   async onChange({ detail } = {}) {
