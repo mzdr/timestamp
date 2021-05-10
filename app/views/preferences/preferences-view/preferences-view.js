@@ -66,7 +66,7 @@ export default class PreferencesView extends HTMLElement {
             </section>
             <section class="content -hidden" #$content>
               <label class="form-group">
-                <input type="text" name="clockFormat" class="action -text">
+                <input type="text" name="clockFormat" class="action -text" size="12">
                 <translation-key class="label">preferences.clockFormat.label</translation-key>
                 <translation-key class="description" markdown>preferences.clockFormat.description</translation-key>
               </label>
@@ -76,6 +76,11 @@ export default class PreferencesView extends HTMLElement {
                 <select #$backgrounds name="calendarBackground" class="action -select"></select>
                 <translation-key class="label">preferences.calendarBackground.label</translation-key>
                 <translation-key class="description">preferences.calendarBackground.description</translation-key>
+              </label>
+              <label class="form-group">
+                <input type="text" name="calendarLegendFormat" class="action -text" size="8">
+                <translation-key class="label">preferences.calendarLegendFormat.label</translation-key>
+                <translation-key class="description" markdown>preferences.calendarLegendFormat.description</translation-key>
               </label>
             </section>
             <section class="content -hidden" #$content>

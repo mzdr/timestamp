@@ -24,6 +24,10 @@ module.exports = {
       label: 'Background',
       description: 'Customize the calendar background to your personal liking.',
     },
+    calendarLegendFormat: {
+      label: 'Legend format',
+      description: 'The format of the legend above the month. Uses the format function of [date-fns](https://date-fns.org/docs/format) as well.',
+    },
     shortcuts: {
       description: 'See below for a complete list of keyboard shortcuts that you can use in the calendar window.',
       keys: [

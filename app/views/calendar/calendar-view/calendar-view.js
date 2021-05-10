@@ -17,31 +17,37 @@ export default class CalendarView extends HTMLElement {
       </template>
     `);
 
-    const { calendar } = window;
+    const { calendar, preferences } = window;
 
     calendar.on('hide', this.onTodayClicked.bind(this));
+    preferences.on('changed', this.onPreferencesChanged.bind(this));
 
     setInterval(this.update.bind(this), 1000);
 
-    this.selected = null;
+    this.selectedMonth = null;
     this.lastUpdate = null;
 
     this.onTodayClicked();
   }
 
-  async update(selected) {
+  async update(force = false) {
+    const { selectedMonth } = this;
     const { calendar } = window;
     const now = await calendar.getDate();
-    const isNewHour = this.lastUpdate === null || (await calendar.isSameHour(this.lastUpdate, now)) === false;
+    const isFirstTime = this.lastUpdate === null;
+    const isSameHour = await calendar.isSameHour(this.lastUpdate || now, now);
 
-    if (selected === undefined && isNewHour === false) {
+    if (force === false && isFirstTime === false && isSameHour) {
       return;
     }
 
-    this.selected = selected || this.selected;
     this.lastUpdate = now;
 
-    dispatch(window, 'postupdate', { selected: this.selected });
+    dispatch(window, 'postupdate', { selectedMonth });
+  }
+
+  onPreferencesChanged() {
+    this.update(true);
   }
 
   onToggle({ detail }) {
@@ -79,12 +85,7 @@ export default class CalendarView extends HTMLElement {
   async onChange({ detail } = {}) {
     const { calendar } = window;
 
-    if (detail) {
-      return this.update(
-        await calendar.getDate({ date: this.selected, ...detail }),
-      );
-    }
-
-    return this.update(await calendar.getDate());
+    this.selectedMonth = await calendar.getDate(detail ? { date: this.selectedMonth, ...detail } : {});
+    this.update();
   }
 }

@@ -14,14 +14,22 @@ export default class CalendarBackground extends HTMLElement {
       </template>
     `);
 
-    const { calendar } = window;
+    const { preferences } = window;
 
-    calendar.on('background-changed', this.onBackgroundChanged.bind(this));
+    preferences.on('changed', this.onPreferencesChanged.bind(this));
 
-    this.onBackgroundChanged();
+    this.render();
   }
 
-  async onBackgroundChanged(event, background) {
+  onPreferencesChanged(event, key, value) {
+    if (key !== 'calendarBackground') {
+      return;
+    }
+
+    this.render(value);
+  }
+
+  async render(background) {
     const { preferences } = window;
     const { $content } = this.$refs;
 

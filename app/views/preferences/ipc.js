@@ -1,5 +1,6 @@
 const { ipcRenderer } = require('electron');
 
+const PREFERENCES_CHANGED = 'preferences.changed';
 const PREFERENCES_GET = 'preferences.get';
 const PREFERENCES_GET_ALL = 'preferences.getAll';
 const PREFERENCES_GET_BACKGROUND_FILE_CONTENTS = 'preferences.get-background-file-contents';
@@ -9,6 +10,7 @@ const PREFERENCES_SET = 'preferences.set';
 const PREFERENCES_SHOW = 'preferences.show';
 
 module.exports = {
+  PREFERENCES_CHANGED,
   PREFERENCES_GET,
   PREFERENCES_GET_ALL,
   PREFERENCES_GET_BACKGROUND_FILE_CONTENTS,

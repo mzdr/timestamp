@@ -13,7 +13,7 @@ const Logger = require('./components/Logger');
 const Preferences = require('./components/Preferences');
 const SystemTray = require('./components/SystemTray');
 const Updater = require('./components/Updater');
-
+const { PREFERENCES_CHANGED } = require('./views/preferences/ipc');
 const { integratedBackgroundsDirectory } = require('./paths');
 
 const {
@@ -26,6 +26,7 @@ const {
 
 const defaultPreferences = {
   calendarBackground: resolve(integratedBackgroundsDirectory, 'empty.svg'),
+  calendarLegendFormat: 'MM / y',
   clockFormat: 'Pp',
   openAtLogin: false,
 };
@@ -113,8 +114,8 @@ const defaultPreferences = {
         app.setLoginItemSettings({ openAtLogin: value });
       } else if (key === 'clockFormat') {
         this.clock.setFormat(value);
-      } else if (key === 'calendarBackground') {
-        this.calendar.setBackground(value);
+      } else if (/^calendar/.test(key)) {
+        this.calendar.window.getWebContents().send(PREFERENCES_CHANGED, key, value);
       }
 
       return this;

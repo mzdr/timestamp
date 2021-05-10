@@ -11,6 +11,7 @@
   grid-template-columns: 50px minmax(60px, max-content) 50px;
   justify-content: center;
   text-align: center;
+  white-space: pre;
 }
 
 .calendar-legend::before,

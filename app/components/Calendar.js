@@ -5,7 +5,6 @@ const datefns = require('date-fns');
 const Window = require('./Window');
 
 const {
-  CALENDAR_BACKGROUND_CHANGED,
   CALENDAR_GET_CALENDAR,
   CALENDAR_GET_DATE,
   CALENDAR_HIDE,
@@ -35,13 +34,6 @@ class Calendar {
     });
 
     this.logger.debug('Calendar module created.');
-  }
-
-  setBackground(background) {
-    this
-      .window
-      .getWebContents()
-      .send(CALENDAR_BACKGROUND_CHANGED, background);
   }
 
   getDate(event, payload = {}) {

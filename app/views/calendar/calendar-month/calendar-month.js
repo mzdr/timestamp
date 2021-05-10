@@ -13,10 +13,10 @@ export default class CalendarMonth extends HTMLElement {
   }
 
   async onPostUpdate({ detail }) {
-    const { selected } = detail;
+    const { selectedMonth } = detail;
     const { calendar } = window;
     const { $content } = this.$refs;
-    const { weekdays, weeks, days } = await calendar.getCalendar({ date: selected });
+    const { weekdays, weeks, days } = await calendar.getCalendar({ date: selectedMonth });
 
     const $weekdays = weekdays.map((weekday) => `<span class="weekday">${weekday}</span>`).join('');
     const $weeks = weeks.map((week) => `<span class="week">${week}</span>`).join('');

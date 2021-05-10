@@ -92,7 +92,10 @@ translation-key a {
 }
 
 .preferences-contents > .content {
+  align-content: flex-start;
+  display: grid;
   grid-area: 1 / 1 / -1 / -1;
+  grid-row-gap: var(--grid-gap);
   padding: calc(var(--grid-gap) * 2);
 }
 
