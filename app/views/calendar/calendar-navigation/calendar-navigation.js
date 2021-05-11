@@ -46,7 +46,8 @@ export default class CalendarNavigation extends HTMLElement {
     `);
   }
 
-  onKeyDown({ key, metaKey }) {
+  onKeyDown(e) {
+    const { key, metaKey } = e;
     const { app, calendar, preferences } = window;
 
     if (key === 'ArrowRight') {
@@ -59,6 +60,10 @@ export default class CalendarNavigation extends HTMLElement {
       this.goPreviousYear();
     } else if (key === ' ') {
       this.goToday();
+
+      // Hitting space might as well trigger a focused button (month),
+      // avoid that behaviour.
+      e.preventDefault();
     } else if (key === 'Escape') {
       calendar.hide();
     } else if (key === 'w' && metaKey === false) {

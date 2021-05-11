@@ -86,6 +86,6 @@ export default class CalendarView extends HTMLElement {
     const { calendar } = window;
 
     this.selectedMonth = await calendar.getDate(detail ? { date: this.selectedMonth, ...detail } : {});
-    this.update();
+    this.update(true);
   }
 }
