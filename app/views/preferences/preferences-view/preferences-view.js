@@ -145,6 +145,8 @@ export default class PreferencesView extends HTMLElement {
     const index = [...currentTarget.parentElement.children].indexOf(currentTarget);
 
     $content.forEach(($el, current) => $el.classList.toggle('-hidden', index !== current));
+
+    this.onPostRender();
   }
 
   onKeyDown({ key }) {

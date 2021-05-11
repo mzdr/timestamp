@@ -37,6 +37,7 @@ translation-key a {
 .preferences-side {
   box-shadow: inset -1px 0 0 var(--color-line);
   display: grid;
+  grid-template-rows: repeat(3, min-content);
   padding: var(--grid-gap);
 }
 
@@ -57,6 +58,7 @@ translation-key a {
 }
 
 .preferences-side > .about {
+  align-self: flex-end;
   color: var(--color-text-shy);
   font-size: var(--shy-size);
 }
@@ -105,6 +107,4 @@ translation-key a {
 
 .preferences-contents > .content > .description {
   color: var(--color-text-shy);
-  display: block;
-  margin-bottom: var(--grid-gap);
 }
