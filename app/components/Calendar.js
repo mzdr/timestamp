@@ -81,24 +81,31 @@ class Calendar {
     for (let i = 0; i < previousMonthDays; i += 1) {
       const day = datefns.addDays(firstWeek, i);
       const isToday = datefns.isToday(day);
+      const isThisWeek = datefns.isThisWeek(day, { locale });
       const previousMonth = true;
 
-      days.push({ day, isToday, previousMonth });
+      days.push({
+        day, isToday, isThisWeek, previousMonth,
+      });
     }
 
     for (let i = 0; i < totalDays; i += 1) {
       const day = datefns.addDays(startOfMonth, i);
       const isToday = datefns.isToday(day);
+      const isThisWeek = datefns.isThisWeek(day, { locale });
 
-      days.push({ day, isToday });
+      days.push({ day, isToday, isThisWeek });
     }
 
     for (let i = 1; i <= nextMonthDays; i += 1) {
       const day = datefns.addDays(lastDayOfMonth, i);
       const isToday = datefns.isToday(day);
+      const isThisWeek = datefns.isThisWeek(day, { locale });
       const nextMonth = true;
 
-      days.push({ day, isToday, nextMonth });
+      days.push({
+        day, isToday, isThisWeek, nextMonth,
+      });
     }
 
     for (let i = 0; i < 7; i += 1) {

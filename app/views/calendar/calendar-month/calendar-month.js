@@ -22,11 +22,12 @@ export default class CalendarMonth extends HTMLElement {
     const $weeks = weeks.map((week) => `<span class="week">${week}</span>`).join('');
 
     const $days = days.map(({
-      day, isToday, previousMonth, nextMonth,
+      day, isToday, isThisWeek, previousMonth, nextMonth,
     }) => {
       const cssClass = [
         'day',
         isToday ? '-today' : null,
+        isThisWeek ? '-week' : null,
         previousMonth ? '-previous' : null,
         nextMonth ? '-next' : null,
       ]
