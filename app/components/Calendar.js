@@ -54,7 +54,11 @@ class Calendar {
     }
 
     if (format) {
-      return datefns.format(final, format, { locale });
+      try {
+        return datefns.format(final, format, { locale });
+      } catch (e) {
+        return '#invalid format#';
+      }
     }
 
     return final;
