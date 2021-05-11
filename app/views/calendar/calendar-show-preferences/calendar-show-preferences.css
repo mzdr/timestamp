@@ -31,7 +31,7 @@
 
 .icon-dots > .dot {
   fill: currentColor;
-  opacity: 0.2;
+  opacity: 0.3;
 }
 
 .icon-dots > .dot:nth-of-type(2) {

@@ -3,8 +3,11 @@
     /* @see https://codepen.io/bork/details/wJhEm */
     .wave { fill: var(--color-background-primary, #fff); }
 
-    .start { stop-color: var(--start-color, #0075ff); }
-    .stop { stop-color: var(--stop-color, #a8d0ff); }
+    .wave-start { stop-color: var(--color-background-primary, #fff); }
+    .wave-stop { stop-color: var(--color-background-primary, #fff); }
+
+    .gradient-start { stop-color: var(--start-color, #0075ff); }
+    .gradient-stop { stop-color: var(--stop-color, #a8d0ff); }
 
     :host { color: #fff; }
 
@@ -33,13 +36,17 @@
     :host([data-hour="22"]) { --start-color: #040b3c; --stop-color: #233072; }
     :host([data-hour="23"]) { --start-color: #040b3c; --stop-color: #012459; }
   </style>
-  <path fill="url(#gradient)" d="M0 0h256v196H0z" />
-  <path class="wave" d="M0 183.5c67.5 18.5 153-43 256 8.5v4H0v-12.5z" />
-  <path class="wave" fill-opacity="0.7" d="M0 168.5c66.5-9 174.582 28.729 256 11.907V196H0v-27.5z" />
   <defs>
-    <linearGradient id="gradient" x1="128" x2="128" y1="0" y2="196" gradientUnits="userSpaceOnUse">
-      <stop class="start" />
-      <stop class="stop" offset="1" />
+    <linearGradient id="wave" gradientTransform="rotate(90)">
+      <stop class="wave-start" />
+      <stop class="wave-stop" stop-opacity="0.3" offset="1" />
+    </linearGradient>
+    <linearGradient id="gradient" gradientTransform="rotate(60)">
+      <stop class="gradient-start" />
+      <stop class="gradient-stop" offset="1" />
     </linearGradient>
   </defs>
+  <path fill="url(#gradient)" d="M0 0h256v196H0z" />
+  <path fill="url(#wave)" d="M0 168.5c66.5-9 174.582 28.729 256 11.907V196H0v-27.5z" />
+  <path class="wave" d="M0 183.5c67.5 18.5 153-43 256 8.5v4H0v-12.5z" />
 </svg>
