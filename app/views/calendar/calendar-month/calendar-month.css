@@ -17,6 +17,7 @@
   grid-row-gap: 10px;
   grid-template-areas: "weekdays" "days";
   grid-template-columns: 1fr;
+  min-height: 200px;
 }
 
 .calendar-month > .weekdays {
@@ -47,7 +48,6 @@
   align-items: center;
   aspect-ratio: 1 / 1;
   display: flex;
-  font-weight: 300;
   justify-content: center;
   text-align: center;
 }
@@ -66,6 +66,7 @@
 
 .calendar-month > .days > .day.-today {
   background-color: var(--color-brand);
+  background-image: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
   border-radius: 50%;
   color: var(--palette-white);
 }

@@ -6,8 +6,8 @@
     .wave-start { stop-color: var(--color-background-primary, #fff); }
     .wave-stop { stop-color: var(--color-background-primary, #fff); }
 
-    .gradient-start { stop-color: var(--start-color, #0075ff); }
-    .gradient-stop { stop-color: var(--stop-color, #a8d0ff); }
+    .gradient-start { stop-color: var(--start-color); }
+    .gradient-stop { stop-color: var(--stop-color); }
 
     :host { color: #fff; }
 

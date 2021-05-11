@@ -7,7 +7,7 @@ export default class CalendarToday extends HTMLElement {
     upgrade(this, `
       <template>
         <link rel="stylesheet" href="calendar-today/calendar-today.css">
-        <span class="calendar-today" @postupdate.window="onPostUpdate" #$content></span>
+        <span class="calendar-today" @postupdate.window="onPostUpdate" #$content>&nbsp;</span>
       </template>
     `);
   }

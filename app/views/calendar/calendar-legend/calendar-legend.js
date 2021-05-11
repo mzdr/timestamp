@@ -7,7 +7,7 @@ export default class CalendarLegend extends HTMLElement {
     upgrade(this, `
       <template>
         <link rel="stylesheet" href="calendar-legend/calendar-legend.css">
-        <span class="calendar-legend" #$content @postupdate.window="onPostUpdate"></span>
+        <span class="calendar-legend" #$content @postupdate.window="onPostUpdate">&nbsp;</span>
       </template>
     `);
   }

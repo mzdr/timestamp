@@ -6,7 +6,6 @@
   align-items: center;
   color: var(--color-text-shy);
   display: grid;
-  font-weight: 300;
   grid-column-gap: 20px;
   grid-template-columns: 50px minmax(60px, max-content) 50px;
   justify-content: center;

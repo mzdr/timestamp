@@ -5,9 +5,9 @@
 
 .calendar-today {
   display: block;
-  font-size: 32px;
+  font-size: calc(var(--type-size) * 2.5);
   font-weight: 100;
-  padding: 52px 0 32px;
+  padding: calc(var(--grid-gap) * 2.5) 0 calc(var(--grid-gap) * 1.5);
 }
 
 .calendar-today > .day {
