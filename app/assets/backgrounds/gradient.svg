@@ -1,49 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 256 196">
   <style>
-    /* @see https://codepen.io/bork/details/wJhEm */
-    .wave { fill: var(--color-background-primary, #fff); }
+    /*
 
+      Thanks to Claudio Guglieri and Peter Bork.
+
+      https://codepen.io/bork/details/wJhEm
+      https://dribbble.com/shots/2644219-Colorscape-Color-study
+
+    */
+
+    .wave { fill: var(--color-background-primary, #fff); }
     .wave-start { stop-color: var(--color-background-primary, #fff); }
     .wave-stop { stop-color: var(--color-background-primary, #fff); }
 
-    .gradient-start { stop-color: var(--start-color); }
-    .gradient-stop { stop-color: var(--stop-color); }
+    :host {
+      background-image: linear-gradient(var(--deg), var(--start), var(--stop));
+      color: var(--palette-white, #fff);
+    }
 
-    :host { color: #fff; }
-
-    :host([data-hour="0"]) { --start-color: #012459; --stop-color: #001322; }
-    :host([data-hour="1"]) { --start-color: #003972; --stop-color: #001322; }
-    :host([data-hour="2"]) { --start-color: #003972; --stop-color: #001322; }
-    :host([data-hour="3"]) { --start-color: #004372; --stop-color: #00182b; }
-    :host([data-hour="4"]) { --start-color: #004372; --stop-color: #011d34; }
-    :host([data-hour="5"]) { --start-color: #016792; --stop-color: #00182b; }
-    :host([data-hour="6"]) { --start-color: #07729f; --stop-color: #042c47; }
-    :host([data-hour="7"]) { --start-color: #12a1c0; --stop-color: #07506e; }
-    :host([data-hour="8"]) { --start-color: #74d4cc; --stop-color: #1386a6; }
-    :host([data-hour="9"]) { --start-color: #efeebc; --stop-color: #61d0cf; }
-    :host([data-hour="10"]) { --start-color: #fee154; --stop-color: #a3dec6; }
-    :host([data-hour="11"]) { --start-color: #fdc352; --stop-color: #e8ed92; }
-    :host([data-hour="12"]) { --start-color: #ffac6f; --stop-color: #ffe467; }
-    :host([data-hour="13"]) { --start-color: #fda65a; --stop-color: #ffe467; }
-    :host([data-hour="14"]) { --start-color: #fd9e58; --stop-color: #ffe467; }
-    :host([data-hour="15"]) { --start-color: #f18448; --stop-color: #ffd364; }
-    :host([data-hour="16"]) { --start-color: #f06b7e; --stop-color: #f9a856; }
-    :host([data-hour="17"]) { --start-color: #ca5a92; --stop-color: #f4896b; }
-    :host([data-hour="18"]) { --start-color: #5b2c83; --stop-color: #d1628b; }
-    :host([data-hour="19"]) { --start-color: #371a79; --stop-color: #713684; }
-    :host([data-hour="20"]) { --start-color: #28166b; --stop-color: #45217c; }
-    :host([data-hour="21"]) { --start-color: #192861; --stop-color: #372074; }
-    :host([data-hour="22"]) { --start-color: #040b3c; --stop-color: #233072; }
-    :host([data-hour="23"]) { --start-color: #040b3c; --stop-color: #012459; }
+    :host([data-hour="0"]) { --deg: 180deg; --start: #001322; --stop: #012459; }
+    :host([data-hour="1"]) { --deg: 195deg; --start: #001322; --stop: #012459; }
+    :host([data-hour="2"]) { --deg: 210deg; --start: #001322; --stop: #012459; }
+    :host([data-hour="3"]) { --deg: 225deg; --start: #001322; --stop: #012459; }
+    :host([data-hour="4"]) { --deg: 240deg; --start: #001322; --stop: #003972; }
+    :host([data-hour="5"]) { --deg: 255deg; --start: #00182b; --stop: #016792; }
+    :host([data-hour="6"]) { --deg: 270deg; --start: #042c47; --stop: #07729f; }
+    :host([data-hour="7"]) { --deg: 285deg; --start: #07506e; --stop: #12a1c0; }
+    :host([data-hour="8"]) { --deg: 300deg; --start: #1386a6; --stop: #74d4cc; }
+    :host([data-hour="9"]) { --deg: 315deg; --start: #efeebc; --stop: #61d0cf; color: var(--palette-black); }
+    :host([data-hour="10"]) { --deg: 330deg; --start: #fee154; --stop: #a3dec6; color: var(--palette-black); }
+    :host([data-hour="11"]) { --deg: 345deg; --start: #fdc352; --stop: #e8ed92; color: var(--palette-black); }
+    :host([data-hour="12"]) { --deg: 0deg; --start: #ff8d27; --stop: #ffe577; }
+    :host([data-hour="13"]) { --deg: 15deg; --start: #ff7e20; --stop: #ffda35; }
+    :host([data-hour="14"]) { --deg: 30deg; --start: #ff8d27; --stop: #ffe577; }
+    :host([data-hour="15"]) { --deg: 45deg; --start: #f18448; --stop: #ffd364; }
+    :host([data-hour="16"]) { --deg: 60deg; --start: #f06b7e; --stop: #f9a856; }
+    :host([data-hour="17"]) { --deg: 75deg; --start: #ca5a92; --stop: #f4896b; }
+    :host([data-hour="18"]) { --deg: 90deg; --start: #5b2c83; --stop: #d1628b; }
+    :host([data-hour="19"]) { --deg: 105deg; --start: #371a79; --stop: #713684; }
+    :host([data-hour="20"]) { --deg: 120deg; --start: #28166b; --stop: #45217c; }
+    :host([data-hour="21"]) { --deg: 135deg; --start: #192861; --stop: #372074; }
+    :host([data-hour="22"]) { --deg: 150deg; --start: #040b3c; --stop: #233072; }
+    :host([data-hour="23"]) { --deg: 165deg; --start: #040b3c; --stop: #012459; }
   </style>
   <defs>
     <linearGradient id="wave" gradientTransform="rotate(90)">
       <stop class="wave-start" />
       <stop class="wave-stop" stop-opacity="0.3" offset="1" />
-    </linearGradient>
-    <linearGradient id="gradient" gradientTransform="rotate(60)">
-      <stop class="gradient-start" />
-      <stop class="gradient-stop" offset="1" />
     </linearGradient>
   </defs>
   <path fill="url(#gradient)" d="M0 0h256v196H0z" />
