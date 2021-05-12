@@ -26,8 +26,8 @@ const {
 
 const defaultPreferences = {
   calendarBackground: resolve(integratedBackgroundsDirectory, 'empty.svg'),
-  calendarLegendFormat: 'MM / y',
-  clockFormat: 'Pp',
+  calendarLegendFormat: 'MMM y',
+  clockFormat: 'PPPP',
   openAtLogin: false,
 };
 
