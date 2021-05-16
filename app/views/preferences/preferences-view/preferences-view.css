@@ -65,7 +65,7 @@ translation-key a {
 
 .preferences-navigation {
   display: grid;
-  grid-row-gap: calc(var(--grid-gap) / 2);
+  grid-row-gap: calc(var(--grid-gap) / 3);
 }
 
 .preferences-navigation > .item {
@@ -76,17 +76,31 @@ translation-key a {
   color: currentColor;
   display: grid;
   font: inherit;
-  grid-column-gap: calc(var(--grid-gap) / 2);
+  grid-column-gap: calc(var(--grid-gap) / 3);
   grid-template-columns: min-content 1fr;
   outline: 0;
-  padding: 4px 0;
+  padding: 4px 8px;
+  position: relative;
   text-align: left;
 }
 
+.preferences-navigation > .item.-active::before {
+  background-color: var(--color-text-primary);
+  border-radius: 5px;
+  content: "";
+  height: 100%;
+  left: 0;
+  opacity: 0.14;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+}
+
 .preferences-navigation > .item > .icon {
-  height: 18px;
+  height: 14px;
   stroke-width: 1.5;
-  width: 18px;
+  width: 14px;
 }
 
 .preferences-contents {
@@ -101,7 +115,7 @@ translation-key a {
   padding: calc(var(--grid-gap) * 2);
 }
 
-.preferences-contents > .content.-hidden {
+.preferences-contents > .content:not(.-active) {
   display: none;
 }
 
