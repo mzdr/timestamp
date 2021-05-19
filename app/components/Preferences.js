@@ -131,8 +131,6 @@ class Preferences {
   }
 
   get(key) {
-    this.logger.debug(`Getting value of preference with key ”${key}”.`);
-
     return this.data.get(key);
   }
 
