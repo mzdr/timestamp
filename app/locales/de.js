@@ -18,15 +18,19 @@ module.exports = {
     },
     clockFormat: {
       label: 'Format der Uhr',
-      description: 'Die System-Tray-Uhr verwendet die Formatfunktion von [date-fns](https://date-fns.org/docs/format). Verwenden Sie ein beliebiges Muster, das Ihnen gefällt.',
+      description: 'Das [Format](https://date-fns.org/docs/format) der Uhrzeitanzeige im System-Tray.',
     },
     calendarBackground: {
       label: 'Hintergrund',
-      description: 'Passen Sie den Kalenderhintergrund an Ihre persönlichen Wünsche an.',
+      description: 'Wählen Sie einen Kalenderhintergrund aus der Ihrem Geschmack entspricht.',
     },
     calendarLegendFormat: {
       label: 'Format der Legende',
-      description: 'Das Format der Legende über dem Monat. Verwendet auch die Formatfunktion von [date-fns](https://date-fns.org/docs/format).',
+      description: 'Das [Format](https://date-fns.org/docs/format) der Legende über dem Monat.',
+    },
+    calendarTodayFormat: {
+      label: 'Format des aktuellen Tages',
+      description: 'Das [Format](https://date-fns.org/docs/format) des aktuellen Tages welches im Kalenderkopf angezeigt wird.',
     },
     shortcuts: {
       description: 'Im Folgenden finden Sie eine vollständige Liste der Tastenkombinationen, die Sie im Kalenderfenster verwenden können.',

@@ -82,6 +82,11 @@ export default class PreferencesView extends HTMLElement {
                 <translation-key class="label">preferences.calendarLegendFormat.label</translation-key>
                 <translation-key class="description" markdown>preferences.calendarLegendFormat.description</translation-key>
               </label>
+              <label class="form-group">
+                <textarea name="calendarTodayFormat" class="action -text" cols="10"></textarea>
+                <translation-key class="label">preferences.calendarTodayFormat.label</translation-key>
+                <translation-key class="description" markdown>preferences.calendarTodayFormat.description</translation-key>
+              </label>
             </section>
             <section class="content" #$content>
               <translation-key class="description">preferences.shortcuts.description</translation-key>

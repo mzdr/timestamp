@@ -18,15 +18,19 @@ module.exports = {
     },
     clockFormat: {
       label: 'Clock format',
-      description: 'The system tray clock is using the format function of [date-fns](https://date-fns.org/docs/format). Use any pattern you may like.',
+      description: 'The format [pattern](https://date-fns.org/docs/format) of the system tray clock.',
     },
     calendarBackground: {
       label: 'Background',
-      description: 'Customize the calendar background to your personal liking.',
+      description: 'Choose a calendar background that suits your personal liking.',
     },
     calendarLegendFormat: {
       label: 'Legend format',
-      description: 'The format of the legend above the month. Uses the format function of [date-fns](https://date-fns.org/docs/format) as well.',
+      description: 'The format [pattern](https://date-fns.org/docs/format) of the legend above the month.',
+    },
+    calendarTodayFormat: {
+      label: 'Today format',
+      description: 'The format [pattern](https://date-fns.org/docs/format) of the today display in the calendar head.',
     },
     shortcuts: {
       description: 'See below for a complete list of keyboard shortcuts that you can use in the calendar window.',

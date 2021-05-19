@@ -7,17 +7,31 @@ export default class CalendarToday extends HTMLElement {
     upgrade(this, `
       <template>
         <link rel="stylesheet" href="calendar-today/calendar-today.css">
-        <span class="calendar-today" @postupdate.window="onPostUpdate" #$content>&nbsp;</span>
+        <slot class="calendar-today">&nbsp;</slot>
       </template>
     `);
+
+    const { preferences } = window;
+
+    preferences.on('changed', this.onPreferencesChanged.bind(this));
+
+    this.render();
   }
 
-  async onPostUpdate() {
-    const { calendar } = window;
-    const { $content } = this.$refs;
-    const [day, date, month] = (await calendar.getDate({ format: 'EEEE do MMMM' })).split(' ');
+  onPreferencesChanged(event, key, value) {
+    if (key !== 'calendarTodayFormat') {
+      return;
+    }
 
-    $content.innerHTML = `${day},<br><strong class="day">${date}</strong> ${month}`;
+    this.render(value);
+  }
+
+  async render(format) {
+    const { calendar, preferences } = window;
+
+    this.innerHTML = await calendar.getDate({
+      format: (format || await preferences.get('calendarTodayFormat')).replace(/\n/g, '\'<br>\''),
+    });
 
     dispatch(this, 'postrender');
   }

@@ -1,9 +1,8 @@
 .form-group {
   display: grid;
-  grid-gap: calc(var(--grid-gap) / 3) calc(var(--grid-gap) * 2);
-  grid-template-areas: "label action" "description .";
+  grid-gap: calc(var(--grid-gap) / 3) calc(var(--grid-gap) * 3);
+  grid-template-areas: "label action" "description action";
   grid-template-columns: 1fr min-content;
-  grid-template-rows: minmax(30px, min-content) min-content;
 }
 
 .form-group > .label {
@@ -18,7 +17,7 @@
 }
 
 .form-group > .action {
-  align-self: center;
+  align-self: flex-start;
   grid-area: action;
   margin: 0;
   outline: 0;
@@ -29,6 +28,8 @@
   font: inherit;
   outline: 0;
   padding: 2px 4px;
+  resize: none;
+  text-align: center;
 }
 
 .form-group > .action.-toggle {
@@ -37,6 +38,6 @@
 }
 
 .form-group > .action.-select {
-  padding: 4px;
+  padding: 5px;
   text-transform: capitalize;
 }
