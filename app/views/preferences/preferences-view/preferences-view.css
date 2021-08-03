@@ -55,6 +55,8 @@ translation-key a {
 
 .preferences-side > .navigation {
   margin: calc(var(--grid-gap) * 2) 0;
+
+  -webkit-app-region: no-drag;
 }
 
 .preferences-side > .about {
