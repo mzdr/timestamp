@@ -1,29 +1,47 @@
 :host {
   display: grid;
-  grid-row-gap: 18px;
-  grid-template-areas: "background" "legend" "month" "navigation";
+  grid-template-areas: "background" "legend" "month";
   padding-bottom: var(--grid-gap);
   position: relative;
   user-select: none;
   width: 340px;
+}
 
+calendar-background {
   -webkit-app-region: drag;
 }
 
-calendar-legend,
-calendar-month,
-calendar-navigation {
+calendar-legend {
+  padding: 14px var(--grid-gap) 22px;
+}
+
+calendar-month {
   padding: 0 var(--grid-gap);
 }
 
 calendar-background { grid-area: background; }
 calendar-legend { grid-area: legend; }
 calendar-month { grid-area: month; }
-calendar-navigation { grid-area: navigation; }
 
 calendar-show-preferences {
   padding: 18px 12px;
   position: absolute;
   right: 12px;
   top: 6px;
+
+  -webkit-app-region: no-drag;
+}
+
+calendar-navigation {
+  inset: 0;
+  position: absolute;
+}
+
+calendar-navigation[hidden] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+calendar-navigation:not([hidden]) {
+  -webkit-app-region: no-drag;
 }

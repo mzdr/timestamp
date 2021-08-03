@@ -6,14 +6,14 @@ export default class CalendarView extends HTMLElement {
 
     upgrade(this, `
       <template>
-        <link rel="stylesheet" href="calendar-view/calendar-view.css" />
+        <link rel="stylesheet" href="calendar-view/calendar-view.css" @keydown.window="onKeyDown" />
         <calendar-background @postrender="onPostRender">
           <calendar-today @postrender="onPostRender" @click="onTodayClicked"></calendar-today>
           <calendar-show-preferences @click="onShowPreferences"></calendar-show-preferences>
         </calendar-background>
-        <calendar-legend @postrender="onPostRender"></calendar-legend>
+        <calendar-legend @click="onLegendClicked" @postrender="onPostRender"></calendar-legend>
         <calendar-month #$month @postrender="onPostRender"></calendar-month>
-        <calendar-navigation @change="onChange" @toggle="onToggle"></calendar-navigation>
+        <calendar-navigation #$navigation @change="onChange" hidden></calendar-navigation>
       </template>
     `);
 
@@ -46,12 +46,31 @@ export default class CalendarView extends HTMLElement {
     dispatch(window, 'postupdate', { selectedMonth });
   }
 
+  onKeyDown(e) {
+    const { key, metaKey } = e;
+    const { app, calendar, preferences } = window;
+    const { $navigation } = this.$refs;
+
+    if (key === 'Escape') {
+      if ($navigation.hidden) {
+        calendar.hide();
+      } else {
+        $navigation.hidden = true;
+      }
+    } else if (key === 'w' && metaKey === false) {
+      this.onToggle({ weeks: true });
+    } else if (key === ',' && metaKey) {
+      preferences.show();
+    } else if (key === 'q' && metaKey) {
+      app.quit();
+    }
+  }
+
   onPreferencesChanged() {
     this.update(true);
   }
 
-  onToggle({ detail }) {
-    const { weeks } = detail;
+  onToggle({ weeks }) {
     const { $month } = this.$refs;
 
     if (weeks) {
@@ -82,10 +101,18 @@ export default class CalendarView extends HTMLElement {
     this.onChange();
   }
 
+  onLegendClicked() {
+    this.$refs.$navigation.hidden = false;
+  }
+
   async onChange({ detail } = {}) {
     const { calendar } = window;
 
     this.selectedMonth = await calendar.getDate(detail ? { date: this.selectedMonth, ...detail } : {});
     this.update(true);
+
+    if (detail?.diff?.years === undefined) {
+      this.$refs.$navigation.hidden = true;
+    }
   }
 }

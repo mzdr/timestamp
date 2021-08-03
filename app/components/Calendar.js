@@ -7,6 +7,7 @@ const Window = require('./Window');
 const {
   CALENDAR_GET_CALENDAR,
   CALENDAR_GET_DATE,
+  CALENDAR_GET_MONTHS,
   CALENDAR_HIDE,
   CALENDAR_IS_SAME_HOUR,
   CALENDAR_SHOW,
@@ -19,6 +20,7 @@ class Calendar {
 
     ipcMain.handle(CALENDAR_GET_CALENDAR, this.getCalendar.bind(this));
     ipcMain.handle(CALENDAR_GET_DATE, this.getDate.bind(this));
+    ipcMain.handle(CALENDAR_GET_MONTHS, this.getMonths.bind(this));
     ipcMain.handle(CALENDAR_IS_SAME_HOUR, (event, ...dates) => datefns.isSameHour(...dates));
 
     ipcMain.on(CALENDAR_HIDE, () => this.window.hide());
@@ -128,6 +130,24 @@ class Calendar {
       weeks,
       days,
     };
+  }
+
+  getMonths() {
+    const { locale } = this;
+    const start = datefns.startOfYear(new Date());
+    const months = [];
+
+    for (let i = 0; i < 12; i += 1) {
+      months.push(
+        datefns.format(
+          datefns.addMonths(start, i),
+          'MMM',
+          { locale },
+        ),
+      );
+    }
+
+    return months;
   }
 }
 

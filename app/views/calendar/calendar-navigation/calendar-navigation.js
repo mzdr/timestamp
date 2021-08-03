@@ -10,45 +10,46 @@ export default class CalendarNavigation extends HTMLElement {
 
         <div
           class="calendar-navigation"
-          #$content
           @keydown.window="onKeyDown"
           @postupdate.window="onPostUpdate"
         >
-          <button class="go-to -year" @click="goPreviousYear"></button>
+          <div class="year">
+            <button class="go-to" @click="goPreviousYear">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="icon-chevron">
+                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+              </svg>
+            </button>
 
-          <div class="quarter">
-            <button class="go-to -month" @click="goMonth" data-month="0"></button>
-            <button class="go-to -month" @click="goMonth" data-month="1"></button>
-            <button class="go-to -month" @click="goMonth" data-month="2"></button>
+            <strong class="go-to -year" #$year></strong>
+
+            <button class="go-to" @click="goNextYear">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="icon-chevron">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L10.293 8 4.646 2.354a.5.5 0 010-.708z"/>
+              </svg>
+            </button>
           </div>
 
-          <div class="quarter">
-            <button class="go-to -month" @click="goMonth" data-month="3"></button>
-            <button class="go-to -month" @click="goMonth" data-month="4"></button>
-            <button class="go-to -month" @click="goMonth" data-month="5"></button>
+          <div class="month">
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
+            <button #$month class="go-to" @click="goMonth"></button>
           </div>
-
-          <div class="quarter">
-            <button class="go-to -month" @click="goMonth" data-month="6"></button>
-            <button class="go-to -month" @click="goMonth" data-month="7"></button>
-            <button class="go-to -month" @click="goMonth" data-month="8"></button>
-          </div>
-
-          <div class="quarter">
-            <button class="go-to -month" @click="goMonth" data-month="9"></button>
-            <button class="go-to -month" @click="goMonth" data-month="10"></button>
-            <button class="go-to -month" @click="goMonth" data-month="11"></button>
-          </div>
-
-          <button class="go-to -year" @click="goNextYear"></button>
         </div>
       </template>
     `);
   }
 
   onKeyDown(e) {
-    const { key, metaKey } = e;
-    const { app, calendar, preferences } = window;
+    const { key } = e;
 
     if (key === 'ArrowRight') {
       this.goNextMonth();
@@ -64,26 +65,26 @@ export default class CalendarNavigation extends HTMLElement {
       // Hitting space might as well trigger a focused button (month),
       // avoid that behaviour.
       e.preventDefault();
-    } else if (key === 'Escape') {
-      calendar.hide();
-    } else if (key === 'w' && metaKey === false) {
-      dispatch(this, 'toggle', { weeks: true });
-    } else if (key === ',' && metaKey) {
-      preferences.show();
-    } else if (key === 'q' && metaKey) {
-      app.quit();
     }
   }
 
-  onPostUpdate({ detail }) {
+  async onPostUpdate({ detail }) {
+    const { calendar } = window;
     const { selectedMonth } = detail;
-    const { $content } = this.$refs;
-    const $months = $content.querySelectorAll('.go-to.-month');
+    const { $year, $month } = this.$refs;
+    const months = await calendar.getMonths();
 
-    $months.forEach(($el) => $el.classList.toggle(
-      '-current',
-      parseInt($el.dataset.month, 10) === selectedMonth.getMonth(),
-    ));
+    $year.textContent = selectedMonth.getFullYear();
+
+    $month.forEach(($el, month) => {
+      $el.classList.toggle(
+        '-current',
+        month === selectedMonth.getMonth(),
+      );
+
+      // eslint-disable-next-line no-param-reassign
+      $el.textContent = months[month];
+    });
 
     return this;
   }
@@ -94,8 +95,8 @@ export default class CalendarNavigation extends HTMLElement {
     return this;
   }
 
-  goMonth({ currentTarget: { dataset: { month } } }) {
-    dispatch(this, 'change', { set: { month } });
+  goMonth({ currentTarget }) {
+    dispatch(this, 'change', { set: { month: this.$refs.$month.indexOf(currentTarget) } });
 
     return this;
   }
