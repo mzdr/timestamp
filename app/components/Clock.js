@@ -5,10 +5,14 @@ class Clock {
     const { onTick, locale, format } = options;
 
     this.locale = locale.getObject();
-    this.setFormat(format);
+
+    this
+      .setFormat(format)
+      .onTick();
 
     if (typeof onTick === 'function') {
-      setInterval(() => onTick(this.toString()), 1000);
+      setInterval(() => onTick(this.onTick()), 1000);
+      onTick(this.onTick());
     }
   }
 
@@ -27,9 +31,21 @@ class Clock {
     return this;
   }
 
+  onTick() {
+    this.now = new Date();
+
+    return this;
+  }
+
   toString() {
+    const { locale } = this;
+
     try {
-      return datefns.format(new Date(), this.getFormat(), { locale: this.locale });
+      return datefns.format(
+        this.now,
+        this.getFormat(),
+        { locale },
+      );
     } catch (e) {
       return '#invalid format#';
     }

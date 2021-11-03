@@ -20,6 +20,7 @@ const {
   APP_QUIT,
   APP_RESIZE_WINDOW,
   APP_RESTART,
+  APP_TICK,
   APP_TRANSLATE,
   APP_UPDATE_DOWNLOADED,
 } = require('./ipc');
@@ -68,7 +69,7 @@ const defaultPreferences = {
       this.clock = new Clock({
         format: defaultPreferences.clockFormat,
         locale: this.locale,
-        onTick: this.tray.setLabel.bind(this.tray),
+        onTick: this.onTick.bind(this),
       });
 
       this.calendar = new Calendar({
@@ -120,6 +121,11 @@ const defaultPreferences = {
       }
 
       return this;
+    }
+
+    onTick(clock) {
+      this.tray.setLabel(clock.toString());
+      this.calendar?.window.getWebContents().send(APP_TICK);
     }
 
     onTranslate(event, key, options = {}) {

@@ -4,6 +4,7 @@ const { productName, version, copyright } = require('../package.json');
 const APP_QUIT = 'app.quit';
 const APP_RESIZE_WINDOW = 'app.resize-window';
 const APP_RESTART = 'app.restart';
+const APP_TICK = 'app.tick';
 const APP_TRANSLATE = 'app.translate';
 const APP_UPDATE_DOWNLOADED = 'app.update-downloaded';
 
@@ -11,6 +12,7 @@ module.exports = {
   APP_QUIT,
   APP_RESIZE_WINDOW,
   APP_RESTART,
+  APP_TICK,
   APP_TRANSLATE,
   APP_UPDATE_DOWNLOADED,
 
