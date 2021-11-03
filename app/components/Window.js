@@ -95,7 +95,7 @@ class Window {
 
   setContentSize(width, height) {
     if (typeof width !== 'number' || typeof height !== 'number') {
-      throw new Error('Window.setContentSize has been call with non-numeric arguments.');
+      throw new Error('Window.setContentSize has been called with non-numeric arguments.');
     }
 
     this.browserWindow.setContentSize(width, height, true);
