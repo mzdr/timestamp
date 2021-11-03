@@ -26,7 +26,7 @@ const {
 } = require('./ipc');
 
 const defaultPreferences = {
-  calendarBackground: resolve(integratedBackgroundsDirectory, 'empty.svg'),
+  calendarBackground: resolve(integratedBackgroundsDirectory, 'gradient.svg'),
   calendarLegendFormat: 'MMMM  y',
   calendarTodayFormat: 'EEEE,\ndo MMMM',
   clockFormat: 'PPPP',
