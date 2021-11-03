@@ -5,12 +5,10 @@ export default class TranslationKey extends HTMLElement {
     super();
 
     this.originalKey = this.textContent;
-    this.onPostUpdate();
-
-    window.addEventListener('postupdate', this.onPostUpdate.bind(this));
+    this.render();
   }
 
-  async onPostUpdate() {
+  async render() {
     const { app } = window;
 
     if (this.hasAttribute('markdown')) {
