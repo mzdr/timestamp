@@ -69,12 +69,12 @@ class Updater {
 
       this.logger.debug(`Update available. (${currentVersion} -> ${version})`);
     } catch ({ message }) {
-      this.logger.warning(message);
+      this.logger.error(`Update tick failed because of “${message}”.`);
     }
   }
 
   onError({ message }) {
-    this.logger.warning(message);
+    this.logger.error(`AutoUpdater failed because of “${message}”.`);
 
     return this;
   }
