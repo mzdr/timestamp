@@ -15,8 +15,14 @@ class Locale {
     const partialSupport = language;
     const fallback = 'en-US';
 
+    // Find locale that is supported by date-fns. Go from best to worst.
     this.locale = [fullSupport, partialSupport, fallback].find((k) => locales.date[k]);
+
+    // Pick datefns locale object.
     this.localeObject = locales.date[this.locale];
+
+    // Pick app translations. For now we just support language specific translations,
+    // not regional specific ones. Might come at a later time.
     this.translations = locales.app[partialSupport] || locales.app.en;
 
     logger.debug(`Using “${this.translations.locale}” as application locale and “${this.locale}” as clock/calendar locale.`);
