@@ -8,13 +8,14 @@
     "airbnb-base"
   ],
   "parserOptions": {
-    "ecmaVersion": 12,
+    "ecmaVersion": 13,
     "sourceType": "module"
   },
   "rules": {
     "import/extensions": "off",
     "no-console": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "no-restricted-syntax": "off"
   },
   "settings": {
     "import/core-modules": ["electron"]
