@@ -1,27 +1,23 @@
 :host {
+  --view-width: 338px;
+
   display: grid;
-  grid-template-areas: "background" "legend" "month";
-  padding-bottom: var(--grid-gap);
+  grid-template-areas: "background" "month";
   position: relative;
   user-select: none;
-  width: 340px;
+  width: var(--view-width);
 }
 
-calendar-background {
+calendar-head {
   -webkit-app-region: drag;
 }
 
-calendar-legend {
-  padding: 14px var(--grid-gap) 22px;
+calendar-body {
+  padding: 0 var(--grid-gap) var(--grid-gap);
 }
 
-calendar-month {
-  padding: 0 var(--grid-gap);
-}
-
-calendar-background { grid-area: background; }
-calendar-legend { grid-area: legend; }
-calendar-month { grid-area: month; }
+calendar-head { grid-area: background; }
+calendar-body { grid-area: month; }
 
 calendar-show-preferences {
   padding: 18px 12px;

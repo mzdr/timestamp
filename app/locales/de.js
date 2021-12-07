@@ -36,13 +36,6 @@ module.exports = {
       description: 'Im Folgenden finden Sie eine vollständige Liste der Tastenkombinationen, die Sie im Kalenderfenster verwenden können.',
       keys: [
         ['W', 'Wochennummern anzeigen'],
-        ['↑', 'Nächstes Jahr'],
-        ['↓', 'Vorheriges Jahr'],
-        ['→', 'Nächster Monat'],
-        ['←', 'Vorheriger Monat'],
-        ['⌘+,', 'Einstellungen anzeigen'],
-        ['⌘+Q', 'Timestamp beenden'],
-        ['Esc', 'Fenster schließen'],
         ['Leertaste', 'Aktuellen Tag anzeigen'],
       ],
     },

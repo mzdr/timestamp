@@ -7,9 +7,8 @@ const Window = require('./Window');
 const {
   CALENDAR_GET_CALENDAR,
   CALENDAR_GET_DATE,
-  CALENDAR_GET_MONTHS,
+  CALENDAR_GET_WEEKDAYS,
   CALENDAR_HIDE,
-  CALENDAR_IS_SAME_HOUR,
   CALENDAR_SHOW,
 } = require('../views/calendar/ipc');
 
@@ -20,8 +19,7 @@ class Calendar {
 
     ipcMain.handle(CALENDAR_GET_CALENDAR, this.getCalendar.bind(this));
     ipcMain.handle(CALENDAR_GET_DATE, this.getDate.bind(this));
-    ipcMain.handle(CALENDAR_GET_MONTHS, this.getMonths.bind(this));
-    ipcMain.handle(CALENDAR_IS_SAME_HOUR, (event, ...dates) => datefns.isSameHour(...dates));
+    ipcMain.handle(CALENDAR_GET_WEEKDAYS, this.getWeekdays.bind(this));
 
     ipcMain.on(CALENDAR_HIDE, () => this.window.hide());
     ipcMain.on(CALENDAR_SHOW, () => this.window.show());
@@ -42,17 +40,20 @@ class Calendar {
     const { locale } = this;
 
     const {
-      date, format, set, diff,
+      date,
+      format,
+      set,
+      diff,
     } = payload;
 
     let final = date || new Date();
 
-    if (diff) {
-      final = datefns.add(final, diff); // date-fns.add() supports negative numbers as well
-    }
-
     if (set) {
       final = datefns.set(final, set);
+    }
+
+    if (diff) {
+      final = datefns.add(final, diff); // date-fns.add() supports negative numbers as well
     }
 
     if (format) {
@@ -66,88 +67,50 @@ class Calendar {
     return final;
   }
 
-  getCalendar(event, { date }) {
+  getCalendar(event, payload) {
     const { locale } = this;
-    const weekdays = [];
-    const weeks = [];
+    const month = this.getDate(null, payload);
+    const startOfMonth = datefns.startOfMonth(month);
+    const endOfMonth = datefns.endOfMonth(month);
+    const totalDays = datefns.differenceInCalendarDays(endOfMonth, startOfMonth);
+
     const days = [];
 
-    const totalDays = datefns.getDaysInMonth(date);
-    const lastDayOfMonth = datefns.lastDayOfMonth(date);
-    const startOfMonth = datefns.startOfMonth(date);
-    const firstWeek = datefns.startOfWeek(startOfMonth, { locale });
-    const lastWeek = datefns.endOfWeek(lastDayOfMonth, { locale });
-    const previousMonthDays = datefns.differenceInCalendarDays(startOfMonth, firstWeek);
-    const nextMonthDays = datefns.differenceInCalendarDays(lastWeek, lastDayOfMonth);
-
-    for (let i = 0; i < previousMonthDays; i += 1) {
-      const day = datefns.addDays(firstWeek, i);
-      const isToday = datefns.isToday(day);
-      const isThisWeek = datefns.isThisWeek(day, { locale });
-      const previousMonth = true;
+    for (let i = 0; i <= totalDays; i += 1) {
+      const date = datefns.addDays(startOfMonth, i);
+      const week = datefns.getWeek(date, { locale });
+      const weekday = datefns.getDay(date);
+      const day = datefns.format(date, 'd', { locale });
 
       days.push({
-        day, isToday, isThisWeek, previousMonth,
+        date,
+        day,
+        week,
+        weekday,
       });
     }
 
-    for (let i = 0; i < totalDays; i += 1) {
-      const day = datefns.addDays(startOfMonth, i);
-      const isToday = datefns.isToday(day);
-      const isThisWeek = datefns.isThisWeek(day, { locale });
-
-      days.push({ day, isToday, isThisWeek });
-    }
-
-    for (let i = 1; i <= nextMonthDays; i += 1) {
-      const day = datefns.addDays(lastDayOfMonth, i);
-      const isToday = datefns.isToday(day);
-      const isThisWeek = datefns.isThisWeek(day, { locale });
-      const nextMonth = true;
-
-      days.push({
-        day, isToday, isThisWeek, nextMonth,
-      });
-    }
-
-    for (let i = 0; i < 7; i += 1) {
-      weekdays.push(datefns.format(days[i].day, 'EEE', { locale }));
-    }
-
-    for (let i = 0; i < days.length; i += 7) {
-      weeks.push(datefns.getWeek(days[i].day, { locale }));
-    }
-
-    return {
-      totalDays,
-      lastDayOfMonth,
-      startOfMonth,
-      firstWeek,
-      lastWeek,
-      previousMonthDays,
-      nextMonthDays,
-      weekdays,
-      weeks,
-      days,
-    };
+    return days;
   }
 
-  getMonths() {
+  getWeekdays() {
     const { locale } = this;
-    const start = datefns.startOfYear(new Date());
-    const months = [];
+    const startOfWeek = datefns.startOfWeek(new Date(), { locale });
+    const startIndex = datefns.getDay(startOfWeek);
+    const weekdays = [];
 
-    for (let i = 0; i < 12; i += 1) {
-      months.push(
-        datefns.format(
-          datefns.addMonths(start, i),
-          'MMM',
-          { locale },
-        ),
+    for (let i = 0; i < 7; i += 1) {
+      const weekday = datefns.addDays(startOfWeek, i);
+
+      weekdays.push(
+        datefns.format(weekday, 'EEE', { locale }),
       );
     }
 
-    return months;
+    return {
+      startIndex,
+      weekdays,
+    };
   }
 }
 

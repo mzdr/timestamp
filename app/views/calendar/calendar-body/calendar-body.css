@@ -1,0 +1,145 @@
+:host {
+  display: block;
+}
+
+:host(.show-weeks) > .calendar-month {
+  grid-template-areas: "no weekdays" "weeks days";
+  grid-template-columns: 1fr 7fr;
+}
+
+:host(:not(.show-weeks)) > .calendar-month > .no,
+:host(:not(.show-weeks)) > .calendar-month > .weeks {
+  display: none;
+}
+
+.calendar-legend {
+  align-items: center;
+  color: var(--color-shy);
+  display: grid;
+  grid-column-gap: 20px;
+  grid-template-columns: 50px minmax(60px, max-content) 50px;
+  justify-content: center;
+  padding: 14px var(--grid-gap) 22px;
+  text-align: center;
+  white-space: pre;
+}
+
+.calendar-legend::before,
+.calendar-legend::after {
+  content: "";
+  height: 1px;
+}
+
+.calendar-legend::before {
+  background-image: linear-gradient(to left, var(--color-line), transparent);
+}
+
+.calendar-legend::after {
+  background-image: linear-gradient(to right, var(--color-line), transparent);
+}
+
+.calendar-month {
+  --maximum-days: 7;
+  --maximum-weeks: 6;
+  --week-width: calc(var(--view-width) - (2 * var(--grid-gap)));
+  --days-gap: 6px;
+  --days-height: calc(var(--week-width) / var(--maximum-days) * var(--maximum-weeks));
+
+  display: grid;
+  grid-row-gap: 10px;
+  grid-template-areas: "weekdays" "days";
+  grid-template-columns: 1fr;
+}
+
+.calendar-month > .weekdays {
+  display: grid;
+  grid-area: weekdays;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.calendar-month > .no {
+  color: var(--color-line);
+  text-align: center;
+}
+
+.calendar-month > .weeks {
+  color: var(--color-shy);
+  grid-area: weeks;
+}
+
+.calendar-month > .weeks,
+.calendar-month > .days {
+  display: grid;
+  grid-row-gap: var(--days-gap);
+}
+
+.calendar-month > .weeks > .week,
+.calendar-month > .days > .day {
+  align-items: center;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.calendar-month > .days {
+  color: var(--color-shy);
+  grid-area: days;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(7, 1fr);
+  height: calc(var(--days-height) + (var(--days-gap) * (var(--maximum-weeks) - 1)));
+  overflow: scroll;
+}
+
+.calendar-month > .days::-webkit-scrollbar {
+  display: none;
+}
+
+.calendar-month > .days > .day.-today {
+  background-color: var(--color-brand);
+  background-image: linear-gradient(20deg, #0002, transparent);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px #0001;
+  color: var(--palette-white);
+  font-weight: 500;
+}
+
+[data-active-month="0"] [data-month="0"],
+[data-active-month="1"] [data-month="1"],
+[data-active-month="2"] [data-month="2"],
+[data-active-month="3"] [data-month="3"],
+[data-active-month="4"] [data-month="4"],
+[data-active-month="5"] [data-month="5"],
+[data-active-month="6"] [data-month="6"],
+[data-active-month="7"] [data-month="7"],
+[data-active-month="8"] [data-month="8"],
+[data-active-month="9"] [data-month="9"],
+[data-active-month="10"] [data-month="10"],
+[data-active-month="11"] [data-month="11"] {
+  color: var(--color-pen);
+}
+
+/* Sunday */
+[data-start-of-week="0"] [data-weekday="1"]:first-child { grid-column: 1; }
+[data-start-of-week="0"] [data-weekday="2"]:first-child { grid-column: 2; }
+[data-start-of-week="0"] [data-weekday="3"]:first-child { grid-column: 3; }
+[data-start-of-week="0"] [data-weekday="4"]:first-child { grid-column: 4; }
+[data-start-of-week="0"] [data-weekday="5"]:first-child { grid-column: 5; }
+[data-start-of-week="0"] [data-weekday="6"]:first-child { grid-column: 6; }
+
+/* Monday */
+[data-start-of-week="1"] [data-weekday="2"]:first-child { grid-column: 2; }
+[data-start-of-week="1"] [data-weekday="3"]:first-child { grid-column: 3; }
+[data-start-of-week="1"] [data-weekday="4"]:first-child { grid-column: 4; }
+[data-start-of-week="1"] [data-weekday="5"]:first-child { grid-column: 5; }
+[data-start-of-week="1"] [data-weekday="6"]:first-child { grid-column: 6; }
+[data-start-of-week="1"] [data-weekday="0"]:first-child { grid-column: 7; }
+
+/* Saturday */
+[data-start-of-week="6"] [data-weekday="1"]:first-child { grid-column: 3; }
+[data-start-of-week="6"] [data-weekday="2"]:first-child { grid-column: 4; }
+[data-start-of-week="6"] [data-weekday="3"]:first-child { grid-column: 5; }
+[data-start-of-week="6"] [data-weekday="4"]:first-child { grid-column: 6; }
+[data-start-of-week="6"] [data-weekday="5"]:first-child { grid-column: 7; }
+[data-start-of-week="6"] [data-weekday="0"]:first-child { grid-column: 2; }

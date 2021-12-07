@@ -36,13 +36,6 @@ module.exports = {
       description: 'See below for a complete list of keyboard shortcuts that you can use in the calendar window.',
       keys: [
         ['W', 'Toggle week numbers'],
-        ['↑', 'Next year'],
-        ['↓', 'Previous year'],
-        ['→', 'Next month'],
-        ['←', 'Previous month'],
-        ['⌘+,', 'Show preferences'],
-        ['⌘+Q', 'Quit timestamp'],
-        ['Esc', 'Close window'],
         ['Space', 'Go to today'],
       ],
     },

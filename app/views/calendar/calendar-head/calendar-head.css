@@ -2,21 +2,21 @@
   display: block;
 }
 
-.calendar-background {
+.calendar-head {
   display: grid;
   grid-template-areas: "main";
 }
 
-.calendar-background > .image,
-.calendar-background > .slot {
+.calendar-head > .background,
+.calendar-head > .slot {
  grid-area: main;
 }
 
-.calendar-background > .image {
+.calendar-head > .background {
   display: flex;
   margin: 0;
 }
 
-.calendar-background > .slot {
+.calendar-head > .slot {
   display: block;
 }
