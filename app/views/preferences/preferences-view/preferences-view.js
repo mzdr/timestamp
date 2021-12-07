@@ -17,6 +17,7 @@ export default class PreferencesView extends HTMLElement {
         <aside class="preferences-side side">
           <img class="logo" src="../../assets/logo.svg" alt="">
           <h1 class="name">${app.productName}</h1>
+          <span class="about">v${app.version}</span>
 
           <nav class="navigation preferences-navigation">
             <button #$tab class="item" @click="onCategoryClicked">
@@ -35,8 +36,11 @@ export default class PreferencesView extends HTMLElement {
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"></path></svg>
               <translation-key class="title">preferences.category.shortcuts</translation-key>
             </button>
+            <button #$tab class="item" @click="onQuitClicked">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+              <translation-key class="title">preferences.category.quit</translation-key>
+            </button>
           </nav>
-          <section class="about preferences-about">v${app.version}</section>
         </aside>
 
         <section #$alert class="alert -hidden container-alert">
@@ -145,6 +149,10 @@ export default class PreferencesView extends HTMLElement {
     preferences.set(name, isBoolean ? checked : value);
 
     return this;
+  }
+
+  onQuitClicked() {
+    app.quit();
   }
 
   onCategoryClicked({ currentTarget }) {

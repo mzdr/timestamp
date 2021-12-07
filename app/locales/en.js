@@ -11,6 +11,7 @@ module.exports = {
       tray: 'System tray',
       calendar: 'Calendar',
       shortcuts: 'Shortcuts',
+      quit: 'Quit',
     },
     openAtLogin: {
       label: 'Open at login',

@@ -11,6 +11,7 @@ module.exports = {
       tray: 'System Tray',
       calendar: 'Kalender',
       shortcuts: 'Tastaturkürzel',
+      quit: 'Beenden',
     },
     openAtLogin: {
       label: 'Autostart',
