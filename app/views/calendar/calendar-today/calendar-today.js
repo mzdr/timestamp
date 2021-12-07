@@ -44,7 +44,13 @@ export default class CalendarToday extends HTMLElement {
   }
 
   async render() {
-    this.innerHTML = await calendar.getDate({ format: await this.format });
+    const today = await calendar.getDate({ format: await this.format });
+
+    if (this.innerHTML === today) {
+      return;
+    }
+
+    this.innerHTML = today;
 
     dispatch(this, 'postrender');
   }
