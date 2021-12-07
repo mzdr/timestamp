@@ -1,7 +1,7 @@
 :root {
-  background-color: var(--color-background-primary);
+  background-color: var(--color-paper);
   box-sizing: border-box;
-  color: var(--color-text-primary);
+  color: var(--color-pen);
   cursor: default;
 }
 

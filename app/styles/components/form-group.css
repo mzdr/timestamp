@@ -11,23 +11,26 @@
 }
 
 .form-group > .description {
-  color: var(--color-text-shy);
+  color: var(--color-shy);
   font-size: var(--shy-size);
   grid-area: description;
 }
 
 .form-group > .action {
   align-self: flex-start;
+  background-color: #fff;
+  border-radius: 3px;
+  border: 0;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  font: inherit;
   grid-area: action;
   margin: 0;
   outline: 0;
+  padding: 6px 12px;
 }
 
 .form-group > .action.-text {
   color: var(--palette-black);
-  font: inherit;
-  outline: 0;
-  padding: 2px 4px;
   resize: none;
   text-align: center;
 }
@@ -38,6 +41,6 @@
 }
 
 .form-group > .action.-select {
-  padding: 5px;
+  appearance: none;
   text-transform: capitalize;
 }

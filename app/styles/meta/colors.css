@@ -9,19 +9,19 @@
   --palette-white: #fff;
 
   --color-brand: var(--palette-blue);
-  --color-background-primary: var(--palette-white);
+  --color-paper: var(--palette-white);
   --color-line: var(--palette-gray-80);
-  --color-text-primary: var(--palette-black);
-  --color-text-shy: var(--palette-gray-60);
+  --color-pen: var(--palette-black);
+  --color-shy: var(--palette-gray-60);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --palette-white: #eee;
 
-    --color-background-primary: var(--palette-black);
-    --color-text-primary: var(--palette-white);
-    --color-text-shy: var(--palette-gray-40);
+    --color-paper: var(--palette-black);
+    --color-pen: var(--palette-white);
+    --color-shy: var(--palette-gray-40);
     --color-line: var(--palette-gray-20);
   }
 }

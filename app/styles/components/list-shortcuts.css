@@ -19,5 +19,7 @@
   border-radius: 3px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
   color: var(--palette-black);
+  min-width: 1.25ch;
   padding: 6px 12px;
+  text-align: center;
 }

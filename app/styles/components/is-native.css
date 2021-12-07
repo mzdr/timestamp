@@ -10,8 +10,8 @@
     --palette-black: #322d2c;
     --palette-white: #e0e0df;
 
-    --color-background-primary: var(--palette-black);
-    --color-text-primary: var(--palette-white);
+    --color-paper: var(--palette-black);
+    --color-pen: var(--palette-white);
     --color-line: #434041;
   }
 }

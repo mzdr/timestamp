@@ -21,7 +21,7 @@ translation-key a {
 
 .preferences-view > .alert,
 .preferences-view > .contents {
-  background-color: var(--color-background-primary);
+  background-color: var(--color-paper);
 }
 
 .preferences-view > .alert {
@@ -61,7 +61,7 @@ translation-key a {
 
 .preferences-side > .about {
   align-self: flex-end;
-  color: var(--color-text-shy);
+  color: var(--color-shy);
   font-size: var(--shy-size);
 }
 
@@ -87,7 +87,7 @@ translation-key a {
 }
 
 .preferences-navigation > .item.-active::before {
-  background-color: var(--color-text-primary);
+  background-color: var(--color-pen);
   border-radius: 5px;
   content: "";
   height: 100%;
@@ -122,5 +122,5 @@ translation-key a {
 }
 
 .preferences-contents > .content > .description {
-  color: var(--color-text-shy);
+  color: var(--color-shy);
 }

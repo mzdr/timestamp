@@ -9,13 +9,13 @@
 
     */
 
-    .wave { fill: var(--color-background-primary, #fff); }
-    .wave-start { stop-color: var(--color-background-primary, #fff); }
-    .wave-stop { stop-color: var(--color-background-primary, #fff); }
+    .wave { fill: var(--color-paper); }
+    .wave-start { stop-color: var(--color-paper); }
+    .wave-stop { stop-color: var(--color-paper); }
 
     :host {
       background-image: linear-gradient(var(--deg), var(--start), var(--stop));
-      color: var(--palette-white, #fff);
+      color: var(--palette-white);
     }
 
     :host([hour="0"]) { --deg: 180deg; --start: #001322; --stop: #012459; }
@@ -27,9 +27,9 @@
     :host([hour="6"]) { --deg: 270deg; --start: #042c47; --stop: #07729f; }
     :host([hour="7"]) { --deg: 285deg; --start: #07506e; --stop: #12a1c0; }
     :host([hour="8"]) { --deg: 300deg; --start: #1386a6; --stop: #74d4cc; }
-    :host([hour="9"]) { --deg: 315deg; --start: #efeebc; --stop: #61d0cf; color: var(--palette-black); }
-    :host([hour="10"]) { --deg: 330deg; --start: #fee154; --stop: #a3dec6; color: var(--palette-black); }
-    :host([hour="11"]) { --deg: 345deg; --start: #fdc352; --stop: #e8ed92; color: var(--palette-black); }
+    :host([hour="9"]) { --deg: 315deg; --start: #efeebc; --stop: #61d0cf; }
+    :host([hour="10"]) { --deg: 330deg; --start: #fee154; --stop: #a3dec6; }
+    :host([hour="11"]) { --deg: 345deg; --start: #fdc352; --stop: #e8ed92; }
     :host([hour="12"]) { --deg: 0deg; --start: #ff8d27; --stop: #ffe577; }
     :host([hour="13"]) { --deg: 15deg; --start: #ff7e20; --stop: #ffda35; }
     :host([hour="14"]) { --deg: 30deg; --start: #ff8d27; --stop: #ffe577; }
@@ -42,6 +42,13 @@
     :host([hour="21"]) { --deg: 135deg; --start: #192861; --stop: #372074; }
     :host([hour="22"]) { --deg: 150deg; --start: #040b3c; --stop: #233072; }
     :host([hour="23"]) { --deg: 165deg; --start: #040b3c; --stop: #012459; }
+
+    /* Improve contrast. */
+    :host([hour="9"]),
+    :host([hour="10"]),
+    :host([hour="11"]) {
+      color: var(--palette-black);
+    }
   </style>
   <defs>
     <linearGradient id="wave" gradientTransform="rotate(90)">
