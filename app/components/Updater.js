@@ -39,7 +39,7 @@ class Updater {
           response.on('end', () => {
             try {
               resolve(JSON.parse(json.join()));
-            } catch (e) {
+            } catch (error) {
               this.logger.error('Couldn’t parse feed response.');
             }
           });

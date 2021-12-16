@@ -46,7 +46,7 @@ class Clock {
         this.getFormat(),
         { locale },
       );
-    } catch (e) {
+    } catch (error) {
       return '#invalid format#';
     }
   }

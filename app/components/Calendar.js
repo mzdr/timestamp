@@ -59,7 +59,7 @@ class Calendar {
     if (format) {
       try {
         return datefns.format(final, format, { locale });
-      } catch (e) {
+      } catch (error) {
         return '#invalid format#';
       }
     }
