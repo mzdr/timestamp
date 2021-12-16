@@ -69,15 +69,15 @@ class Calendar {
 
   getCalendar(event, payload) {
     const { locale } = this;
-    const month = this.getDate(null, payload);
-    const startOfMonth = datefns.startOfMonth(month);
-    const endOfMonth = datefns.endOfMonth(month);
-    const totalDays = datefns.differenceInCalendarDays(endOfMonth, startOfMonth);
+    const year = this.getDate(null, payload);
+    const startOfYear = datefns.startOfYear(year);
+    const endOfYear = datefns.endOfYear(year);
+    const totalDays = datefns.differenceInCalendarDays(endOfYear, startOfYear);
 
     const days = [];
 
     for (let i = 0; i <= totalDays; i += 1) {
-      const date = datefns.addDays(startOfMonth, i);
+      const date = datefns.addDays(startOfYear, i);
       const week = datefns.getWeek(date, { locale });
       const weekday = datefns.getDay(date);
       const day = datefns.format(date, 'd', { locale });

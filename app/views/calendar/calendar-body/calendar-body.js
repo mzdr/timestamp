@@ -3,42 +3,33 @@ import { dispatch, upgrade } from '../../../../node_modules/@browserkids/dom/ind
 const { app, calendar, preferences } = window;
 
 export default class CalendarBody extends HTMLElement {
-  #snapTimeout = null;
-
-  #$activeMonth = null;
+  #years = [];
 
   constructor() {
     super();
 
     upgrade(this, `
       <link rel="stylesheet" href="calendar-body/calendar-body.css">
-      <section class="calendar-legend" #$legend>&nbsp;</section>
-      <section class="calendar-month">
-        <span class="no">#</span>
-        <div class="weekdays" #$weekdays></div>
-        <div class="weeks" #$weeks></div>
-        <div class="days" #$days @scroll="onScroll"></div>
+      <section class="calendar-body">
+        <span class="legend" #$legend>&nbsp;</span>
+        <ul class="weekdays" #$weekdays></ul>
+        <ul class="days" #$days></ul>
       </section>
     `);
 
-    app.on('tick', this.onTick.bind(this));
-
-    this.intersectionObserver = new IntersectionObserver(this.onVisibilityChanged.bind(this), {
-      root: this.$refs.$days,
-      rootMargin: `0px 0px -${(3 / 6) * 100}% 0px`,
-    });
+    app.on('tick', () => this.setToday());
 
     this.render();
   }
 
-  static async getDays({ month, months, year } = {}) {
+  static async getDays({ year, diff } = {}) {
     const payload = {
-      set: { month, year },
-      diff: { months },
+      set: { year },
+      diff: { years: diff },
     };
 
     return (await calendar.getCalendar(payload)).map(({ date, day, weekday }, index) => {
-      const $day = document.createElement('span');
+      const $day = document.createElement('li');
       const isFirst = index === 0;
 
       $day.classList.add('day');
@@ -56,32 +47,8 @@ export default class CalendarBody extends HTMLElement {
     });
   }
 
-  onTick() {
-    this.setToday();
-  }
-
-  onScroll() {
-    const { $days } = this.$refs;
-    const { scrollTop, scrollHeight, offsetHeight } = $days;
-    const triggerHeight = offsetHeight * (3 / 6);
-
-    if (scrollTop <= triggerHeight) {
-      this.addMonth({ isPrepending: true });
-    } else if (scrollTop >= (scrollHeight - offsetHeight - triggerHeight)) {
-      this.addMonth();
-    }
-
-    if (this.#snapTimeout) {
-      clearTimeout(this.#snapTimeout);
-    }
-
-    this.#snapTimeout = setTimeout(() => {
-      this.#$activeMonth?.scrollIntoView({ behavior: 'smooth' });
-    }, 800);
-  }
-
   async onVisibilityChanged(entries) {
-    const { $days, $legend } = this.$refs;
+    const { $legend } = this.$refs;
     const intersectingOne = entries.find(({ isIntersecting }) => isIntersecting);
 
     if (intersectingOne === undefined) {
@@ -91,99 +58,120 @@ export default class CalendarBody extends HTMLElement {
     const $day = intersectingOne.target;
     const { year, month, day } = $day.dataset;
 
-    // Set month of day that came into viewport as active month
-    $days.dataset.activeMonth = month;
-
-    // Update legend with newly set month label
     $legend.textContent = await calendar.getDate({
-      date: new Date(year, month, day),
+      set: { year, month, day },
       format: await preferences.get('calendarLegendFormat'),
     });
 
-    this.#$activeMonth = $day;
+    this.activeMonth = month;
+
+    const position = this.#years.indexOf(year);
+
+    if (position === 1) {
+      return;
+    }
+
+    await this.addYear({ isFirst: position === 0 });
+    await this.removeYear({ isFirst: position === 2 });
   }
 
-  async addMonth(settings = {}) {
-    const { isPrepending = false } = settings;
+  createObserver() {
     const { $days } = this.$refs;
 
-    const elementChild = `${isPrepending ? 'first' : 'last'}ElementChild`;
-    const diff = isPrepending ? -1 : 1;
+    this.firstRow = new IntersectionObserver(this.onVisibilityChanged.bind(this), {
+      root: $days,
+      rootMargin: '0px 0px -50% 0px',
+    });
 
-    const { year, month } = $days[elementChild]?.dataset ?? {};
-    const payload = { year, month, months: year ? diff : 0 };
-    const days = await this.constructor.getDays(payload);
+    return this;
+  }
 
-    if (isPrepending) {
+  async addYear(settings = {}) {
+    const { isFirst = false, year } = settings;
+    const { $days } = this.$refs;
+    const $firstOrLastDay = $days[`${isFirst ? 'first' : 'last'}ElementChild`];
+
+    const diff = isFirst ? -1 : 1;
+    const days = await this.constructor.getDays({
+      year: year ?? $firstOrLastDay?.dataset?.year,
+      diff: $firstOrLastDay ? diff : 0,
+    });
+
+    if (isFirst) {
       days.reverse();
     }
 
-    days.forEach(($day) => {
-      if ($day.dataset.day === '1') {
-        this.intersectionObserver.observe($day);
+    days.forEach(($el) => {
+      if ($el.dataset.day === '1') {
+        this.firstRow.observe($el);
       }
 
-      $days[isPrepending ? 'prepend' : 'append']($day);
+      $days[isFirst ? 'prepend' : 'append']($el);
     });
+
+    this.#years[isFirst ? 'unshift' : 'push'](days.at(0).dataset.year);
   }
 
-  removeMonth(settings = {}) {
-    const { isLast = true } = settings;
+  removeYear(settings = {}) {
+    const { isFirst = true } = settings;
     const { $days } = this.$refs;
-    const elementChild = `${isLast ? 'last' : 'first'}ElementChild`;
-    const month = $days[elementChild]?.dataset?.month;
+    const elementChild = `${isFirst ? 'first' : 'last'}ElementChild`;
+    const year = $days[elementChild]?.dataset?.year;
 
-    while ($days[elementChild]?.dataset?.month === month) {
+    while ($days[elementChild]?.dataset?.year === year) {
       const $day = $days[elementChild];
 
       // Avoid memory leaks
       // @see https://w3c.github.io/IntersectionObserver/#lifetime
       if ($day.dataset.day === '1') {
-        this.intersectionObserver.unobserve($day);
+        this.firstRow.unobserve($day);
       }
 
       $day.remove();
     }
+
+    this.#years[isFirst ? 'shift' : 'pop']();
   }
 
-  async setWeekdays() {
-    const { $weekdays, $days } = this.$refs;
-    const { weekdays, startIndex } = await calendar.getWeekdays();
-
-    $days.dataset.startOfWeek = startIndex;
-    $weekdays.replaceChildren();
-
-    weekdays.forEach((weekday) => {
-      const $weekday = document.createElement('span');
-
-      $weekday.textContent = weekday;
-      $weekdays.appendChild($weekday);
-    });
-  }
-
-  async setToday(settings = {}) {
-    const { isReplacing = false } = settings;
+  async setActiveMonth(payload) {
     const { $days } = this.$refs;
-    const todayCss = '-today';
+
+    const date = await calendar.getDate(payload);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const isReset = this.#years.includes(year.toString()) === false;
+
+    if (isReset) {
+      this.createObserver();
+
+      $days.replaceChildren();
+
+      this.#years = [];
+
+      await this.addYear({ year });
+      await this.addYear();
+      await this.addYear({ isFirst: true });
+    }
+
+    $days
+      .querySelector(`[data-year="${year}"][data-month="${month}"]`)
+      .scrollIntoView();
+
+    await this.setToday();
+  }
+
+  async setToday() {
+    const { $days } = this.$refs;
 
     const now = await calendar.getDate();
     const year = now.getFullYear();
     const month = now.getMonth();
     const day = now.getDate();
 
-    if (isReplacing) {
-      this.empty();
+    const todayCss = '-today';
+    const todaySelector = `[data-year="${year}"][data-month="${month}"][data-day="${day}"]`;
 
-      await this.addMonth();
-      await this.addMonth({ isPrepending: true });
-      await this.addMonth();
-
-      $days
-        .querySelector(`[data-month="${month}"][data-day="1"]`)
-        .scrollIntoView();
-    }
-
-    const $today = $days.querySelector(`[data-year="${year}"][data-month="${month}"][data-day="${day}"]`);
+    const $today = $days.querySelector(todaySelector);
     const $oldToday = $days.querySelector(`.${todayCss}`);
 
     if ($oldToday === $today) {
@@ -194,20 +182,45 @@ export default class CalendarBody extends HTMLElement {
     $today?.classList?.add(todayCss);
   }
 
-  empty() {
-    const { $days } = this.$refs;
+  async setWeekdays() {
+    const { $weekdays } = this.$refs;
+    const { weekdays, startIndex } = await calendar.getWeekdays();
 
-    Array
-      .from($days.querySelectorAll('[data-day="1"]'))
-      .forEach(($day) => this.intersectionObserver.unobserve($day));
+    this.startOfWeek = startIndex;
 
-    $days.replaceChildren();
+    $weekdays.replaceChildren();
+
+    weekdays.forEach((weekday) => {
+      const $weekday = document.createElement('li');
+
+      $weekday.textContent = weekday;
+      $weekdays.appendChild($weekday);
+    });
   }
 
   async render() {
+    this.createObserver();
+
     await this.setWeekdays();
-    await this.setToday({ isReplacing: true });
+    await this.setActiveMonth();
+    await this.setToday();
 
     dispatch(this, 'postrender');
+  }
+
+  get activeMonth() {
+    return this.getAttribute('active-month') ?? '';
+  }
+
+  set activeMonth(value) {
+    this.setAttribute('active-month', value);
+  }
+
+  get startOfWeek() {
+    return this.getAttribute('start-of-week') ?? '';
+  }
+
+  set startOfWeek(value) {
+    this.setAttribute('start-of-week', value);
   }
 }

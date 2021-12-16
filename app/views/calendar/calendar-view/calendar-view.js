@@ -15,7 +15,7 @@ export default class CalendarView extends HTMLElement {
       <calendar-body #$body @postrender="onPostRender"></calendar-body>
     `);
 
-    calendar.on('hide', this.onTodayClicked.bind(this));
+    calendar.on('hide', this.onHide.bind(this));
   }
 
   onKeyDown(e) {
@@ -29,7 +29,12 @@ export default class CalendarView extends HTMLElement {
       preferences.show();
     } else if (key === 'q' && metaKey) {
       app.quit();
+    } else if (key === ' ') {
+      this.onTodayClicked();
     }
+
+    // In general prevent any default browser shortcuts
+    e.preventDefault();
   }
 
   onToggle({ weeks }) {
@@ -55,11 +60,19 @@ export default class CalendarView extends HTMLElement {
     return this;
   }
 
-  onTodayClicked() {
-    this.$refs.$body.setToday({
-      isReplacing: true,
-    });
+  onHide() {
+    this.onTodayClicked();
+  }
 
-    return this;
+  onTodayClicked() {
+    this.$refs.$body.setActiveMonth();
+  }
+
+  get hidden() {
+    return this.getAttribute('hidden');
+  }
+
+  set hidden(value) {
+    this.toggleAttribute('hidden', value);
   }
 }

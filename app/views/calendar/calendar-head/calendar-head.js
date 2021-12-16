@@ -8,10 +8,10 @@ export default class CalendarHead extends HTMLElement {
 
     upgrade(this, `
       <link rel="stylesheet" href="calendar-head/calendar-head.css">
-      <div class="calendar-head">
+      <section class="calendar-head">
         <figure class="background" #$background></figure>
         <slot class="slot"></slot>
-      </div>
+      </section>
     `);
 
     app.on('tick', this.render.bind(this));

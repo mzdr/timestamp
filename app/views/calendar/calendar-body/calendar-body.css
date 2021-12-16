@@ -2,43 +2,46 @@
   display: block;
 }
 
-:host(.show-weeks) > .calendar-month {
-  grid-template-areas: "no weekdays" "weeks days";
-  grid-template-columns: 1fr 7fr;
+:host([active-month="0"]) [data-month="0"],
+:host([active-month="1"]) [data-month="1"],
+:host([active-month="2"]) [data-month="2"],
+:host([active-month="3"]) [data-month="3"],
+:host([active-month="4"]) [data-month="4"],
+:host([active-month="5"]) [data-month="5"],
+:host([active-month="6"]) [data-month="6"],
+:host([active-month="7"]) [data-month="7"],
+:host([active-month="8"]) [data-month="8"],
+:host([active-month="9"]) [data-month="9"],
+:host([active-month="10"]) [data-month="10"],
+:host([active-month="11"]) [data-month="11"] {
+  color: var(--color-pen);
 }
 
-:host(:not(.show-weeks)) > .calendar-month > .no,
-:host(:not(.show-weeks)) > .calendar-month > .weeks {
-  display: none;
-}
+/* Sunday */
+:host([start-of-week="0"]) [data-weekday="1"]:first-child { grid-column: 1; }
+:host([start-of-week="0"]) [data-weekday="2"]:first-child { grid-column: 2; }
+:host([start-of-week="0"]) [data-weekday="3"]:first-child { grid-column: 3; }
+:host([start-of-week="0"]) [data-weekday="4"]:first-child { grid-column: 4; }
+:host([start-of-week="0"]) [data-weekday="5"]:first-child { grid-column: 5; }
+:host([start-of-week="0"]) [data-weekday="6"]:first-child { grid-column: 6; }
 
-.calendar-legend {
-  align-items: center;
-  color: var(--color-shy);
-  display: grid;
-  grid-column-gap: 20px;
-  grid-template-columns: 50px minmax(60px, max-content) 50px;
-  justify-content: center;
-  padding: 14px var(--grid-gap) 22px;
-  text-align: center;
-  white-space: pre;
-}
+/* Monday */
+:host([start-of-week="1"]) [data-weekday="2"]:first-child { grid-column: 2; }
+:host([start-of-week="1"]) [data-weekday="3"]:first-child { grid-column: 3; }
+:host([start-of-week="1"]) [data-weekday="4"]:first-child { grid-column: 4; }
+:host([start-of-week="1"]) [data-weekday="5"]:first-child { grid-column: 5; }
+:host([start-of-week="1"]) [data-weekday="6"]:first-child { grid-column: 6; }
+:host([start-of-week="1"]) [data-weekday="0"]:first-child { grid-column: 7; }
 
-.calendar-legend::before,
-.calendar-legend::after {
-  content: "";
-  height: 1px;
-}
+/* Saturday */
+:host([start-of-week="6"]) [data-weekday="1"]:first-child { grid-column: 3; }
+:host([start-of-week="6"]) [data-weekday="2"]:first-child { grid-column: 4; }
+:host([start-of-week="6"]) [data-weekday="3"]:first-child { grid-column: 5; }
+:host([start-of-week="6"]) [data-weekday="4"]:first-child { grid-column: 6; }
+:host([start-of-week="6"]) [data-weekday="5"]:first-child { grid-column: 7; }
+:host([start-of-week="6"]) [data-weekday="0"]:first-child { grid-column: 2; }
 
-.calendar-legend::before {
-  background-image: linear-gradient(to left, var(--color-line), transparent);
-}
-
-.calendar-legend::after {
-  background-image: linear-gradient(to right, var(--color-line), transparent);
-}
-
-.calendar-month {
+.calendar-body {
   --maximum-days: 7;
   --maximum-weeks: 6;
   --week-width: calc(var(--view-width) - (2 * var(--grid-gap)));
@@ -47,99 +50,83 @@
 
   display: grid;
   grid-row-gap: 10px;
-  grid-template-areas: "weekdays" "days";
+  grid-template-areas: "legend" "weekdays" "days";
   grid-template-columns: 1fr;
 }
 
-.calendar-month > .weekdays {
+.calendar-body > .legend {
+  align-items: center;
+  color: var(--color-shy);
+  display: grid;
+  grid-area: legend;
+  grid-column-gap: 20px;
+  grid-template-columns: 50px minmax(60px, max-content) 50px;
+  justify-content: center;
+  padding: 14px var(--grid-gap);
+  text-align: center;
+  white-space: pre;
+}
+
+.calendar-body > .legend::before,
+.calendar-body > .legend::after {
+  content: "";
+  height: 1px;
+}
+
+.calendar-body > .legend::before {
+  background-image: linear-gradient(to left, var(--color-line), transparent);
+}
+
+.calendar-body > .legend::after {
+  background-image: linear-gradient(to right, var(--color-line), transparent);
+}
+
+.calendar-body > .weekdays {
   display: grid;
   grid-area: weekdays;
   grid-template-columns: repeat(7, 1fr);
+  list-style: none;
+  margin: 0;
+  padding: 0;
   text-align: center;
 }
 
-.calendar-month > .no {
-  color: var(--color-line);
-  text-align: center;
-}
-
-.calendar-month > .weeks {
+.calendar-body > .days {
   color: var(--color-shy);
-  grid-area: weeks;
-}
-
-.calendar-month > .weeks,
-.calendar-month > .days {
   display: grid;
+  grid-area: days;
+  grid-auto-flow: row;
   grid-row-gap: var(--days-gap);
+  grid-template-columns: repeat(7, 1fr);
+  height: calc(var(--days-height) + (var(--days-gap) * (var(--maximum-weeks) - 1)));
+  list-style: none;
+  margin: 0;
+  overflow: scroll;
+  padding: 0;
+  /*scroll-snap-type: y mandatory;*/
 }
 
-.calendar-month > .weeks > .week,
-.calendar-month > .days > .day {
+.calendar-body > .days > .day {
   align-items: center;
   aspect-ratio: 1 / 1;
   display: flex;
   justify-content: center;
+  /*overflow-anchor: none;*/
   text-align: center;
 }
 
-.calendar-month > .days {
-  color: var(--color-shy);
-  grid-area: days;
-  grid-auto-flow: row;
-  grid-template-columns: repeat(7, 1fr);
-  height: calc(var(--days-height) + (var(--days-gap) * (var(--maximum-weeks) - 1)));
-  overflow: scroll;
-}
+/*.calendar-body > .days > .day[data-day="1"] {*/
+/*  scroll-snap-align: start;*/
+/*}*/
 
-.calendar-month > .days::-webkit-scrollbar {
+.calendar-body > .days::-webkit-scrollbar {
   display: none;
 }
 
-.calendar-month > .days > .day.-today {
+.calendar-body > .days > .day.-today {
   background-color: var(--color-brand);
-  background-image: linear-gradient(20deg, #0002, transparent);
+  background-image: linear-gradient(20deg, #fff2, transparent);
   border-radius: 50%;
-  box-shadow: inset 0 0 0 1px #0001;
   color: var(--palette-white);
   font-weight: 500;
 }
-
-[data-active-month="0"] [data-month="0"],
-[data-active-month="1"] [data-month="1"],
-[data-active-month="2"] [data-month="2"],
-[data-active-month="3"] [data-month="3"],
-[data-active-month="4"] [data-month="4"],
-[data-active-month="5"] [data-month="5"],
-[data-active-month="6"] [data-month="6"],
-[data-active-month="7"] [data-month="7"],
-[data-active-month="8"] [data-month="8"],
-[data-active-month="9"] [data-month="9"],
-[data-active-month="10"] [data-month="10"],
-[data-active-month="11"] [data-month="11"] {
-  color: var(--color-pen);
-}
-
-/* Sunday */
-[data-start-of-week="0"] [data-weekday="1"]:first-child { grid-column: 1; }
-[data-start-of-week="0"] [data-weekday="2"]:first-child { grid-column: 2; }
-[data-start-of-week="0"] [data-weekday="3"]:first-child { grid-column: 3; }
-[data-start-of-week="0"] [data-weekday="4"]:first-child { grid-column: 4; }
-[data-start-of-week="0"] [data-weekday="5"]:first-child { grid-column: 5; }
-[data-start-of-week="0"] [data-weekday="6"]:first-child { grid-column: 6; }
-
-/* Monday */
-[data-start-of-week="1"] [data-weekday="2"]:first-child { grid-column: 2; }
-[data-start-of-week="1"] [data-weekday="3"]:first-child { grid-column: 3; }
-[data-start-of-week="1"] [data-weekday="4"]:first-child { grid-column: 4; }
-[data-start-of-week="1"] [data-weekday="5"]:first-child { grid-column: 5; }
-[data-start-of-week="1"] [data-weekday="6"]:first-child { grid-column: 6; }
-[data-start-of-week="1"] [data-weekday="0"]:first-child { grid-column: 7; }
-
-/* Saturday */
-[data-start-of-week="6"] [data-weekday="1"]:first-child { grid-column: 3; }
-[data-start-of-week="6"] [data-weekday="2"]:first-child { grid-column: 4; }
-[data-start-of-week="6"] [data-weekday="3"]:first-child { grid-column: 5; }
-[data-start-of-week="6"] [data-weekday="4"]:first-child { grid-column: 6; }
-[data-start-of-week="6"] [data-weekday="5"]:first-child { grid-column: 7; }
-[data-start-of-week="6"] [data-weekday="0"]:first-child { grid-column: 2; }

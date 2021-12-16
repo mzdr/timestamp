@@ -153,6 +153,8 @@ export default class PreferencesView extends HTMLElement {
 
   onQuitClicked() {
     app.quit();
+
+    return this;
   }
 
   onCategoryClicked({ currentTarget }) {

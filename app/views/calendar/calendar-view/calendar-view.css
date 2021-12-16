@@ -8,24 +8,23 @@
   width: var(--view-width);
 }
 
-calendar-head {
+calendar-head,
+calendar-body {
   -webkit-app-region: drag;
 }
 
+calendar-head { grid-area: background; }
+
 calendar-body {
+  grid-area: month;
   padding: 0 var(--grid-gap) var(--grid-gap);
 }
-
-calendar-head { grid-area: background; }
-calendar-body { grid-area: month; }
 
 calendar-show-preferences {
   padding: 18px 12px;
   position: absolute;
   right: 12px;
   top: 6px;
-
-  -webkit-app-region: no-drag;
 }
 
 calendar-navigation {
@@ -38,6 +37,7 @@ calendar-navigation[hidden] {
   pointer-events: none;
 }
 
+calendar-today,
 calendar-navigation:not([hidden]) {
   -webkit-app-region: no-drag;
 }

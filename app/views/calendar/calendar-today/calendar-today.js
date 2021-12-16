@@ -28,6 +28,18 @@ export default class CalendarToday extends HTMLElement {
     this.render();
   }
 
+  async render() {
+    const today = await calendar.getDate({ format: await this.format });
+
+    if (this.innerHTML === today) {
+      return;
+    }
+
+    this.innerHTML = today;
+
+    dispatch(this, 'postrender');
+  }
+
   set format(value) {
     this.#format = value.replace(/\n/g, '\'<br>\'');
   }
@@ -41,17 +53,5 @@ export default class CalendarToday extends HTMLElement {
 
       return this.#format;
     })();
-  }
-
-  async render() {
-    const today = await calendar.getDate({ format: await this.format });
-
-    if (this.innerHTML === today) {
-      return;
-    }
-
-    this.innerHTML = today;
-
-    dispatch(this, 'postrender');
   }
 }
