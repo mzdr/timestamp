@@ -1,0 +1,7 @@
+.is-draggable {
+  -webkit-app-region: drag;
+}
+
+.is-draggable.-not {
+  -webkit-app-region: no-drag;
+}

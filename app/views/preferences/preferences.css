@@ -1,11 +1,6 @@
-:host {
-  display: block;
+:root {
   user-select: none;
   width: 720px;
-}
-
-translation-key a {
-  color: var(--color-brand);
 }
 
 .preferences-view {
@@ -37,8 +32,6 @@ translation-key a {
   display: grid;
   grid-template-rows: repeat(3, min-content);
   padding: var(--grid-gap);
-
-  -webkit-app-region: drag;
 }
 
 .preferences-side > .logo {
@@ -55,8 +48,6 @@ translation-key a {
 
 .preferences-side > .navigation {
   margin: calc(var(--grid-gap) * 2) 0;
-
-  -webkit-app-region: no-drag;
 }
 
 .preferences-side > .about {
@@ -100,8 +91,9 @@ translation-key a {
 }
 
 .preferences-navigation > .item > .icon {
+  color: currentColor;
   height: 15px;
-  color: var(--color-shy);
+  opacity: 0.5;
   stroke-width: 1.5;
   width: 15px;
 }
