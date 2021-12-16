@@ -1,6 +1,8 @@
 import { bindAttributes, bindEventListeners, findReferences } from '@browserkids/dom';
 
 window.renderer = new class Renderer {
+  #isPackaged = null;
+
   constructor({ app, preferences }) {
     this.$root = document.documentElement;
     this.$refs = findReferences(this.$root);
@@ -39,9 +41,16 @@ window.renderer = new class Renderer {
     this.preferences.set(name, isBoolean ? checked : value);
   }
 
-  onKeyDown({ key }) {
+  async onKeyDown(event) {
+    const { key } = event;
+
     if (key === 'Escape') {
       this.preferences.hide();
+    }
+
+    // In general prevent any default browser shortcuts in production
+    if (await this.isPackaged) {
+      event.preventDefault();
     }
   }
 
@@ -94,5 +103,15 @@ window.renderer = new class Renderer {
       });
 
     this.onCategoryClicked({ currentTarget: $tab[0] });
+  }
+
+  get isPackaged() {
+    return (async () => {
+      if (this.#isPackaged === null) {
+        this.#isPackaged = await this.app.isPackaged();
+      }
+
+      return this.#isPackaged;
+    })();
   }
 }(window);
