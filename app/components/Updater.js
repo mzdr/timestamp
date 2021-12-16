@@ -5,7 +5,7 @@ const { autoUpdater } = require('electron');
 class Updater {
   constructor(options = {}) {
     const {
-      checkEvery = 1000 * 60 * 60,
+      checkEvery = 1000 * 60 * 60 * 24, // 24 hours
       currentVersion,
       feedUrl,
       logger,
