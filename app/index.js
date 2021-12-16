@@ -127,7 +127,7 @@ const defaultPreferences = {
 
     onTick(clock) {
       this.tray.setLabel(clock.toString());
-      this.calendar?.window.getWebContents().send(APP_TICK);
+      this.calendar?.window.getWebContents().send(APP_TICK, clock.now);
     }
 
     onTranslate(event, key, options = {}) {

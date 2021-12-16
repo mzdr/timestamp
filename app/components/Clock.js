@@ -1,6 +1,8 @@
 const datefns = require('date-fns');
 
 class Clock {
+  #tickId = null;
+
   constructor(options = {}) {
     const { onTick, locale, format } = options;
 
@@ -8,12 +10,7 @@ class Clock {
 
     this
       .setFormat(format)
-      .onTick();
-
-    if (typeof onTick === 'function') {
-      setInterval(() => onTick(this.onTick()), 1000);
-      onTick(this.onTick());
-    }
+      .onTick(onTick);
   }
 
   getFormat() {
@@ -31,10 +28,14 @@ class Clock {
     return this;
   }
 
-  onTick() {
+  onTick(fn) {
     this.now = new Date();
 
-    return this;
+    fn(this);
+
+    if (this.#tickId === null) {
+      this.#tickId = setInterval(() => this.onTick(fn), 1000);
+    }
   }
 
   toString() {
