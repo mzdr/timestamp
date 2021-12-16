@@ -17,6 +17,7 @@ const { PREFERENCES_CHANGED } = require('./views/preferences/ipc');
 const { integratedBackgroundsDirectory } = require('./paths');
 
 const {
+  APP_IS_PACKAGED,
   APP_QUIT,
   APP_RESIZE_WINDOW,
   APP_RESTART,
@@ -83,10 +84,11 @@ const defaultPreferences = {
         onChange: this.onPreferencesChanged.bind(this),
       });
 
-      ipcMain.on(APP_QUIT, () => app.exit());
-      ipcMain.on(APP_RESTART, this.onRestart.bind(this));
-      ipcMain.on(APP_RESIZE_WINDOW, this.onResizeWindow.bind(this));
+      ipcMain.handle(APP_IS_PACKAGED, () => app.isPackaged);
       ipcMain.handle(APP_TRANSLATE, this.onTranslate.bind(this));
+      ipcMain.on(APP_QUIT, () => app.exit());
+      ipcMain.on(APP_RESIZE_WINDOW, this.onResizeWindow.bind(this));
+      ipcMain.on(APP_RESTART, this.onRestart.bind(this));
     }
 
     onRestart() {
