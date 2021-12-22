@@ -3,6 +3,8 @@ import { bindAttributes, bindEventListeners, findReferences } from '@browserkids
 window.renderer = new class Renderer {
   #isPackaged = null;
 
+  #resize = null;
+
   constructor({ app, preferences }) {
     this.$root = document.documentElement;
     this.$refs = findReferences(this.$root);
@@ -17,7 +19,21 @@ window.renderer = new class Renderer {
     });
 
     this.app.on('update-downloaded', this.onUpdateDownloaded.bind(this));
-    this.render();
+
+    this
+      .createObserver({ resize: true })
+      .render();
+  }
+
+  createObserver(settings = {}) {
+    const { resize = false } = settings;
+
+    if (resize) {
+      this.#resize = new ResizeObserver(this.onResize.bind(this));
+      this.#resize.observe(this.$root);
+    }
+
+    return this;
   }
 
   onCategoryClicked({ currentTarget }) {
@@ -54,15 +70,15 @@ window.renderer = new class Renderer {
     }
   }
 
-  onPostRender() {
+  onQuitClicked() {
+    this.app.quit();
+  }
+
+  onResize() {
     this.app.resizeWindow({
       height: this.$root.offsetHeight,
       width: this.$root.offsetWidth,
     });
-  }
-
-  onQuitClicked() {
-    this.app.quit();
   }
 
   onRestartClicked() {

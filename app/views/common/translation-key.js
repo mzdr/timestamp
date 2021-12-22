@@ -1,5 +1,3 @@
-import { dispatch } from '@browserkids/dom';
-
 customElements.define('translation-key', class TranslationKey extends HTMLElement {
   #key;
 
@@ -18,7 +16,5 @@ customElements.define('translation-key', class TranslationKey extends HTMLElemen
     } else {
       this.textContent = await app?.translate(this.#key);
     }
-
-    dispatch(this, 'postrender');
   }
 });

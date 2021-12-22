@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="is-native -transparent">
+<html @keydown.window="onKeyDown" class="is-native -transparent">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'sha256-rsIvmmZP7gi++DMJu/EmEuqN8OZoShxV4vpYFEUSSEI='">
@@ -46,13 +46,7 @@
     </div>
   </section>
 
-  <form
-    #$form
-    @input="onInput"
-    @postrender="onPostRender"
-    @keydown.window="onKeyDown"
-    class="contents preferences-contents"
-  >
+  <form #$form @input="onInput" class="contents preferences-contents">
     <section class="content" #$content>
       <label class="form-group">
         <input type="checkbox" name="openAtLogin" class="action -toggle">
