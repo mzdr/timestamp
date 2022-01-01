@@ -1,4 +1,4 @@
-import { bindAttributes, bindEventListeners, findReferences } from '@browserkids/dom';
+import { bindAttributes, bindEventListeners, findReferences } from '@browserkids/web-components';
 
 window.renderer = new class Renderer {
   #isPackaged = null;
