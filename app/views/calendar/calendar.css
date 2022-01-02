@@ -1,0 +1,123 @@
+:root {
+  width: 338px;
+}
+
+:root.update-downloaded .icon-dots > .dot:nth-of-type(2) {
+  animation-play-state: running;
+}
+
+:root:not(.show-navigation) .calendar-view > .navigation {
+  display: none;
+}
+
+.calendar-view {
+  display: grid;
+  position: relative;
+  user-select: none;
+}
+
+.calendar-view > * {
+  grid-column: 1;
+}
+
+.calendar-view > .head {
+  grid-row: 1;
+}
+
+.calendar-view > .head > .today {
+  display: block;
+  font-size: calc(var(--type-size) * 2.5);
+  font-weight: 100;
+  padding: calc(var(--grid-gap) * 2.5) var(--grid-gap);
+  text-align: center;
+  white-space: pre;
+}
+
+.calendar-view > .head > .preferences {
+  box-sizing: content-box;
+  padding: 18px 12px;
+  position: absolute;
+  right: 12px;
+  top: 6px;
+}
+
+.calendar-view > .legend {
+  align-items: center;
+  color: var(--color-shy);
+  display: grid;
+  grid-column-gap: 20px;
+  grid-row: 2;
+  grid-template-columns: 50px minmax(60px, max-content) 50px;
+  justify-content: center;
+  padding: 14px var(--grid-gap);
+  text-align: center;
+  white-space: pre;
+}
+
+.calendar-view > .legend::before,
+.calendar-view > .legend::after {
+  content: "";
+  height: 1px;
+}
+
+.calendar-view > .legend::before {
+  background-image: linear-gradient(to left, var(--color-line), transparent);
+}
+
+.calendar-view > .legend::after {
+  background-image: linear-gradient(to right, var(--color-line), transparent);
+}
+
+.calendar-view > .days {
+  aspect-ratio: 7 / 6;
+  box-sizing: content-box;
+  grid-row: 3;
+  padding: 0 var(--grid-gap) var(--grid-gap);
+}
+
+.calendar-view > .navigation {
+  align-content: center;
+  backdrop-filter: blur(20px);
+  background-color: rgba(255, 255, 255, 0.7);
+  display: grid;
+  grid-row-gap: var(--grid-gap);
+  grid-row: 1 / 3;
+  grid-template-columns: repeat(3, 1fr);
+  padding: var(--grid-gap);
+  width: 100%;
+}
+
+.go-to {
+  align-items: center;
+  background-color: transparent;
+  border-radius: 1em;
+  border: 0;
+  color: currentColor;
+  display: flex;
+  font-family: var(--type-family);
+  font-size: calc(var(--type-size) * 1.5);
+  font-weight: 200;
+  justify-content: center;
+  line-height: calc(var(--type-rhythm) * 1.5);
+  padding: 0;
+}
+
+.go-to.-current,
+.go-to.-year {
+  font-weight: 400;
+}
+
+.go-to.-current {
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.icon-chevron {
+  opacity: 0.6;
+  width: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .calendar-view > .navigation {
+    background-color: rgba(17, 17, 17, 0.5);
+  }
+}

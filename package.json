@@ -47,7 +47,7 @@
     "test": "npm run lint"
   },
   "dependencies": {
-    "@browserkids/web-components": "^0.7.0",
+    "@browserkids/web-components": "^0.8.0",
     "date-fns": "^2.28.0",
     "marked": "^4.0.8",
     "semver": "^7.3.5"

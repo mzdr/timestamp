@@ -1,0 +1,19 @@
+.icon-dots {
+  display: block;
+  height: 6px;
+  overflow: visible;
+}
+
+.icon-dots > .dot {
+  fill: currentColor;
+  opacity: 0.5;
+}
+
+.icon-dots > .dot:nth-of-type(2) {
+  animation-duration: 1.25s;
+  animation-fill-mode: both;
+  animation-iteration-count: infinite;
+  animation-name: bounce;
+  animation-play-state: paused;
+  transform-origin: center bottom;
+}

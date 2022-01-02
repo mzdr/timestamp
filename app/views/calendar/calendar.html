@@ -1,12 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html @keydown.window="onKeyDown" :class="rootClasses">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'sha256-QnknVzwhAxxFuJL3HXCADX8aXtGJ+yHkuOBJ+L1Xpdw='; style-src 'self' 'unsafe-inline'">
   <link rel="stylesheet" href="../../styles/styles.css">
+  <link rel="stylesheet" href="./calendar.css">
 </head>
-<body>
-  <calendar-view></calendar-view>
+<body class="calendar-view">
+  <dynamic-image :source="source" :month="month" :hour="hour" class="head">
+    <span :html="today" class="today">&nbsp;</span>
+
+    <svg @click="onShowPreferences" class="preferences icon-dots" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 6">
+      <circle class="dot" cx="21" cy="3" r="3" />
+      <circle class="dot" cx="12" cy="3" r="3" />
+      <circle class="dot" cx="3" cy="3" r="3" />
+    </svg>
+  </dynamic-image>
+
+  <span :text="legend" @click="onLegendClicked" class="legend"></span>
+  <browserkids-calendar #$calendar @update="onCalendarUpdate" class="days"></browserkids-calendar>
+
+  <nav class="navigation">
+    <button class="go-to" @click="goPreviousYear">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="icon-chevron">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+      </svg>
+    </button>
+
+    <strong class="go-to -year" :text="year"></strong>
+
+    <button class="go-to" @click="goNextYear">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" class="icon-chevron">
+        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 01.708 0l6 6a.5.5 0 010 .708l-6 6a.5.5 0 01-.708-.708L10.293 8 4.646 2.354a.5.5 0 010-.708z"/>
+      </svg>
+    </button>
+
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+    <button #$month class="go-to" @click="goMonth"></button>
+  </nav>
+
+  <script type="importmap">{"imports": {"@browserkids/web-components": "../../../node_modules/@browserkids/web-components/index.js"}}</script>
+  <script src="../common/dynamic-image.js" type="module"></script>
   <script src="./renderer.js" type="module"></script>
 </body>
 </html>
